@@ -1,0 +1,59 @@
+// ----- 颜色 -----
+$primary-font-color: #333; // 文字颜色
+$minor-font-color: #666; // 文字次颜色
+$primary-bg-color: #efeff4; // 主要背景色
+$minor-bg-color: #eeefef; // 次要背景色
+$primary-color: #4790fe; // 主色
+$error-color: #f44336; // 错误色
+$warning-color: #ff8903; // 警告色
+$font-color-em: #3586ff; // 强调字体颜色，偏蓝
+$border-color: #d9d9d9; // 边框颜色
+$gray-color: #888;
+$mid-gray-color: #a0a0a0;
+$small-gray-color: #fafafa;
+$placeholder-color: #b2b2b2;
+$header-bg-color: #1c1c1f;
+
+// ----- 文字尺寸 -----
+$font-size-xxxl: 25px;
+$font-size-xxl: 20px;
+$font-size-xl: 17px;
+$font-size-m: 15px;
+$font-size-s: 14px;
+$font-size-xs: 13px;
+$font-size-xxs: 12px;
+$font-size-xxxs: 10px;
+
+@mixin font-size-xxxs {
+  font-size: $font-size-xxs;
+  transform: scale(0.9167);
+}
+
+@mixin font-size-xxxxs {
+  font-size: $font-size-xxs;
+  transform: scale(0.8333);
+}
+
+// ----- 尺寸 -----
+$header-height: 40px; // 头部高度
+$border-radius: 2px;
+
+// ----- mint ui color颜色 -----
+$el-blue: #20A0FF;
+$el-light-blue: #58B7FF;
+$el-dark-blue: #1D8CE0;
+$el-green: #13CE66;
+$el-orange: #ff8903;
+$el-yellow: #ffcc00;
+$el-red: #fe6252;
+$el-black: #1F2D3D;
+$el-light-black: #324057;
+$el-extra-light-black: #475669;
+$el-silver: #8492A6;
+$el-light-silver:#99A9BF;
+$el-extra-light-silver: #C0CCDA;
+$el-gray:#D3DCE6;
+$el-light-gray:#E5E9F2;
+$el-extra-light-gray:#EFF2F7;
+$el-white: white;
+$el-dark-white: #F9FAFC;
