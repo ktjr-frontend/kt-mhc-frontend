@@ -21,19 +21,27 @@
       :readonly="readonly"
       v-model="currentValue">
     </textarea>
-    <input
-      @change="$emit('change', currentValue)"
-      ref="input"
-      class="mint-field-core"
-      :placeholder="placeholder"
-      :number="type === 'number'"
-      v-else
-      :type="type"
-      @focus="active = true"
-      :disabled="disabled"
-      :readonly="readonly"
-      :value="currentValue"
-      @input="handleInput">
+    <div class="inputs" v-else>
+      <div class="input-line">
+        <input
+          @change="$emit('change', currentValue)"
+          ref="input"
+          class="mint-field-core"
+          :placeholder="placeholder"
+          :number="type === 'number'"
+          :type="type"
+          @focus="active = true"
+          :disabled="disabled"
+          :readonly="readonly"
+          :value="currentValue"
+          @input="handleInput">
+        <slot name="input1-append"></slot>
+      </div>
+      <div class="input-line">
+        <slot name="input2"></slot>
+        <slot name="input2-append"></slot>
+      </div>
+    </div>
     <div
       @click="handleClear"
       class="mint-field-clear"

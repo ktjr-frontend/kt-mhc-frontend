@@ -4,7 +4,7 @@
   n-progress(parent=".app")
   transition(:name="transitionName", appear, mode="out-in")
     mt-header(ref="header", fixed="", :title="headerTitle", v-show="headerShow")
-      mt-button(v-if="headerBackShow", icon="back", slot="left", @click="routerBack()") 返回
+      mt-button(v-if="headerBackShow", icon="back", slot="left", @click="back()") 返回
       //- mt-button.of-v(v-if="msgCountBtnVisible", slot="left", @click="$router.push({name: 'messageList'})")
         i.iconfont.icon-xiaoxi-solid.ft18.pos-r
           span.badge-red.badge-top 10
@@ -16,7 +16,7 @@
           a(@click="emitEvent('messages-mark-read')") 全部已读
   .container(:class="{'header-show': headerShow, 'has-fixed-buttons': hasFixedButtons}", ref="container", v-touch:swipe.swipeleft.swiperight="onAppSwiper")
     transition(:name="transitionName", appear, mode="out-in")
-      router-view
+      router-view(ref="routerView")
   mt-tabbar(:fixed="true", v-show="tabBarVisible", ref="tabbar")
     mt-tab-item#orders(:class="{'is-selected': fisrtTabItemIsSelected}")
       div(slot="icon")
@@ -104,6 +104,16 @@ export default {
         this.routerForward()
       } else if (direction === 'swiperight') {
         this._transitionName = 'slideLeftFade'
+        this.routerBack()
+      }
+    },
+
+    // header的返回按钮
+    back() {
+      const routerView = this.$refs.routerView
+      if (routerView.backButtonAction) {
+        routerView.backButtonAction()
+      } else {
         this.routerBack()
       }
     },
@@ -242,8 +252,8 @@ small {
   &.header-show {
     padding-top: $header-height;
   }
-  &.has-fixed-buttons {
-    padding-bottom: 80px;
-  }
+  // &.has-fixed-buttons {
+  //   padding-bottom: 44px;
+  // }
 }
 </style>

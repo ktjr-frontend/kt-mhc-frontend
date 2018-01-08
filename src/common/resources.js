@@ -20,3 +20,5 @@ export const login = resource('login', {}, {}, { _showLoadingStatus: true, ...co
 export const captcha = resource('captcha', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 登录
 export const users = resource('users', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单列表
 export const orders = resource('orders', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单列表
+export const providers = resource('providers', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单列表
+export const vehicles = resource('vehicles', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单列表

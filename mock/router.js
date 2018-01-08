@@ -47,7 +47,7 @@ files.forEach(f => {
 // handle token expired err
 router.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    res.json({
+    res.status(401).json({
       code: 200003,
       message: '鉴权失败'
     })

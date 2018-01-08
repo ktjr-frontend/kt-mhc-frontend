@@ -29,6 +29,7 @@
           button.ui-border-radius.warning 编辑资料
     mt-popup.search-box(v-model='searchBoxVisible', position='right')
       search(:close="closeSearchBox")
+    .fixed-footer-placeholder
     footer.fixed-footer
       .tab-item.flex1
         i.iconfont.icon-car

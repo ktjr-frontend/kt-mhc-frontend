@@ -35,6 +35,11 @@ body {
     &:last-child {
       background-image: none;
     }
+    &.click-active {
+      &:active {
+        opacity: 0.8;
+      }
+    }
     &.sub-cell {
       .mint-cell-title {
         padding-left: 15px;
@@ -49,7 +54,6 @@ body {
           border-color: transparent transparent $border-color $border-color;
           border-width: 0 0 2px 2px;
           left: 0;
-
         }
       }
     }
@@ -92,6 +96,10 @@ body {
     &.empty {
       .mint-cell-value {
         color: $placeholder-color;
+        .em,
+        em {
+          color: $primary-font-color;
+        }
       }
     }
   }
@@ -218,7 +226,7 @@ body {
     .title-hint {
       margin-top: 10px;
       font-size: 12px;
-      color: $mid-gray-color; // @include font-size-xxxs;
+      color: $placeholder-color; // @include font-size-xxxs;
     }
   }
   .mint-cell-label {
@@ -231,6 +239,16 @@ body {
     font-size: $font-size-s;
     &.is-link {
       margin-right: 14px;
+    }
+    .inputs {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-line {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     span {
       white-space: nowrap;
@@ -293,6 +311,7 @@ body {
     }
     &.mint-button-block {
       display: block;
+      border-radius: 0;
       width: 100%;
     }
     .mint-button-text {

@@ -7,7 +7,7 @@
       .arrow
         slot(name="arrow")
           | {{arrow}}
-          i.iconfont.icon-you
+        i.iconfont.icon-you
       slot
     .card-footer
       slot(name="footer")

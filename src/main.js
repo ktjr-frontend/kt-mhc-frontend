@@ -30,6 +30,8 @@ import {
   TabContainer,
   TabContainerItem,
   Navbar,
+  IndexList,
+  IndexSection,
   Popup,
   Spinner,
   InfiniteScroll
@@ -58,6 +60,8 @@ Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Navbar.name, Navbar)
 Vue.component(Popup.name, Popup)
+Vue.component(IndexList.name, IndexList)
+Vue.component(IndexSection.name, IndexSection)
 Vue.component(Spinner.name, Spinner)
 Vue.use(InfiniteScroll)
 

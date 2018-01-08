@@ -82,7 +82,7 @@ exports.styleLoaders = function(options) {
 
     if (isPreProcesser) {
       // 之前是loader.splice(3, 0, 'postcss') 有错误，应该在sass loader 后,导致karma运行失败 嚓
-      loader.splice(-1, 0, {
+      loader.splice(-1 - (extension === 'scss'), 0, {
         loader: 'postcss-loader',
         options: {
           plugins: function() {
