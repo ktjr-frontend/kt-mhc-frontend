@@ -1,7 +1,7 @@
 // ----- 颜色 -----
 $primary-font-color: #333; // 文字颜色
 $minor-font-color: #666; // 文字次颜色
-$primary-bg-color: #efeff4; // 主要背景色
+$primary-bg-color: #f0f4f7; // 主要背景色
 $minor-bg-color: #eeefef; // 次要背景色
 $primary-color: #4790fe; // 主色
 $error-color: #f44336; // 错误色
@@ -39,7 +39,7 @@ $header-height: 40px; // 头部高度
 $border-radius: 2px;
 
 // ----- mint ui color颜色 -----
-$el-blue: #20A0FF;
+$el-blue: $primary-color;
 $el-light-blue: #58B7FF;
 $el-dark-blue: #1D8CE0;
 $el-green: #13CE66;

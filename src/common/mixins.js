@@ -1,5 +1,6 @@
 import { pruneParams } from '@/common/helpers.js'
 import { isWeixin } from '@/common/utils.js'
+import { ORDER_STATUS_MAP } from '@/constants.js'
 const routerCrumbs = []
 
 export default {
@@ -36,6 +37,12 @@ export default {
           get() {
             return routerCrumbs
           }
+        }
+      },
+
+      data() {
+        return {
+          ORDER_STATUS_MAP
         }
       }
     })

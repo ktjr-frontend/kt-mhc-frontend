@@ -25,10 +25,12 @@ import {
   MessageBox,
   Indicator,
   Progress,
+  Picker,
   Tabbar,
   TabItem,
   TabContainer,
   TabContainerItem,
+  DatetimePicker,
   Navbar,
   IndexList,
   IndexSection,
@@ -38,6 +40,8 @@ import {
 } from 'mint-ui'
 
 import KtField from '@/components/KtField.vue'
+import KtSelect from '@/components/KtSelect.vue'
+import KtDatePicker from '@/components/KtDatePicker.vue'
 import KtCountdown from '@/components/KtCountdown.vue'
 import KtIcon from '@/components/KtIcon.vue'
 import KtCheckbox from '@/components/KtCheckbox.vue'
@@ -54,10 +58,12 @@ Vue.component(Radio.name, Radio)
 Vue.component(Header.name, Header)
 Vue.component(Button.name, Button)
 Vue.component(Progress.name, Progress)
+Vue.component(Picker.name, Picker)
 Vue.component(Tabbar.name, Tabbar)
 Vue.component(TabItem.name, TabItem)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
+Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.component(Navbar.name, Navbar)
 Vue.component(Popup.name, Popup)
 Vue.component(IndexList.name, IndexList)
@@ -67,6 +73,8 @@ Vue.use(InfiniteScroll)
 
 // 自定义组件
 Vue.component(KtField.name, KtField)
+Vue.component(KtSelect.name, KtSelect)
+Vue.component(KtDatePicker.name, KtDatePicker)
 Vue.component(KtCountdown.name, KtCountdown)
 Vue.component(KtIcon.name, KtIcon)
 Vue.component(KtCheckbox.name, KtCheckbox)
@@ -128,6 +136,9 @@ const ToastClasses = {
 }
 
 Vue.$msgBox = Vue.prototype.$msgBox = MessageBox
+Vue.$alert = Vue.prototype.$alert = MessageBox.alert
+Vue.$confirm = Vue.prototype.$confirm = MessageBox.confirm
+Vue.$prompt = Vue.prototype.$prompt = MessageBox.prompt
 Vue.$toast = Vue.prototype.$toast = function toast(msg = '', type = '') {
   Toast({
     message: msg,

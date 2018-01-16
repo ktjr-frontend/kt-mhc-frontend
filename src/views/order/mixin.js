@@ -1,47 +1,45 @@
-import { find } from 'lodash'
+import { find, includes } from 'lodash'
+import { ORDER_STATUS_MAP } from '@/constants.js'
 
 const orderStatusList = [{
   name: '全部',
   value: '0'
 }, {
-  name: '待供应上确认',
-  value: '1'
-}, {
-  name: '待经销商确认',
-  value: '2'
-}, {
-  name: '待经销商修改',
-  value: '3'
-}, {
-  name: '待供应商修改',
-  value: '4'
-}, {
   name: '待完善资料',
-  value: '5'
+  value: ORDER_STATUS_MAP.WAIT_FILL_MATERIAL
 }, {
   name: '待初审',
-  value: '6'
+  value: ORDER_STATUS_MAP.WAIT_FOR_FIRST_CHECK
 }, {
-  name: '待审批',
-  value: '7'
+  name: '初审未通过',
+  value: ORDER_STATUS_MAP.FISRT_CHECK_REJECTED
 }, {
-  name: '待签约',
-  value: '8'
+  name: '待验车',
+  value: ORDER_STATUS_MAP.WAIT_FOR_CHECK_CAR
+}, {
+  name: '验车未通过',
+  value: ORDER_STATUS_MAP.CHECK_CAR_REJECTED
 }, {
   name: '待放款',
-  value: '9'
+  value: ORDER_STATUS_MAP.WAIT_FOR_LOAN
+}, {
+  name: '放款审核未通过',
+  value: ORDER_STATUS_MAP.LOAN_CHECK_FAILED
 }, {
   name: '已放款',
-  value: '10'
+  value: ORDER_STATUS_MAP.LOANED
 }, {
-  name: '待上传照片',
-  value: '11'
+  name: '在途中',
+  value: ORDER_STATUS_MAP.ON_THE_WAY
 }, {
-  name: '已完成',
-  value: '12'
+  name: '仓库验车不通过',
+  value: ORDER_STATUS_MAP.STORE_CHECK_FAILED
+}, {
+  name: '已入库',
+  value: ORDER_STATUS_MAP.PUT_IN_STORE
 }, {
   name: '已关闭',
-  value: '13'
+  value: ORDER_STATUS_MAP.CLOSED
 }]
 
 const orderStatusClassMap = {
@@ -58,9 +56,33 @@ export default {
       return orderStatusClassMap[value] || ''
     }
   },
+
   methods: {
+    canEditStatus(status) {
+      return includes([
+        ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,
+        ORDER_STATUS_MAP.WAIT_FOR_FIRST_CHECK,
+        ORDER_STATUS_MAP.FISRT_CHECK_REJECTED,
+        ORDER_STATUS_MAP.CHECK_CAR_REJECTED,
+        ORDER_STATUS_MAP.LOAN_CHECK_FAILED
+      ], status)
+    },
+    canCloseStatus(status) {
+      return includes([
+        ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,
+        ORDER_STATUS_MAP.FISRT_CHECK_REJECTED,
+        ORDER_STATUS_MAP.WAIT_FOR_CHECK_CAR,
+        ORDER_STATUS_MAP.CHECK_CAR_REJECTED,
+        ORDER_STATUS_MAP.WAIT_FOR_LOAN,
+        ORDER_STATUS_MAP.LOAN_CHECK_FAILED
+      ], status)
+    }
+  },
+
+  computed: {
 
   },
+
   data() {
     return {
       orderStatusList

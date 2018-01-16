@@ -1,14 +1,24 @@
 <template lang="pug">
   section.search-vehicles(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
-    header.flex
+    header.flex.search-header(v-if="headerVisible")
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @keyup.13.prevent="search", v-model="filter.price", placeholder="输入指导价快速选择车型")
-        i.iconfont.icon-qingchu(v-if="filter.value", @click="clearSearch")
+        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.price", placeholder="输入指导价快速选择车型")
+        i.iconfont.icon-qingchu(v-if="filter.price", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
-      ul.search-result
-        mt-cell.click-active(v-for="r in searchResult", :key="r.id", @click.native="selectResult(r)", :title="r.name")
+      .no-data(v-if="!searchResult.length && filter.price")
+        i.iconfont.icon-car
+        p 此搜索条件下没有结果
+      .search-help(v-if="!searchResult.length && !filter.price")
+        img(src="~assets/images/search-vehicle-bg.jpg")
+      ul.search-result(v-if="searchResult.length")
+        mt-cell.click-active(v-for="r in searchResult", :key="r.id", @click.native="selectResult(r)", title="11")
+          .custom-title.flex.flex-start(slot="title")
+            img.mr10(:src="r.icon", slot="icon", width="18")
+            .custom-content
+              p {{r.model}}
+              small.note 指导价：{{ r.price }} 万
     //- .form-buttons-placeholder
     //- .form-buttons.fixed
       mt-button.mint-button-block(type='primary', size='large', @click="submit") 确定
@@ -25,8 +35,29 @@ export default {
 
   methods: {
     clearSearch() {
-      this.filter.value = ''
+      this.filter.price = ''
       this.search()
+    },
+
+    reset() {
+      this.searchResult = []
+      this.filter.price = ''
+    },
+
+    inputChange(event) {
+      this.filter.price = event.target.value
+      this.search()
+    },
+
+    init(price) {
+      if (price) {
+        this.headerVisible = false
+        this.filter.price = price
+        this.search()
+      } else {
+        this.headerVisible = true
+        this.reset()
+      }
     },
 
     search: debounce(async function() {
@@ -38,7 +69,7 @@ export default {
           throw res
         })
       this.searchResult = res.data.result || []
-    }, 300),
+    }, 500),
 
     selectResult(r) {
       this.$emit('select-vehicle', r)
@@ -47,6 +78,7 @@ export default {
 
   data() {
     return {
+      headerVisible: true,
       searchResult: [],
       filter: {
         price: ''
@@ -63,51 +95,29 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-header {
-  height: 45px;
-  padding: 0 10px;
-  background: white;
-}
-
-.cancel-btn {
-  width: 50px;
-  color: $primary-color;
-}
-
 .iconfont {
   width: 30px;
   text-align: center; // float: left;
 }
 
-.search-input {
-  height: 30px;
-  background: $small-gray-color;
-  border-radius: $border-radius;
-  input {
-    -webkit-appearance: none;
-    background: none;
-    border: none;
-    height: 100%; // width: 100%;
+.search-help {
+  padding-top: 100px;
+  text-align: center;
+  img {
+    width: 60vw;
+  }
+}
+
+.custom-content {
+  padding: 10px 0;
+  line-height: 1.5em;
+  p {
+    white-space: normal;
   }
 }
 
 .body {
-  margin-top: 1px;
+  padding-top: 10px;
 }
 
-.no-data {
-  min-height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: $placeholder-color;
-  .icon-car {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 2em;
-    background: $border-color;
-    border-radius: 50%;
-  }
-}
 </style>

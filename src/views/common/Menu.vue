@@ -5,11 +5,11 @@
     .card-container.box-border.box-border-tb
       .card.box-border.box-border-r
         router-link.card-inner(:to="{name: 'orders'}")
-          i.iconfont.icon-order.el-green
+          i.iconfont.icon-dingdan.el-blue
           p 订单宝
       .card.box-border.box-border-r
         router-link.card-inner(:to="{name: 'stocks'}")
-          i.iconfont.icon-kucun.el-red
+          i.iconfont.icon-kucun.el-green
           p 库存宝
       .card
         .card-inner(@click="more()")

@@ -15,26 +15,31 @@
           li(v-for="item in orderStatusList", :key="item.value")
             .inner.ui-border-radius(@click="search(item)", :class="{'selected': filter.status === item.value}") {{item.name}}
     .card-body(v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
+      .no-data(v-if="!orderList.length")
+        i.iconfont.icon-car
+        p 没有订单数据
       kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow='order.status | orderStatusFormat')
         span.color-primary(slot='arrow') {{order.status | orderStatusFormat}}
-        .content
+        .content(@click="goToDetail(order)")
           .content-row 垫资金额：{{order.amount | ktCurrency}}
           .content-row 供应商：{{order.provider}}
           .content-row.flex
             .content-left.flex-item 订单描述：{{order.desc}}
             .content-right 共 {{order.count}} 辆
           .content-row 订单简称：{{order.name}}
-        .buttons.text-right.ui-border-t(slot='footer')
-          button.ui-border-radius 关闭订单
-          button.ui-border-radius.warning 编辑资料
-    mt-popup.search-box(v-model='searchBoxVisible', position='right')
+        .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
+          button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 关闭订单
+          button.ui-border-radius.warning(v-if="canEditStatus(order.status)", @click="editOrder(order)") 编辑资料
+    mt-popup.popup-box(v-model='searchBoxVisible', position='right')
       search(:close="closeSearchBox")
+    mt-popup.popup-box(v-model='procedureBoxVisible', position='right')
+      apply-procedure(:close="closeProcedureBox")
     .fixed-footer-placeholder
     footer.fixed-footer
       .tab-item.flex1
         i.iconfont.icon-car
         p 申请提车
-      .tab-item.flex1.ui-border-l
+      .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
         i.iconfont.icon-key
         p 申请手续
       .tab-item.flex2.tab-btn
@@ -45,13 +50,14 @@
 <script>
 import KtCardItem from '@/components/KtCardItem.vue'
 import Search from '@/views/order/Search.vue'
+import ApplyProcedure from '@/views/order/ApplyProcedure.vue'
 import { orders } from '@/common/resources.js'
 import { debounce } from 'lodash'
 import OrderMixin from '@/views/order/mixin.js'
 
 export default {
   mixins: [OrderMixin],
-  components: { KtCardItem, Search },
+  components: { KtCardItem, Search, ApplyProcedure },
   methods: {
     showAmountTip() {
       this.$msgBox({
@@ -66,15 +72,60 @@ export default {
       })
     },
 
+    backButtonAction() {
+      if (this.searchBoxVisible) {
+        this.searchBoxVisible = false
+      } else if (this.procedureBoxVisible) {
+        this.procedureBoxVisible = false
+      } else {
+        this.routerBack()
+      }
+    },
+
     // 显示搜索框
     showSearchBox() {
-      console.log('open search box')
       this.searchBoxVisible = true
     },
 
     closeSearchBox() {
-      console.log('close search box')
       this.searchBoxVisible = false
+    },
+
+    // 显示申请手续
+    showProcedureBox() {
+      this.procedureBoxVisible = true
+    },
+
+    closeProcedureBox() {
+      this.procedureBoxVisible = false
+    },
+
+    // 关闭订单
+    async closeOrder(order) {
+      const action = await this.$confirm('确定关闭订单？')
+      if (action === 'confirm') {
+        order.status = this.ORDER_STATUS_MAP.CLOSED
+      }
+    },
+
+    // 编辑订单
+    editOrder(order) {
+      // this.$router.push({
+      //   name: 'orderDetail',
+      //   params: {
+      //     id: order.id
+      //   }
+      // })
+    },
+
+    // 订单详情
+    goToDetail(order) {
+      this.$router.push({
+        name: 'orderDetail',
+        params: {
+          id: order.id
+        }
+      })
     },
 
     // 筛选
@@ -136,6 +187,7 @@ export default {
       statusFilterVisible: false,
       statusFilterStyle: {},
       searchBoxVisible: false, // 搜索层显示控制
+      procedureBoxVisible: false, // 搜索层显示控制
       loading: false,
       filter: {
         status: '0',
@@ -168,12 +220,6 @@ header {
     margin-left: 10px;
     line-height: 20px;
   }
-}
-
-.search-box {
-  height: 100%;
-  width: 100%;
-  background: $primary-bg-color;
 }
 
 .amount {
@@ -240,6 +286,12 @@ header {
   flex: none;
   text-align: right;
   color: $font-color-em;
+}
+
+.content {
+  &:active {
+    opacity: 0.85;
+  }
 }
 
 .content-left {

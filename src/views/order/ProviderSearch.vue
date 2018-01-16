@@ -1,9 +1,9 @@
 <template lang="pug">
   section.search-providers(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
-    header.flex
+    header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @keyup.13.prevent="search", v-model="filter.providerName", placeholder="搜索")
+        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.providerName", placeholder="搜索")
         i.iconfont.icon-qingchu(v-if="filter.value", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
@@ -29,6 +29,11 @@ export default {
       this.search()
     },
 
+    inputChange(event) {
+      this.filter.providerName = event.target.value
+      this.search()
+    },
+
     search: debounce(async function() {
       const res = await providers
         .get(this.pruneParams(this.filter))
@@ -45,7 +50,7 @@ export default {
     },
 
     submit() {
-      this.$emit('provider-confirmed', this.filter.providerName)
+      this.$emit('popup-confirmed', this.filter.providerName)
     }
   },
 
@@ -67,51 +72,13 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-header {
-  height: 45px;
-  padding: 0 10px;
-  background: white;
-}
-
-.cancel-btn {
-  width: 50px;
-  color: $primary-color;
-}
-
 .iconfont {
   width: 30px;
   text-align: center; // float: left;
 }
 
-.search-input {
-  height: 30px;
-  background: $small-gray-color;
-  border-radius: $border-radius;
-  input {
-    -webkit-appearance: none;
-    background: none;
-    border: none;
-    height: 100%; // width: 100%;
-  }
-}
-
 .body {
-  margin-top: 1px;
+  padding-top: 10px;
 }
 
-.no-data {
-  min-height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: $placeholder-color;
-  .icon-car {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 2em;
-    background: $border-color;
-    border-radius: 50%;
-  }
-}
 </style>

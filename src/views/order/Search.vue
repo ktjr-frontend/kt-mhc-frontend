@@ -1,9 +1,9 @@
 <template lang="pug">
   section.search-orders(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
-    header.flex
+    header.flex.search-header
       .search-input.flex-item.flex
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @keyup.13="search", v-model="filter.value", placeholder="搜索")
+        input.flex-item(type="search", @input="inputChange($event)" @keyup.13="search", :value="filter.value", placeholder="搜索")
         i.iconfont.icon-qingchu(v-if="filter.value", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
@@ -13,15 +13,15 @@
         mt-tab-item#3 供应商/经销商
       mt-tab-container(v-model='tabActive')
         mt-tab-container-item#1
-          .no-data()
+          .no-data
             i.iconfont.icon-car
             p 此搜索条件下没有结果
         mt-tab-container-item#2
-          .no-data()
+          .no-data
             i.iconfont.icon-car
             p 此搜索条件下没有结果
         mt-tab-container-item#3
-          .no-data()
+          .no-data
             i.iconfont.icon-car
             p 此搜索条件下没有结果
 
@@ -38,6 +38,11 @@ export default {
   methods: {
     clearSearch() {
       this.filter.value = ''
+      this.search()
+    },
+
+    inputChange(event) {
+      this.filter.value = event.target.value
       this.search()
     },
 
@@ -77,47 +82,8 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-header {
-  height: 45px;
-  padding: 0 10px;
-  background: white;
-}
-
-.cancel-btn {
-  width: 50px;
-  color: $primary-color;
-}
-
 .iconfont {
   width: 30px;
   text-align: center; // float: left;
-}
-
-.search-input {
-  height: 30px;
-  background: $small-gray-color;
-  border-radius: $border-radius;
-  input {
-    -webkit-appearance: none;
-    background: none;
-    border: none;
-    height: 100%; // width: 100%;
-  }
-}
-
-.no-data {
-  min-height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: $placeholder-color;
-  .icon-car {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 2em;
-    background: $border-color;
-    border-radius: 50%;
-  }
 }
 </style>

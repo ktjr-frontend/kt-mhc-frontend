@@ -1,28 +1,129 @@
 const _ = require('lodash')
+const orders = [{
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '1',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '2',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '3',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '4',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '5',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '6',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '7',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '8',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '9',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '10',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '11',
+  name: '测试订单'
+}, {
+  number: 'G20171231000' + _.uniqueId(),
+  count: 4,
+  amount: 160000,
+  provider: '宁波奥宝莱汽车有限公司',
+  desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+  createDate: new Date(),
+  status: '12',
+  name: '测试订单'
+}]
 
 module.exports = router => {
   // 订单列表
   router.get('/orders', (req, res) => {
+    const page = req.query.page || 1
+    const size = req.query.size || 10
+    const status = req.query.status || '0'
+    const startIndex = (page - 1) * 10
+    const filterOrders = orders.filter(or => {
+      if (status === '0' || !status) {
+        return true
+      }
+      return or.status === status
+    })
     res.jsonOk({
-      result: [{
-        number: 'G20171231000' + _.uniqueId(),
-        count: 2,
-        amount: 160000,
-        provider: '宁波奥宝莱汽车有限公司',
-        desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
-        createDate: new Date(),
-        status: '2',
-        name: '测试订单'
-      }, {
-        number: 'G20171231000' + _.uniqueId(),
-        count: 4,
-        amount: 160000,
-        provider: '宁波奥宝莱汽车有限公司',
-        desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
-        createDate: new Date(),
-        status: '1',
-        name: '测试订单'
-      }]
+      result: filterOrders.slice(startIndex, size + startIndex)
     })
   })
 
@@ -30,7 +131,7 @@ module.exports = router => {
   router.get('/providers', (req, res) => {
     const result = [{
       id: 1,
-      name: '青岛哈哈汽车有限公司'
+      name: '宁波奥宝莱汽车有限公司'
     }, {
       id: 2,
       name: '北京大佬汽车有限公司'
@@ -47,20 +148,11 @@ module.exports = router => {
   // 依据价格搜索车型
   router.get('/vehicles', (req, res) => {
     const result = [{
-      id: 1,
-      model: '奔驰C级AMG 2010款 C 63 AMG 高性能版',
-      icon: '//x.autoimg.cn/m/news/brand/36.jpg',
-      price: 133.8
-    }, {
-      id: 2,
-      model: '宝马7系 2013款 740Li xDrive',
-      icon: '//x.autoimg.cn/m/news/brand/15.jpg',
-      price: 133.5
-    }, {
-      id: 3,
-      model: '高尔夫 2018款 1.6L 自动时尚型',
-      icon: '//x.autoimg.cn/m/news/brand/1.jpg',
-      price: 13.33
+      id: 0,
+      model: '奥迪A3 2018款 30周年年型 Sportback 35 TFSI 进取型',
+      appearTrim: '白色/黑色',
+      icon: '//x.autoimg.cn/m/news/brand/33.jpg',
+      price: 13.39
     }]
 
     res.jsonOk({

@@ -17,6 +17,7 @@
       :placeholder="placeholder"
       v-if="type === 'textarea'"
       :rows="rows"
+      @focus="active = true"
       :disabled="disabled"
       :readonly="readonly"
       v-model="currentValue">
@@ -34,6 +35,7 @@
           :disabled="disabled"
           :readonly="readonly"
           :value="currentValue"
+          @click.stop.prevent="$emit('input-click', $event)"
           @input="handleInput">
         <slot name="input1-append"></slot>
       </div>
@@ -46,7 +48,7 @@
       @click="handleClear"
       class="mint-field-clear"
       v-if="!disableClear"
-      v-show="currentValue && type !== 'textarea' && active">
+      v-show="currentValue && active">
       <i class="mintui mintui-field-error"></i>
     </div>
     <span class="mint-field-state" v-if="state" :class="['is-' + state]">

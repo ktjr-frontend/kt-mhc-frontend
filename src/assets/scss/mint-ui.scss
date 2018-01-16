@@ -10,6 +10,14 @@ body {
     z-index: 99999;
   }
 
+  .mint-navbar .mint-tab-item.is-selected {
+    margin-bottom: -1px;
+  }
+
+  .mint-popup-bottom {
+    width: 100%;
+  }
+
   .mint-field-core {
     font-size: $font-size-m;
     display: flex;
@@ -183,6 +191,13 @@ body {
       list-style-position: inside;
     }
   }
+  // .mint-field {
+  //   &.not-empty {
+  //     .mint-field-core:focus + .mint-field-clear {
+  //       display: block!important;
+  //     }
+  //   }
+  // }
   .mint-field .mint-cell-title {
     width: 100px;
   }
@@ -197,6 +212,13 @@ body {
     flex: 2;
     margin: 0;
     line-height: 1.1em;
+  }
+  .mint-button--default {
+    box-shadow: none;
+    background-color: transparent;
+    &:after {
+      display: none;
+    }
   }
   .mint-header-button {
     .mint-button--default::before {
@@ -317,6 +339,11 @@ body {
     .mint-button-text {
       white-space: nowrap;
     }
+    &.no-border {
+      &:before {
+        display: none;
+      }
+    }
     &.mint-button--default::before {
       content: " ";
       border: 1px solid $font-color-em;
@@ -335,6 +362,10 @@ body {
   .mint-button--gray {
     background: #bfbfbf;
     color: white;
+  }
+  .mint-toast {
+    z-index: 99999;
+    min-width: 130px;
   }
   .mint-toast-icon {
     font-size: 56px;

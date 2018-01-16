@@ -94,7 +94,7 @@ $blue-color: #479bf5;
   }
   .mint-msgbox-header {
     height: 125px;
-    background-image: url("~assets/images/wave-shim.jpg"), url("~assets/images/icon-error.png");
+    // background-image: url("~assets/images/wave-shim.jpg"), url("~assets/images/icon-error.png");
     background-position: center bottom, center 40%;
     background-repeat: no-repeat;
     background-size: contain, 104px;
