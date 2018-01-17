@@ -3,15 +3,16 @@
     form(@submit.prevent="submit")
       section
         .fields
-          mt-cell.em-cell(title='供应商信息', is-link, :value='model.provider', @click.native="showProviderSearch")
+          mt-cell.em-cell(title='供应商信息', :state="getFieldState('model.provider')", :class="{'empty': !model.provider}", is-link, @click.native="showProviderSearch")
+            span {{model.provider || '请选择'}}
           input(type="hidden", v-model="model.provider")
       section
         .fields-header 带 <em>*</em> 为必填
         .fields
-          mt-cell(is-link, :class="{'empty': !model.vehicle.count}", @click.native="showVehicleList",  :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
+          mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
-          kt-field(type='text', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
+          kt-field(type='textarea', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
       section.mt10
         .fields
           mt-cell.title-cell
@@ -42,23 +43,23 @@
         .fields
           mt-cell.title-cell
             span(slot="title") 上传资料
-          mt-cell(is-link, @click.native="showPurchaseContract", :class="{'empty': !modelShow.purchaseContract}",  :value="modelShow.purchaseContract ? '已上传' : '请上传'")
+          mt-cell(is-link, @click.native="showPurchaseContract", :class="{'empty': !modelShow.purchaseContract}",  :value="modelShow.purchaseContract ? '已上传' : '请上传'", :state="getFieldState('model.purchaseContract')")
             span(slot="title") 采购合同 <em>*</em>
           input(type="hidden", v-model="model.purchaseContract")
-          mt-cell(is-link, @click.native="showPaymentCert", :class="{'empty': !modelShow.paymentCert}",  :value="modelShow.paymentCert ? '已上传' : '请上传'")
+          mt-cell(is-link, @click.native="showPaymentCert", :class="{'empty': !modelShow.paymentCert}",  :value="modelShow.paymentCert ? '已上传' : '请上传'", :state="getFieldState('model.paymentCert')")
             span(slot="title") 已支付凭证 <em>*</em>
           input(type="hidden", v-model="model.paymentCert")
-          mt-cell(is-link, @click.native="showDepositCert", :class="{'empty': !modelShow.depositCert}",  :value="modelShow.depositCert ? '已添加' : '请添加'")
+          mt-cell(is-link, @click.native="showDepositCert", :class="{'empty': !modelShow.depositCert}",  :value="modelShow.depositCert ? '已添加' : '请添加'", :state="getFieldState('model.depositCert')")
             span(slot="title") 保证金凭证 <em>*</em>
           input(type="hidden", v-model="model.depositCert")
-          mt-cell(is-link, @click.native="showHandingLetter", :class="{'empty': !modelShow.handingLetter}",  :value="modelShow.handingLetter ? '已上传' : '请上传'")
+          mt-cell(is-link, @click.native="showHandingLetter", :class="{'empty': !modelShow.handingLetter}",  :value="modelShow.handingLetter ? '已上传' : '请上传'", :state="getFieldState('model.handingLetter')")
             span(slot="title") 手续函照片 <em>*</em>
           input(type="hidden", v-model="model.handingLetter")
       section.mt10
         .fields
           mt-cell.title-cell
             span(slot="title") 物流信息
-          mt-cell(is-link, @click.native="showLogistics", :class="{'empty': !modelShow.logistics}",  :value="modelShow.logistics || '请选择'")
+          mt-cell(is-link, @click.native="showLogistics", :class="{'empty': !modelShow.logistics}",  :value="modelShow.logistics || '请选择'", :state="getFieldState('model.handingLetter')")
             span(slot="title") 选择物流 <em>*</em>
           input(type="hidden", v-model="model.logistics")
       .footer-tips
@@ -95,6 +96,7 @@ import PurchaseContract from '@/views/order/PurchaseContract.vue'
 import HandingLetter from '@/views/order/HandingLetter.vue'
 import PaymentCert from '@/views/order/PaymentCert.vue'
 import DepositCert from '@/views/order/DepositCert.vue'
+import { some, includes } from 'lodash'
 
 export default {
   components: { ProviderSearch, VehicleList, Logistics, PurchaseContract, HandingLetter, PaymentCert, DepositCert },
@@ -117,6 +119,12 @@ export default {
     },
     'model.depositCert' (value) {
       return this.validate(value).required('请添加保证金凭证')
+    },
+    'model.paymentCert' (value) {
+      return this.validate(value).required('请添加支付凭证')
+    },
+    'model.handingLetter' (value) {
+      return this.validate(value).required('请添加手续函照片')
     }
   },
 
@@ -183,10 +191,10 @@ export default {
 
     // 物料信息
     showLogistics() {
-      // if (!this.model.vehicle.count) {
-      //   this.$toast('请选择车辆')
-      //   return
-      // }
+      if (!this.model.vehicle.count) {
+        this.$toast('请选择车辆')
+        return
+      }
 
       this.$refs.logistics.init(this.model.logistics)
       this.logisticsVisible = true
@@ -204,10 +212,10 @@ export default {
 
     // 合同信息
     showPurchaseContract() {
-      // if (!this.model.vehicle.count) {
-      //   this.$toast('请选择车辆')
-      //   return
-      // }
+      if (!this.model.vehicle.count) {
+        this.$toast('请选择车辆')
+        return
+      }
 
       this.$refs.purchaseContract.init(this.model.purchaseContract)
       this.purchaseContractVisible = true
@@ -225,10 +233,10 @@ export default {
 
     // 手续函照片
     showHandingLetter() {
-      // if (!this.model.vehicle.count) {
-      //   this.$toast('请选择车辆')
-      //   return
-      // }
+      if (!this.model.vehicle.count) {
+        this.$toast('请选择车辆')
+        return
+      }
 
       this.$refs.handingLetter.init(this.model.handingLetter)
       this.handingLetterVisible = true
@@ -246,10 +254,10 @@ export default {
 
     // 支付凭证
     showPaymentCert() {
-      // if (!this.model.vehicle.count) {
-      //   this.$toast('请选择车辆')
-      //   return
-      // }
+      if (!this.model.vehicle.count) {
+        this.$toast('请选择车辆')
+        return
+      }
 
       this.$refs.paymentCert.init(this.model.paymentCert)
       this.paymentCertVisible = true
@@ -267,10 +275,10 @@ export default {
 
     // 保证金凭证
     showDepositCert() {
-      // if (!this.model.vehicle.count) {
-      //   this.$toast('请选择车辆')
-      //   return
-      // }
+      if (!this.model.vehicle.count) {
+        this.$toast('请选择车辆')
+        return
+      }
 
       this.$refs.depositCert.init(this.model.depositCert)
       this.depositCertVisible = true
@@ -288,11 +296,45 @@ export default {
 
     async submit() {
       const success = await this.$validate()
-      if (success) {
 
+      // 保证主要内容填写
+      const inValid = some(this.validation.errors, err => {
+        return includes(['model.provider', 'model.vehicle.count', 'model.payAmount', 'bailAmount'], err.field)
+      })
+
+      if (inValid) {
+        this.$toast('请填写主要订单信息', 'error')
+        return
+      }
+
+      if (success) {
+        this.$router.back()
         // to be done
       } else {
-        this.$toast(this.validation.firstError(), 'error')
+        const action = await this.$confirm('信息不全，确定提交订单吗？')
+        if (action === 'confirm') {
+          this.$router.back()
+        }
+        // this.$toast(this.validation.firstError(), 'error')
+      }
+    }
+  },
+
+  created() {
+    const orderId = this.$route.params.id
+    if (orderId !== 'add') {
+      this.model = {
+        provider: '宁波奥宝莱汽车有限公司',
+        vehicle: { count: 4 },
+        // logistics: {},
+        // purchaseContract: {},
+        // handingLetter: {},
+        // paymentCert: {},
+        // depositCert: {},
+        desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+        totalAmount: 160000,
+        payAmount: 10000,
+        bailAmount: 150000
       }
     }
   },
@@ -319,16 +361,18 @@ export default {
       modelShow: {
         logistics: '',
         purchaseContract: '',
+        handingLetter: '',
         paymentCert: '',
         depositCert: ''
       },
       model: {
         provider: '',
-        vehicle: { count: 0 },
-        logistics: {},
-        purchaseContract: {},
-        paymentCert: {},
-        depositCert: {},
+        vehicle: { count: null },
+        logistics: null,
+        purchaseContract: null,
+        paymentCert: null,
+        depositCert: null,
+        handingLetter: null,
         desc: '',
         totalAmount: null,
         payAmount: null,

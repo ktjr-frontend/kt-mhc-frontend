@@ -73,7 +73,7 @@ export default {
 
     async submit() {
       if (!this.model.letters.length) {
-        this.$toast('请上传采购合同照片', 'error')
+        this.$toast('请上传手续函照片', 'error')
         return
       }
 

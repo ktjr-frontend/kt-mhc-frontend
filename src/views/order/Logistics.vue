@@ -5,7 +5,7 @@ section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.
       .fields
         kt-address-select(:state="getFieldState('model.startAddress')", v-model="model.startAddress")
           span(slot="label") 起始地 <em>*</em>
-        kt-address-select(:state="getFieldState('model.endAddress')", v-model="model.endAddress")
+        kt-address-select.has-border(:state="getFieldState('model.endAddress')", v-model="model.endAddress")
           span(slot="label") 目的地 <em>*</em>
     section.mt10
       .fields
@@ -29,6 +29,11 @@ section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.
         kt-field(type="text", label="empty", placeholder='请输入备注', v-model='model.comment')
           div(slot="label")
             | 备注
+        .note-line
+          kt-checkbox(v-model="agreement", :value="false", :state="getFieldState('agreement')")
+            span.pl10 我已阅读并同意
+            a
+              |《物流信息服务协议》
 
   .form-buttons-placeholder
     .form-buttons.fixed
@@ -81,11 +86,19 @@ export default {
     },
     'model.detailAddress' (value) {
       return this.validate(value).required('请填写详细地址')
+    },
+    'agreement' (value) {
+      return this.validate(value).custom(() => {
+        if (!this.agreement) {
+          return '请阅读并同意《注册与服务合同》'
+        }
+      })
     }
   },
 
   data() {
     return {
+      agreement: false,
       tranportTypes: [{
         label: '大板车',
         value: '1'
@@ -115,6 +128,10 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.note-line {
+  padding: 15px 10px;
+}
+
 .popup-picker {
   height: 30vh;
   left: 0;

@@ -265,6 +265,14 @@ a {
   }
 }
 
+.picker-box {
+  width: 100%;
+  background: $primary-bg-color;
+  .v-modal {
+    display: none;
+  }
+}
+
 .custom-model {
   position: absolute;
   background: rgba(0, 0, 0, .4);
@@ -281,6 +289,12 @@ a {
   p {
     white-space: normal;
   }
+}
+
+.popup-picker {
+  height: 30vh;
+  left: 0;
+  right: 0;
 }
 
 .picker-header {
@@ -303,6 +317,21 @@ a {
     font-size: 2em;
     background: $border-color;
     border-radius: 50%;
+  }
+}
+
+
+ol {
+  li {
+    list-style: decimal;
+    list-style-position: inside;
+  }
+}
+
+.footer {
+  padding: 10px;
+  .note-line {
+    color: $mid-gray-color;
   }
 }
 

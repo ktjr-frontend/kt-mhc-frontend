@@ -26,7 +26,11 @@
 
 <script>
 import { vehicles } from '@/common/resources.js'
-import { debounce } from 'lodash'
+import { debounce, each } from 'lodash'
+
+const iconsMap = {
+  33: require('@/assets/images/car_brand_icons/33.jpg')
+}
 
 export default {
   props: {
@@ -68,6 +72,11 @@ export default {
           this.loading = false
           throw res
         })
+
+      each(res.data.result, r => {
+        r.icon = iconsMap[r.iconId]
+      })
+
       this.searchResult = res.data.result || []
     }, 500),
 
@@ -119,5 +128,4 @@ export default {
 .body {
   padding-top: 10px;
 }
-
 </style>

@@ -29,6 +29,14 @@ section.deposit-form(:class="this.$root.$children[0].headerShow ? this.$style.ha
         kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.bankName', :state="getFieldState('model.bankName')", @click.native="showFieldError($event, 'model.bankName')")
           div(slot="label")
             | 开户银行 <em>*</em>
+  .footer
+    .note-line
+      h4 注意事项：
+      ol
+        li
+          em 支持同一账户、同一日期多笔打款信息合并添加
+        li 非同一账户、同一日期需要添加多个还款信息
+        li 财务会根据打款信息来进行比对，请按照要求提交，避免因为信息不正确导致财务无法确认的情况
   .form-buttons-placeholder
     .form-buttons.fixed
       mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
@@ -100,9 +108,5 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.popup-picker {
-  height: 30vh;
-  left: 0;
-  right: 0;
-}
+
 </style>

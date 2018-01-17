@@ -58,7 +58,7 @@ export default {
   }
   .checkbox-label:before {
     color: $primary-color;
-    content: '\e625';
+    content: '\e626';
     font-family: 'iconfont';
     font-size: $font-size-m;
   }
@@ -69,7 +69,7 @@ export default {
     display: none;
   }
   input[type="checkbox"]:checked+.checkbox-label:before {
-    content: '\e624';
+    content: '\e625';
   }
 }
 </style>

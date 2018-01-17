@@ -31,6 +31,7 @@ import {
   TabContainer,
   TabContainerItem,
   DatetimePicker,
+  Actionsheet,
   Navbar,
   IndexList,
   IndexSection,
@@ -64,6 +65,7 @@ Vue.component(TabItem.name, TabItem)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(DatetimePicker.name, DatetimePicker)
+Vue.component(Actionsheet.name, Actionsheet)
 Vue.component(Navbar.name, Navbar)
 Vue.component(Popup.name, Popup)
 Vue.component(IndexList.name, IndexList)

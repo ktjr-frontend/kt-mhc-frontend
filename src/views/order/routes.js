@@ -11,8 +11,8 @@ export default [{
     headerShow: true
   }
 }, {
-  path: '/h5/order_add',
-  name: 'orderAdd',
+  path: '/h5/order_edit/:id',
+  name: 'orderEdit',
   component: resolve => require(['@/views/order/OrderForm.vue'], resolve),
   meta: {
     title: '添加订单',

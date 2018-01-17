@@ -11,10 +11,10 @@ div
   //- 起始地选择
   .custom-model(v-if="addressOptionsVisible", @click="addressOptionsVisible = false")
   mt-popup(v-model="addressOptionsVisible", position="bottom", :showToolbar="true")
-    .picker-header
-      mt-button.fl.cancel.no-border(@click="addressOptionsVisible = false") 取消
-      mt-button.fr.confirm.no-border(@click="confirmAddress") 确定
-    mt-picker.popup-picker(:slots='addressList', @change='onAddressChange')
+    mt-picker.popup-picker(:showToolbar="true", :slots='addressList', @change='onAddressChange')
+      .picker-header
+        mt-button.fl.cancel.no-border(@click="addressOptionsVisible = false") 取消
+        mt-button.fr.confirm.no-border(@click="confirmAddress") 确定
 </template>
 
 <script>
@@ -140,7 +140,7 @@ export default {
 
 <style lang="scss" scoped>
 .popup-picker {
-  height: 30vh;
+  height: 35vh;
   left: 0;
   right: 0;
 }

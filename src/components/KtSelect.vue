@@ -4,7 +4,7 @@ div
     span(slot="title")
       slot(name="label")
     div
-      span.va-m {{currentValue || '请选择'}}
+      span.va-m {{currentLabel || '请选择'}}
       span.mint-field-state.is-error(v-if="state === 'error'")
         i.mintui.mintui-field-error
   .custom-model(v-if="optionsVisible", @click="optionsVisible = false")
@@ -81,6 +81,7 @@ export default {
 
 .no-data {
   text-align: center;
+  min-height: 20vh;
   margin-top: 20px;
 }
 </style>

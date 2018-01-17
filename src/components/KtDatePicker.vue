@@ -5,8 +5,8 @@ div
       slot(name="label")
     div
       span.va-m {{currentValue || '请选择'}}
-      span.mint-field-state.is-error(v-if="state === 'error'")
-        i.mintui.mintui-field-error
+      //- span.mint-field-state.is-error(v-if="state === 'error'")
+      //-   i.mintui.mintui-field-error
   .custom-model(v-if="pickerVisible", @click="closePicker")
   mt-datetime-picker(ref="datePicker", :value='currentValue', @confirm="confirm", type='date', year-format='{value} 年', month-format='{value} 月', date-format='{value} 日')
 </template>

@@ -36,14 +36,14 @@
       apply-procedure(:close="closeProcedureBox")
     .fixed-footer-placeholder
     footer.fixed-footer
-      .tab-item.flex1
+      .tab-item.flex1(@click="$router.push({name: 'pickCard'})")
         i.iconfont.icon-car
         p 申请提车
       .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
         i.iconfont.icon-key
         p 申请手续
       .tab-item.flex2.tab-btn
-        button(@click="$router.push({name: 'orderAdd'})") 申请订单宝
+        button(@click="$router.push({name: 'orderEdit', params: {id: 'add'}})") 申请订单宝
 
 </template>
 
@@ -110,12 +110,12 @@ export default {
 
     // 编辑订单
     editOrder(order) {
-      // this.$router.push({
-      //   name: 'orderDetail',
-      //   params: {
-      //     id: order.id
-      //   }
-      // })
+      this.$router.push({
+        name: 'orderEdit',
+        params: {
+          id: order.id
+        }
+      })
     },
 
     // 订单详情

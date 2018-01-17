@@ -151,7 +151,7 @@ module.exports = router => {
       id: 0,
       model: '奥迪A3 2018款 30周年年型 Sportback 35 TFSI 进取型',
       appearTrim: '白色/黑色',
-      icon: '//x.autoimg.cn/m/news/brand/33.jpg',
+      iconId: '33',
       price: 13.39
     }]
 
