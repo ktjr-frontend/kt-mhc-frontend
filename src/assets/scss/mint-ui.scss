@@ -10,12 +10,24 @@ body {
     z-index: 99999;
   }
 
+  .mint-radiolist-title {
+    font-size: $font-size-m;
+    padding: 2px 10px;
+  }
+
   .mint-navbar .mint-tab-item.is-selected {
     margin-bottom: -1px;
   }
 
   .mint-popup-bottom {
     width: 100%;
+  }
+
+  .mint-actionsheet-listitem,
+  .mint-actionsheet-button {
+    padding: 8px 0;
+    line-height: 1.5em;
+    height: auto;
   }
 
   .mint-field-core {
@@ -40,12 +52,17 @@ body {
         color: $error-color!important;
       }
     }
-    &:first-child {
+    &.no-border {
       .mint-cell-wrapper {
         background-image: none;
       }
     }
-    &:last-child {
+    &:not(.ui-border-t):first-child {
+      .mint-cell-wrapper {
+        background-image: none;
+      }
+    }
+    &:not(.ui-border-b):last-child {
       background-image: none;
     }
     &.click-active {
@@ -92,6 +109,13 @@ body {
         background: $primary-color;
       }
     }
+    &.title-simple-cell {
+      min-height: 30px;
+      color: $placeholder-color;
+      .mint-cell-wrapper {
+        font-size: $font-size-xxs;
+      }
+    }
     &.em-cell {
       min-height: 50px;
       .mint-cell-title {
@@ -106,7 +130,8 @@ body {
         flex: none;
       }
     }
-    &.empty {
+    &.empty,
+    &.readonly {
       .mint-cell-value {
         color: $placeholder-color;
         .em,
@@ -114,6 +139,10 @@ body {
           color: $primary-font-color;
         }
       }
+    }
+    .wrap-title {
+      white-space: normal;
+      line-height: 1.5em;
     }
   }
 
@@ -123,9 +152,7 @@ body {
       background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
       background-origin: content-box;
     }
-  }
-
-  // &:last-child {
+  } // &:last-child {
   //   background-image: none;
   // }
   .mint-msgbox {
@@ -250,8 +277,8 @@ body {
     flex-shrink: 0;
     white-space: nowrap; // overflow: hidden;
     .iconfont {
-      font-size: 12px;
-      vertical-align: 1px; // margin-left: 3px;
+      font-size: 20px;
+      vertical-align: -3px; // margin-left: 3px;
     }
     .icon-wenhao {
       display: inline-block;
@@ -371,6 +398,12 @@ body {
     &.mint-button.br2::before {
       border-radius: 4px;
     }
+  }
+  .mint-button--small {
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 12px;
+    height: 33px;
   }
   .mint-button--gray {
     background: #bfbfbf;

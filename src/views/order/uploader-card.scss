@@ -26,6 +26,7 @@ em {
     top: -.5em;
     font-size: 20px;
     color: $placeholder-color;
+    z-index: 999;
     &:active {
       color: $el-red;
     }

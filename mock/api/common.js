@@ -15,7 +15,7 @@ module.exports = router => {
   router.post('/login', (req, res) => {
     const data = req.body
     // console.log(data, req.session.captcha)
-    if (Math.random() >= 0.7) {
+    if (Math.random() >= 1) {
       res.json({
         code: 200003 + parseInt(Math.random() * 2, 10),
         message: '用户被禁用或者状态异常'
@@ -47,11 +47,12 @@ module.exports = router => {
   // 获取用户信息
   router.get('/users', (req, res) => {
     res.jsonOk(Mock.mock({
-      'id': '599794a4f87ca703c05df02d',
-      'phone': '13810000000',
-      'name': 'demo',
-      'nickname': '昵称', //optional 微信昵称
-      'avatarURL': ''
+      id: '599794a4f87ca703c05df02d',
+      phone: '13810000000',
+      name: '张三',
+      nickname: '昵称', //optional 微信昵称
+      company: '开通金融信息服务有限公司',
+      avatarURL: ''
     }))
   })
 }

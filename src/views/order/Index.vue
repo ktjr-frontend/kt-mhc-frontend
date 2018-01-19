@@ -10,16 +10,16 @@
       .order-status.flex-item(@click="toggleStatusFilter")
         i.iconfont.icon-filter
         | 订单状态
-      .order-status-body(:style="statusFilterStyle", v-show="statusFilterVisible")
+      .order-status-body(:style="statusFilterStyle", v-show="statusFilterVisible", @touchstart="statusFilterVisible = false")
         ul.order-status-list.flex.flex-start.flex-wrap
           li(v-for="item in orderStatusList", :key="item.value")
-            .inner.ui-border-radius(@click="search(item)", :class="{'selected': filter.status === item.value}") {{item.name}}
+            .inner.ui-border-radius(@touchstart.stop="search(item)", :class="{'selected': filter.status === item.value}") {{item.name}}
     .card-body(v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
       .no-data(v-if="!orderList.length")
         i.iconfont.icon-car
         p 没有订单数据
       kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow='order.status | orderStatusFormat')
-        span.color-primary(slot='arrow') {{order.status | orderStatusFormat}}
+        span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
         .content(@click="goToDetail(order)")
           .content-row 垫资金额：{{order.amount | ktCurrency}}
           .content-row 供应商：{{order.provider}}
@@ -30,13 +30,17 @@
         .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
           button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 关闭订单
           button.ui-border-radius.warning(v-if="canEditStatus(order.status)", @click="editOrder(order)") 编辑资料
+      .no-more-data(v-if="noMoreData")
+        small 已经到底了
     mt-popup.popup-box(v-model='searchBoxVisible', position='right')
       search(:close="closeSearchBox")
     mt-popup.popup-box(v-model='procedureBoxVisible', position='right')
       apply-procedure(:close="closeProcedureBox")
+    //- mt-actionsheet(:actions='applyActions', v-model='applySheetVisible')
+    kt-actionsheet(:actions='applyActions', v-model='applySheetVisible')
     .fixed-footer-placeholder
     footer.fixed-footer
-      .tab-item.flex1(@click="$router.push({name: 'pickCard'})")
+      .tab-item.flex1(@click="showApplyActions")
         i.iconfont.icon-car
         p 申请提车
       .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
@@ -77,6 +81,8 @@ export default {
         this.searchBoxVisible = false
       } else if (this.procedureBoxVisible) {
         this.procedureBoxVisible = false
+      } else if (this.applySheetVisible) {
+        this.applySheetVisible = false
       } else {
         this.routerBack()
       }
@@ -98,6 +104,11 @@ export default {
 
     closeProcedureBox() {
       this.procedureBoxVisible = false
+    },
+
+    // 显示申请action菜单
+    showApplyActions() {
+      this.applySheetVisible = true
     },
 
     // 关闭订单
@@ -164,6 +175,9 @@ export default {
 
       if (res.data.result.length) {
         this.loading = false
+      } else {
+        this.loading = true
+        this.noMoreData = true
       }
 
       if (isMore) this.orderList = this.orderList.concat(res.data.result)
@@ -183,12 +197,31 @@ export default {
   },
 
   data() {
+    const _self = this
     return {
+      applySheetVisible: false, // 申请菜单
       statusFilterVisible: false,
       statusFilterStyle: {},
       searchBoxVisible: false, // 搜索层显示控制
       procedureBoxVisible: false, // 搜索层显示控制
       loading: false,
+      noMoreData: false,
+      applyActions: [{
+        name: '申请提车',
+        method() {
+          _self.applySheetVisible = true
+          _self.$router.push({ name: 'pickCard' })
+        }
+      }, {
+        name: `
+          <p>物权转让</p>
+          <small>（将车辆物权转移给下游，有下游公司自行申请提车）</small>
+        `,
+        method() {
+          _self.applySheetVisible = true
+          _self.$router.push({ name: 'interestTransfer' })
+        }
+      }],
       filter: {
         status: '0',
         page: 1,
@@ -302,5 +335,10 @@ header {
 
 .content-right {
   text-align: right;
+}
+
+.no-more-data {
+  text-align: center;
+  padding: 10px;
 }
 </style>

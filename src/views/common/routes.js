@@ -20,7 +20,7 @@ export default [{
     title: '开通金融',
     tabBarVisible: false,
     headerShow: true,
-    headerBackShow: false,
+    headerBackShow: true,
     skipAuth: true
   }
 }, {

@@ -38,8 +38,8 @@ section.deposit-form(:class="this.$root.$children[0].headerShow ? this.$style.ha
         li 非同一账户、同一日期需要添加多个还款信息
         li 财务会根据打款信息来进行比对，请按照要求提交，避免因为信息不正确导致财务无法确认的情况
   .form-buttons-placeholder
-    .form-buttons.fixed
-      mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
+  .form-buttons.fixed
+    mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
 </template>
 
 <script>

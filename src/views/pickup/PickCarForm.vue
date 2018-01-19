@@ -7,7 +7,7 @@
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? ('已选择' + model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
-          kt-date-picker.has-border.input-right(label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
+          kt-date-picker.has-border.input-right(:custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
             div(slot="label")
               | 预计提车时间 <em>*</em>
           kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
@@ -33,18 +33,25 @@
         ol
           li 仓管费用需要在仓库进行结算，提车前需要结算清仓管费用。
           li 若签章人暂时无法签章，可选择打印纸质委托函，盖章后拍照上传。
-      .fixed-footer-placeholder
-      footer.fixed-footer
-        .tab-item.flex1(@click="showPickTemplate")
-          p 下载提车函模板
-        .tab-item.flex2.tab-btn
-          button(@click="submit") 提交
+    .fixed-footer-placeholder
+    footer.fixed-footer
+      .tab-item.flex1(@click="showPickTemplate")
+        p 下载提车函模板
+      .tab-item.flex2.tab-btn
+        button(@click="submit") 提交
+    mt-popup.popup-box.popup-box-top(v-model='pickTemplateVisible', position='top')
+      .picker-header(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+        div 下载提车函模板
+        mt-button.right.cancel.no-border(@click="pickTemplateVisible = false") 关闭
+      .picker-body
+        .picker-row.flex
+          input.flex-item(placeholder="请输入邮箱账号", v-model="receiveEmail")
+          mt-button(type="primary", size="small", @click="sendToEmail") 发送至邮箱
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
       vehicle-list(ref="vehicleList", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.picker-box(v-model="pickerListVisible", position="bottom")
       .picker-header
         mt-button.fr.cancel.no-border(@click="pickerListVisible = false") 关闭
-        //- mt-button.fr.confirm.no-border(@click="confirmAddress") 确定
       .picker-list
         mt-cell.has-hint(v-for="p in pickerList", @click.native="onSelectPicker(p)")
           div(slot="title") {{p.name}}
@@ -55,8 +62,8 @@
 
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
-import VehicleList from '@/views/order/VehicleList.vue'
-// import { some, includes } from 'lodash'
+import VehicleList from '@/views/pickup/VehicleList.vue'
+// import { chain } from 'lodash'
 
 export default {
   components: { VehicleList },
@@ -87,6 +94,8 @@ export default {
     backButtonAction() {
       if (this.vehicleListVisible) {
         this.vehicleListVisible = false
+      } else if (this.pickTemplateVisible) {
+        this.pickTemplateVisible = false
       } else {
         this.routerBack()
       }
@@ -94,12 +103,17 @@ export default {
 
     // 提车函模板
     showPickTemplate() {
-
+      this.pickTemplateVisible = true
     },
 
-    // 提车人列表
-    showPickerList() {
-
+    // 发送提车函模板到邮箱
+    sendToEmail() {
+      if (!this.receiveEmail.match(/[0-9a-zA-Z_]+@\w+/)) {
+        this.$toast('邮箱格式不正确', 'error')
+        return
+      }
+      this.pickTemplateVisible = false
+      this.$toast('已发送，请注意查收', 'success')
     },
 
     // 选择提车人
@@ -112,7 +126,7 @@ export default {
 
     // 车辆信息
     showVehicleList() {
-      this.$refs.vehicleList.reset()
+      this.$refs.vehicleList.init()
       this.vehicleListVisible = true
     },
 
@@ -120,9 +134,11 @@ export default {
       this.vehicleListVisible = false
     },
 
-    vehicleConfirm(vehicle) {
-      this.model.vehicle = vehicle
-      this.model.totalAmount = vehicle.count * vehicle.price
+    vehicleConfirm({ vehicles, checkedCar }) {
+      this.model.vehicle = {
+        count: checkedCar.length,
+        vehicles: vehicles
+      }
       this.vehicleListVisible = false
     },
 
@@ -131,7 +147,9 @@ export default {
 
       if (success) {
         this.$router.back()
-        // to be done
+        // this.$router.push({
+        //   name: 'orders'
+        // })
       } else {
         this.$toast(this.validation.firstError(), 'error')
       }
@@ -150,8 +168,10 @@ export default {
 
   data() {
     return {
+      receiveEmail: '',
       vehicleListVisible: false,
       pickerListVisible: false,
+      pickTemplateVisible: false,
       pickCompanies: [{
         label: '北京测试公司一',
         value: '1'
@@ -196,6 +216,13 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" module>
+.has-header {
+  margin-top: $header-height;
+}
+</style>
 
 <style lang="scss" scoped>
 .picker-list {

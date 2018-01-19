@@ -4,6 +4,8 @@ import { merge } from 'lodash'
 // 记录路由是否是通过history.back方式
 window.addEventListener('popstate', (ev) => {
   let direction = 'forward'
+  console.log('popstate', direction)
+
   const currentState = store.getters.currentState
   if (currentState.index && ev.state && ev.state.index >= currentState.index) {
     direction = 'backward'

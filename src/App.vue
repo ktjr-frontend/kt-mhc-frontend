@@ -8,15 +8,29 @@
       //- mt-button.of-v(v-if="msgCountBtnVisible", slot="left", @click="$router.push({name: 'messageList'})")
         i.iconfont.icon-xiaoxi-solid.ft18.pos-r
           span.badge-red.badge-top 10
-      //- mt-button(slot="right", v-if="btnVisible(['signature'])")
+      mt-button(slot="right")
         small
-          router-link(:to="{name:'loanAgreement'}") 查看
+          a(@click="sideMenuVisible = !sideMenuVisible") 菜单
       //- mt-button(slot="right", v-if="msgListBtnVisible")
         small
           a(@click="emitEvent('messages-mark-read')") 全部已读
   .container(:class="{'header-show': headerShow, 'has-fixed-buttons': hasFixedButtons}", ref="container", v-touch:swipe.swipeleft.swiperight="onAppSwiper")
     transition(:name="transitionName", appear, mode="out-in")
       router-view(ref="routerView")
+  mt-popup.popup-box.side-menu(v-model='sideMenuVisible', position='right')
+    ul(:class="this.headerShow ? this.$style.hasHeader : ''")
+      li
+        router-link(:to="{name:'menu'}", :class="{'is-selected': $route.name === 'menu'}")
+          i.iconfont.icon-home
+          | 首页
+      li.ui-border-t
+        router-link(:to="{name:'orders'}", :class="{'is-selected': fisrtTabItemIsSelected}")
+          i.iconfont.icon-dingdan
+          | 订单宝
+      li.ui-border-t
+        router-link(:to="{name:'mine'}", :class="{'is-selected': secondTabItemIsSelected}")
+          i.iconfont.icon-wode
+          | 我的
   mt-tabbar(:fixed="true", v-show="tabBarVisible", ref="tabbar")
     mt-tab-item#orders(:class="{'is-selected': fisrtTabItemIsSelected}")
       div(slot="icon")
@@ -24,8 +38,8 @@
       | 订单宝
     mt-tab-item#stocks(:class="{'is-selected': secondTabItemIsSelected}")
       div(slot="icon")
-        i.iconfont.icon-kucun
-      | 库融宝
+        i.iconfont.icon-wode
+      | 我的
     //- mt-tab-item#mine(:class="{'is-selected': tabIsSelected(['mine', 'changeBankCardStep1', 'changeBankCardStep2', 'changeBankCardStep3', 'messageList', 'messageDetail'])}")
       div(slot="icon")
         i.iconfont.icon-user
@@ -51,7 +65,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_1o71picpkz9f6r.css')
+  require('http://at.alicdn.com/t/font_527342_zm4fx9zwg2t0ggb9.css')
 }
 
 export default {
@@ -104,12 +118,17 @@ export default {
         this.routerForward()
       } else if (direction === 'swiperight') {
         this._transitionName = 'slideLeftFade'
-        this.routerBack()
+        this.back()
       }
     },
 
     // header的返回按钮
     back() {
+      if (this.sideMenuVisible) {
+        this.sideMenuVisible = false
+        return
+      }
+
       const routerView = this.$refs.routerView
       if (routerView.backButtonAction) {
         routerView.backButtonAction()
@@ -157,9 +176,11 @@ export default {
 
   watch: {
     $route(to, from) {
+      this.sideMenuVisible = false
       this.transitionName = this._transitionName || to.params.transitionName || this.$store.getters.transitionName
       this.updateContainerHeight(to, from)
       this._transitionName = ''
+      this.title = this.$store.state.route.meta.title
       // if (from.fullPath !== '/' && !to.params.notSaveCrumbed) {
       //   if (!this.isPopStated) this.routerCrumbs.push(from)
       //   else this.routerCrumbs.pop() // 如果是history.back，那么需要删除当前页面的crumbs,因为上一步记录了此页面路由
@@ -170,10 +191,10 @@ export default {
   computed: {
     ...mapGetters(['route', 'stateCode', 'isPopStated']),
     fisrtTabItemIsSelected() {
-      return includes(['orders'], this.$store.state.route.name)
+      return includes(['orders', 'orderEdit', 'orderDetail'], this.$store.state.route.name)
     },
     secondTabItemIsSelected() {
-      return includes(['stocks'], this.$store.state.route.name)
+      return includes(['mine', 'profile'], this.$store.state.route.name)
     },
     msgCountBtnVisible() {
       return includes(['mine'], this.$store.state.route.name)
@@ -185,7 +206,8 @@ export default {
       return this.$store.state.route.meta.tabBarVisible
     },
     headerShow() {
-      return !this.isInWeixin && this.$store.state.route.meta.headerShow && (~process.env.NODE_ENV.indexOf('app') || ~process.env.NODE_ENV.indexOf('development'))
+      // !this.isInWeixin &&
+      return this.$store.state.route.meta.headerShow && (~process.env.NODE_ENV.indexOf('app') || ~process.env.NODE_ENV.indexOf('development'))
     },
     hasFixedButtons() {
       return this.$store.state.route.meta.hasFixedButtons
@@ -200,6 +222,7 @@ export default {
 
   data() {
     return {
+      sideMenuVisible: false,
       isInWeixin: this.isWeixin(),
       title: '',
       transitionName: 'slideRightFade'
@@ -208,8 +231,13 @@ export default {
 }
 </script>
 
+<style lang="scss" module>
+.has-header {
+  margin-top: $header-height;
+}
+</style>
+
 <style lang="scss">
-// @import '~assets/scss/_variables.scss';
 @import '~assets/fonts/franklin/franklin.css';
 @import '~assets/scss/base.scss';
 @import '~assets/scss/common.scss';
@@ -251,9 +279,28 @@ small {
   -webkit-overflow-scrolling: touch;
   &.header-show {
     padding-top: $header-height;
-  }
-  // &.has-fixed-buttons {
+  } // &.has-fixed-buttons {
   //   padding-bottom: 44px;
   // }
+}
+
+.side-menu {
+  li {
+    .iconfont {
+      margin-right: 5px;
+    }
+    a {
+      padding: 10px 10px;
+      display: block;
+      font-size: $font-size-s;
+      color: $primary-font-color;
+      &.is-selected {
+        color: $primary-color;
+      }
+    }
+    &:active {
+      background-color: rgba(0, 0, 0, .1);
+    }
+  }
 }
 </style>

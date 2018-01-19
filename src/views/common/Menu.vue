@@ -6,11 +6,11 @@
       .card.box-border.box-border-r
         router-link.card-inner(:to="{name: 'orders'}")
           i.iconfont.icon-dingdan.el-blue
-          p 订单宝
+          p 订单
       .card.box-border.box-border-r
-        router-link.card-inner(:to="{name: 'stocks'}")
-          i.iconfont.icon-kucun.el-green
-          p 库存宝
+        router-link.card-inner(:to="{name: 'mine'}")
+          i.iconfont.icon-wode.el-green
+          p 我的
       .card
         .card-inner(@click="more()")
           i.iconfont.icon-gengduo.el-light-gray

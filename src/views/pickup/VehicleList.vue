@@ -1,289 +1,171 @@
 <template lang="pug">
-section.vehicle-list(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
-  header.flex.search-header(v-show="activeStep === '1-1' || activeStep === '2-1'")
-    //- div.flex-item
-    mt-button.mint-button-block(type='primary', size='large', @click="showVehicleSearch('2-1')")
-      i.iconfont.icon-sousuo.mr5
-      | 快速选择车型（输入指导价）
-  section.body.mt10
-    .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
-      ul.standard-list
-        mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showVehicleList(s)", is-link, :title="s.name")
-    .step-block(v-show="activeStep === '1-2'")
-      mt-index-list
-        mt-index-section(v-for="(item, key) in vehicleList", :key="key", :index="key")
-          mt-cell(v-for="v in item", :title='v.name', @click.native="showVehicleSearch('1-2')")
-            img(slot='icon', :src='v.icon' width='24' height='24')
-    .step-block(v-show="activeStep === '2-2' || activeStep === '1-3'")
-      vehicle-search(ref="vehicleSearch", :close="closeVehicleSearch", @select-vehicle="onSelectVehicle")
-    .step-block.pt10(v-show="activeStep === '2-3' || activeStep === '1-4'")
-      mt-cell.click-active.ui-border-b
-        .custom-title.flex.flex-start(slot="title")
-          img.mr10(:src="selectedVehicle.icon", slot="icon", width="18")
-          .custom-content
-            p {{selectedVehicle.model}}
-            small.note 指导价：{{ selectedVehicle.price }} 万
-      form(@submit.prevent="submit")
-        section
-          .fields
-            mt-cell(is-link, :class="{'empty': !model.appearTrim}", :state="getFieldState('model.appearTrim')", @click.native="showAppearTrimOptions",  :value="model.appearTrim || '请选择'")
-              span(slot="title") 外观内饰 <em>*</em>
-              div
-                span.va-m {{model.appearTrim || '请选择'}}
-                //- span.mint-field-state.is-error(v-if="getFieldState('model.appearTrim') === 'error'")
-                  i.mintui.mintui-field-error
-            input(type="hidden", v-model="model.appearTrim")
-            kt-field.has-hint.input-right(type="number", label='数量', placeholder='请输入', v-model='model.count', :state="getFieldState('model.count')", @click.native="showFieldError($event, 'model.count')")
-              div(slot="label") 数量  <em>*</em>
-              span(slot="input1-append") 辆
-            kt-field.has-hint.input-right(type="number", label='单辆车合同单价', placeholder='请输入金额', v-model='model.price', :state="getFieldState('model.price')", @click.native="showFieldError($event, 'model.price')")
-              div(slot="label") 单辆车合同单价 <em>*</em>
-                p.title-hint 给车型批次总价格
-              span(slot="input1-append") 元
-    //- .step-block(v-show="activeStep === '2-4' || activeStep === '1-5'")
-  .custom-model(v-if="appearTrimOptionsVisible", @click="appearTrimOptionsVisible = false")
-  mt-popup(v-model="appearTrimOptionsVisible", position="bottom", :showToolbar="true")
-    .picker-header
-      mt-button.fl.cancel.no-border(@click="appearTrimOptionsVisible = false") 取消
-      mt-button.fr.confirm.no-border(@click="confirmAppearTrim") 确定
-    mt-picker.apprear-trim-picker(:slots='appearTrimList' @change='onApprearTrimChange')
-  .form-buttons-placeholder
-    .form-buttons.fixed
-      mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
+  section.search-vehicles(:class="headerShow ? this.$style.hasHeader : ''")
+    header.flex.search-header(v-if="headerVisible")
+      form.search-input.flex-item.flex(@submit.prevent="search")
+        i.iconfont.icon-sousuo
+        input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.price", placeholder="输入车架号快速搜索")
+        i.iconfont.icon-qingchu(v-if="filter.price", @click="clearSearch")
+      button.cancel-btn(@click="close") 取消
+    .header-sub.ui-border-t
+      //- .custom-model(v-if="repositoryListVisible", @click="repositoryListVisible = false")
+      .select-repository
+        div.select-value(@click="repositoryListVisible = !repositoryListVisible")
+          div.value(:class="repositoryListVisible ? 'open' : ''") {{selectRepositoryLabel}}
+        div.select-list(v-show="repositoryListVisible")
+          ul.ui-border-t
+            li.ui-border-t(v-for="r in repositoryList", :key="r.value", @click="() => {selectRepository = r.value;repositoryListVisible=false}") {{r.label}}
+    section.body
+      .no-data(v-if="!searchResult.length && filter.price")
+        i.iconfont.icon-car
+        p 此条件下没有结果
+      .search-result(v-if="searchResult.length")
+        template(v-for="r in searchResult")
+          mt-cell.ui-border-b(title="empty", :key="r.id")
+            .custom-title.flex.flex-start(slot="title")
+              kt-checkbox.mr10(v-model="r.checked", @change="syncChildStatus(r)")
+              //- img.mr10(:src="r.icon", slot="icon", width="18")
+              .custom-content
+                p {{r.model}}
+                small.note 共 {{r.children.length}} 两
+          section
+            mt-cell.no-border(v-for="sub in r.children", :key="sub.frameNo", title="empty")
+              .custom-title.flex.flex-start(slot="title")
+                kt-checkbox.mr10(v-model="sub.checked", @change="syncParentStatus(r)")
+                //- img.mr10(:src="r.icon", slot="icon", width="18")
+                .custom-content
+                  p 车架号：{{sub.frameNo}}
+                  small.note 外观内饰：{{sub.appearTrim}}
+    .fixed-footer-placeholder
+    footer.fixed-footer.flex
+      .flex-item.flex-start.pl10
+        kt-checkbox(v-model="checked", @change="checkAll")
+          span.pl10 全选
+          span.pl10 已选 [ {{checkedCar.length}} ]
+      .tab-item(v-if="from !== 'interestTransfer'", style="width:80px;")
+        button(@click="submit") 提交
+      template(v-else)
+        .tab-item(style="width: 50px;")
+          button.simple(@click="close") 取消
+        .tab-item(style="min-width: 80px;")
+          button(@click="submit") 转移物权
 </template>
 
 <script>
-import VehicleSearch from '@/views/order/VehicleSearch.vue'
-import ValidatorMixin from '@/views/validator_mixin.js'
+import { vehicles } from '@/common/resources.js'
+import { debounce, each, find, every, chain } from 'lodash'
+
+const iconsMap = {
+  33: require('@/assets/images/car_brand_icons/33.jpg')
+}
 
 export default {
-  mixins: [ValidatorMixin],
-  components: {
-    VehicleSearch
-  },
-
   props: {
-    close: Function
+    close: Function,
+    from: String
   },
 
   methods: {
-    // 自定义后退按钮行为
-    backButtonAction() {
-      const [mainStep, minorStep] = this.activeStep.split('-')
-      if (+minorStep > 1) {
-        this.activeStep = [mainStep, minorStep - 1].join('-')
-      } else if (+minorStep === 1) {
-        this.close()
-      }
+    clearSearch() {
+      this.filter.price = ''
+      this.search()
     },
 
-    // 重置步骤
     reset() {
-      this.activeStep = '1-1'
+      this.searchResult = []
+      this.filter.price = ''
     },
 
-    // 下一步
-    nextStep() {
-      const [mainStep, minorStep] = this.activeStep.split('-')
-      this.activeStep = [mainStep, +minorStep + 1].join('-')
+    searchInputChange(event) {
+      this.filter.price = event.target.value
+      this.search()
     },
 
-    // 显示车辆搜索栏
-    showVehicleSearch(preStep) {
-      if (preStep === '1-2') {
-        this.$refs.vehicleSearch.init(133)
-        this.activeStep = '1-3'
-      } else if (preStep === '2-1') {
-        this.$refs.vehicleSearch.init()
-        this.activeStep = '2-2'
+    init() {
+      this.headerVisible = true
+      this.search()
+    },
+
+    // 同步选择状态
+    syncGlobalStatus() {
+      this.checked = every(this.searchResult, sr => sr.checked)
+    },
+
+    syncParentStatus(r) {
+      r.checked = every(r.children, c => c.checked)
+      this.syncGlobalStatus()
+    },
+
+    syncChildStatus(r) {
+      each(r.children, c => { c.checked = r.checked })
+      this.syncGlobalStatus()
+    },
+
+    checkAll() {
+      each(this.searchResult, sr => {
+        sr.checked = this.checked
+        each(sr.children, c => {
+          c.checked = this.checked
+        })
+      })
+    },
+
+    search: debounce(async function() {
+      const res = await vehicles
+        .get(this.pruneParams(this.filter))
+        .then(res => res.json())
+        .catch(res => {
+          this.loading = false
+          throw res
+        })
+
+      each(res.data.result, r => {
+        r.icon = iconsMap[r.iconId]
+      })
+
+      this.searchResult = res.data.result || []
+    }, 500),
+
+    submit() {
+      if (!this.checkedCar.length) {
+        this.$toast('请选择车辆', 'error')
+        return
       }
-    },
 
-    // 显示车辆类型一级目录
-    showVehicleList() {
-      this.activeStep = '1-2'
-    },
-
-    // 选择具体车型以后
-    onSelectVehicle(vehicle) {
-      this.nextStep()
-      this.validation.reset()
-      this.selectedVehicle = vehicle
-    },
-
-    // 关闭车辆搜索栏
-    closeVehicleSearch() {
-      this.backButtonAction()
-    },
-
-    // 显示外观颜色选择框
-    showAppearTrimOptions() {
-      this.appearTrimOptionsVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs.appearTrimPick
-      // })
-    },
-
-    // 外观颜色选择
-    onApprearTrimChange(picker, values) {
-      this.selectedAppearTrim = values.join('-')
-    },
-
-    // 确定选择
-    confirmAppearTrim(value) {
-      this.model.appearTrim = this.selectedAppearTrim
-      this.appearTrimOptionsVisible = false
-    },
-
-    // 填写具体购买车型信息提交
-    async submit() {
-      const success = await this.$validate()
-      if (success) {
-        this.$emit('popup-confirmed', this.model)
-      } else {
-        this.$toast(this.validation.firstError(), 'error')
-      }
+      this.$emit('popup-confirmed', { vehicles: this.searchResult, checkedCar: this.checkedCar })
     }
   },
 
-  validators: {
-    'model.appearTrim' (value) {
-      return this.validate(value).required('请选择外观内饰')
+  computed: {
+    headerShow() {
+      return this.$root.$children[0].headerShow && this.from !== 'interestTransfer'
     },
-    'model.price' (value) {
-      return this.validate(value).required('请输入单车金额')
+
+    checkedCar() {
+      return chain(this.searchResult).map(sr => sr.children).flatten().filter(c => c.checked).value()
     },
-    'model.count' (value) {
-      return this.validate(value).required('请输入购买数量')
+
+    selectRepositoryLabel() {
+      const rp = find(this.repositoryList, r => r.value === this.selectRepository) || {}
+      return rp.label || ''
     }
   },
 
   data() {
     return {
-      selectedAppearTrim: '黑色-黑色',
-      activeStep: '1-1', // {主步骤}-{子步骤}
-      selectedVehicle: {},
-      appearTrimOptionsVisible: false,
-      appearTrimList: [{
-        flex: 1,
-        values: ['黑色', '北极白', '宝石蓝', '粉笔白', '铁黑', '钻石白'],
-        className: 'apprear',
-        textAlign: 'right'
+      checked: [],
+      repositoryListVisible: false,
+      repositoryList: [{
+        label: '测试1号库',
+        value: '1'
       }, {
-        divider: true,
-        content: '-',
-        className: 'divider'
-      }, {
-        flex: 1,
-        values: ['黑色', '黑色/辣椒红色', '黑色/铂金珠光白', '黑色/瓷器黄色'],
-        className: 'trim',
-        textAlign: 'left'
+        label: '测试2号库',
+        value: '2'
       }],
-      model: {
-        appearTrim: null,
-        count: null,
-        price: null
-      },
-      standardList: [{
-        id: 1,
-        name: '中规/国产'
-      }, {
-        id: 2,
-        name: '美规'
-      }, {
-        id: 3,
-        name: '加规'
-      }, {
-        id: 4,
-        name: '中东'
-      }, {
-        id: 5,
-        name: '欧规'
-      }, {
-        id: 6,
-        name: '墨版'
-      }],
-      vehicleList: {
-        A: [{
-          name: '奥迪',
-          icon: require('@/assets/images/car_brand_icons/33.jpg')
-        }, {
-          name: '阿斯顿·马丁',
-          icon: require('@/assets/images/car_brand_icons/35.jpg')
-        }],
-        B: [{
-          name: '本田',
-          icon: require('@/assets/images/car_brand_icons/14.jpg')
-        }, {
-          name: '奔驰',
-          icon: require('@/assets/images/car_brand_icons/36.jpg')
-        }, {
-          name: '宝马',
-          icon: require('@/assets/images/car_brand_icons/15.jpg')
-        }, {
-          name: '别克',
-          icon: require('@/assets/images/car_brand_icons/38.jpg')
-        }, {
-          name: '比亚迪',
-          icon: require('@/assets/images/car_brand_icons/75.jpg')
-        }, {
-          name: '宝骏',
-          icon: require('@/assets/images/car_brand_icons/120.jpg')
-        }, {
-          name: '标志',
-          icon: require('@/assets/images/car_brand_icons/13.jpg')
-        }, {
-          name: '保时捷',
-          icon: require('@/assets/images/car_brand_icons/40.jpg')
-        }, {
-          name: '宾利',
-          icon: require('@/assets/images/car_brand_icons/39.jpg')
-        }, {
-          name: '北京',
-          icon: require('@/assets/images/car_brand_icons/27.jpg')
-        }, {
-          name: '奔腾',
-          icon: require('@/assets/images/car_brand_icons/95.jpg')
-        }],
-        C: [{
-          name: '长安',
-          icon: require('@/assets/images/car_brand_icons/76.jpg')
-        }, {
-          name: '长城',
-          icon: require('@/assets/images/car_brand_icons/77.jpg')
-        }, {
-          name: '昌河',
-          icon: require('@/assets/images/car_brand_icons/79.jpg')
-        }, {
-          name: '成功汽车',
-          icon: require('@/assets/images/car_brand_icons/196.jpg')
-        }],
-        D: [{
-          name: '大众',
-          icon: require('@/assets/images/car_brand_icons/1.jpg')
-        }, {
-          name: '东风',
-          icon: require('@/assets/images/car_brand_icons/32.jpg')
-        }, {
-          name: '东南',
-          icon: require('@/assets/images/car_brand_icons/81.jpg')
-        }, {
-          name: '道奇',
-          icon: require('@/assets/images/car_brand_icons/41.jpg')
-        }],
-        F: [{
-          name: '福特',
-          icon: require('@/assets/images/car_brand_icons/8.jpg')
-        }, {
-          name: '丰田',
-          icon: require('@/assets/images/car_brand_icons/3.jpg')
-        }, {
-          name: '法拉利',
-          icon: require('@/assets/images/car_brand_icons/42.jpg')
-        }, {
-          name: '菲亚特',
-          icon: require('@/assets/images/car_brand_icons/96.jpg')
-        }]
+      selectRepository: '1',
+      headerVisible: true,
+      searchResult: [],
+      filter: {
+        price: ''
       }
     }
   }
@@ -297,8 +179,72 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-header {
-  padding: 10px;
+.iconfont {
+  width: 30px;
+  text-align: center; // float: left;
+}
+
+.header-sub {
+  // padding: 10px;
+  min-height: 45px;
+  line-height: 45px;
+  background: white;
+}
+
+.search-help {
+  padding-top: 100px;
+  text-align: center;
+  img {
+    width: 60vw;
+  }
+}
+
+.select-value {
+  .value {
+    position: relative;
+    display: inline-block;
+    &.open:after {
+      transform: rotate(180deg);
+      top: 16px;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      border-width: 4px;
+      top: 20px;
+      right: -15px;
+      height: 0;
+      width: 0;
+      border-color: currentColor transparent transparent;
+      border-style: solid;
+    }
+  }
+}
+
+.select-repository {
+  text-align: center;
+  position: relative;
+  font-size: $font-size-m;
+  z-index: 999;
+  ul {
+    background: white;
+    li {
+      padding: 0 10px;
+      &:active {
+        background-color: rgba(0, 0, 0, .02);
+      }
+    }
+  }
+  .select-list {
+    position: absolute;
+    left: 0;
+    top: 45px;
+    height: 100vh;
+    background: rgba(0, 0, 0, .2);
+    right: 0;
+    text-align: left;
+    z-index: 998;
+  }
 }
 
 .custom-content {
@@ -309,9 +255,7 @@ header {
   }
 }
 
-.apprear-trim-picker {
-  height: 30vh;
-  left: 0;
-  right: 0;
+.body {
+  padding-top: 10px;
 }
 </style>

@@ -38,6 +38,7 @@ export default {
 
     currentValue(val) {
       this.$emit('input', val)
+      this.$emit('change', val)
     }
   },
 

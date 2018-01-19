@@ -12,7 +12,7 @@
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
-          kt-field(type='textarea', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
+          //- kt-field(type='textarea', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
       section.mt10
         .fields
           mt-cell.title-cell
@@ -96,6 +96,7 @@ import PurchaseContract from '@/views/order/PurchaseContract.vue'
 import HandingLetter from '@/views/order/HandingLetter.vue'
 import PaymentCert from '@/views/order/PaymentCert.vue'
 import DepositCert from '@/views/order/DepositCert.vue'
+import { titleUpdater } from '@/common/crossers.js'
 import { some, includes } from 'lodash'
 
 export default {
@@ -331,11 +332,14 @@ export default {
         // handingLetter: {},
         // paymentCert: {},
         // depositCert: {},
-        desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+        // desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
         totalAmount: 160000,
         payAmount: 10000,
         bailAmount: 150000
       }
+      titleUpdater.$emit('updatetitle', '编辑订单')
+    } else {
+      titleUpdater.$emit('updatetitle', '添加订单')
     }
   },
 
@@ -373,7 +377,7 @@ export default {
         paymentCert: null,
         depositCert: null,
         handingLetter: null,
-        desc: '',
+        // desc: '',
         totalAmount: null,
         payAmount: null,
         bailAmount: null

@@ -10,4 +10,16 @@ export default [{
     headerBackShow: true,
     headerShow: true
   }
+}, {
+  path: '/h5/interest_transfer',
+  name: 'interestTransfer',
+  component: resolve => require(['@/views/pickup/InterestTransfer.vue'], resolve),
+  meta: {
+    title: '车辆转移物权',
+    tabBarVisible: false,
+    skipAuth: false,
+    hasFixedButtons: true,
+    headerBackShow: true,
+    headerShow: true
+  }
 }]

@@ -11,6 +11,9 @@
   &.flex-down {
     flex-direction: column;
   }
+  &.flex-right {
+    flex-direction: row;
+  }
   &.flex-wrap {
     flex-wrap: wrap;
   }

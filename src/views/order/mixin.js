@@ -20,8 +20,8 @@ const orderStatusList = [{
   name: '验车未通过',
   value: ORDER_STATUS_MAP.CHECK_CAR_REJECTED
 }, {
-  name: '待放款',
-  value: ORDER_STATUS_MAP.WAIT_FOR_LOAN
+  name: '放款审核通过',
+  value: ORDER_STATUS_MAP.LOAN_CHECK_SUCCESS
 }, {
   name: '放款审核未通过',
   value: ORDER_STATUS_MAP.LOAN_CHECK_FAILED
@@ -38,8 +38,23 @@ const orderStatusList = [{
   name: '已入库',
   value: ORDER_STATUS_MAP.PUT_IN_STORE
 }, {
+  name: '还款不通过',
+  value: ORDER_STATUS_MAP.REPAYMENT_FAILED
+}, {
+  name: '待提车',
+  value: ORDER_STATUS_MAP.WAIT_FOR_PICK
+}, {
+  name: '提车审核不通过',
+  value: ORDER_STATUS_MAP.PICK_CHECK_FAILED
+}, {
+  name: '已完成',
+  value: ORDER_STATUS_MAP.PICK_SUCCESS
+}, {
   name: '已关闭',
   value: ORDER_STATUS_MAP.CLOSED
+}, {
+  name: '待结算审核',
+  value: ORDER_STATUS_MAP.WAIT_FOT_SETTLEMENT
 }]
 
 const orderStatusClassMap = {

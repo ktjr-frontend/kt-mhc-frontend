@@ -207,6 +207,7 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
     &.tab-btn {
       height: 100%;
     }
@@ -219,6 +220,10 @@ a {
       background: $primary-color;
       color: white;
       border: 0;
+      &.simple {
+        background: none;
+        color: $minor-font-color;
+      }
       &:active {
         background: darken($primary-color, 5%);
       }
@@ -233,12 +238,15 @@ a {
 }
 
 .search-header {
-  height: 45px;
+  min-height: 45px;
   padding: 0 10px;
   background: white;
   .cancel-btn {
     width: 50px;
     color: $primary-color;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
   }
   .search-input {
     height: 30px;
@@ -260,16 +268,38 @@ a {
   height: 100%;
   width: 100%;
   background: $primary-bg-color;
+  &.popup-box-top {
+    max-height: 30vh;
+    height: auto;
+  }
+  .picker-body {
+    padding: 15px 10px;
+  }
   .v-modal {
     display: none;
+  }
+  &.side-menu {
+    width: 45%;
   }
 }
 
 .picker-box {
   width: 100%;
-  background: $primary-bg-color;
+  background: white;
   .v-modal {
     display: none;
+  }
+}
+
+.picker-row {
+  padding: 5px 10px;
+  input {
+    line-height: 33px;
+    -webkit-appearance: none;
+    border: none;
+    background: none;
+    background-color: $small-gray-color;
+    text-indent: 1em;
   }
 }
 
@@ -298,9 +328,21 @@ a {
 }
 
 .picker-header {
+  text-align: center;
   overflow: hidden;
+  position: relative;
+  line-height: 45px;
+  font-size: $font-size-m;
+  color: $placeholder-color;
+  background-color: white;
   .confirm {
     color: $primary-color;
+  }
+  .right {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 

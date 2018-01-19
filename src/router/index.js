@@ -62,6 +62,7 @@ router.afterEach((to) => {
 // 给push方法添加默认过渡效果和记录堆栈
 const oldPush = router.push
 router.push = function(location = {}, isBackPush) {
+  if (typeof location === 'string') location = { path: location }
   if (!location.params) location.params = {}
   if (!location.params.transitionName) location.params.transitionName = 'slideRightFade'
   if (!isBackPush) store.commit('updateIsPopStated', false)
@@ -71,6 +72,7 @@ router.push = function(location = {}, isBackPush) {
 // 替换replace方法
 const oldReplace = router.replace
 router.replace = function(location = {}, isBackPush) {
+  if (typeof location === 'string') location = { path: location }
   if (!location.params) location.params = {}
   if (!location.params.transitionName) location.params.transitionName = 'slideRightFade'
   if (!isBackPush) store.commit('updateIsPopStated', false)

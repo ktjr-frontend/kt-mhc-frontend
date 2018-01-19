@@ -48,8 +48,8 @@ section.vehicle-list(:class="this.$root.$children[0].headerShow ? this.$style.ha
       mt-button.fr.confirm.no-border(@click="confirmAppearTrim") 确定
     mt-picker.apprear-trim-picker(:slots='appearTrimList' @change='onApprearTrimChange')
   .form-buttons-placeholder
-    .form-buttons.fixed
-      mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
+  .form-buttons.fixed
+    mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
 </template>
 
 <script>

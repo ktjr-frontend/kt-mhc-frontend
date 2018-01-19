@@ -46,6 +46,7 @@ import KtDatePicker from '@/components/KtDatePicker.vue'
 import KtCountdown from '@/components/KtCountdown.vue'
 import KtIcon from '@/components/KtIcon.vue'
 import KtCheckbox from '@/components/KtCheckbox.vue'
+import KtActionsheet from '@/components/KtActionsheet.vue'
 import KtMsgbox from '@/components/KtMsgbox.vue'
 
 // vuex化路由
@@ -80,6 +81,7 @@ Vue.component(KtDatePicker.name, KtDatePicker)
 Vue.component(KtCountdown.name, KtCountdown)
 Vue.component(KtIcon.name, KtIcon)
 Vue.component(KtCheckbox.name, KtCheckbox)
+Vue.component(KtActionsheet.name, KtActionsheet)
 Vue.component(KtMsgbox.name, KtMsgbox)
 
 Vue.use(KtFilters)

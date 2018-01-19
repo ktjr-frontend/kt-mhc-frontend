@@ -36,8 +36,8 @@ section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.
               |《物流信息服务协议》
 
   .form-buttons-placeholder
-    .form-buttons.fixed
-      mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
+  .form-buttons.fixed
+    mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
 </template>
 
 <script>

@@ -5,7 +5,7 @@ div
       slot(name="label") 起始地 <em>*</em>
     div
       span.va-m {{currentValue || '请选择'}}
-      span.mint-field-state.is-error(v-if="state === 'error'")
+      //- span.mint-field-state.is-error(v-if="state === 'error'")
         i.mintui.mintui-field-error
       //- input(type="hidden", v-model="model.endAddress")
   //- 起始地选择

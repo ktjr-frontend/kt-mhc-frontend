@@ -1,11 +1,11 @@
 <template lang="pug">
 div
-  mt-cell(is-link, :class="{'empty': !currentValue}", :state="state", @click.native="showOptions", :value="currentValue || '请选择'")
+  mt-cell(is-link, :class="[{'empty': !currentValue}, ...cellClass]", :state="state", @click.native="showOptions", :value="currentValue || '请选择'")
     span(slot="title")
       slot(name="label")
     div
       span.va-m {{currentLabel || '请选择'}}
-      span.mint-field-state.is-error(v-if="state === 'error'")
+      //- span.mint-field-state.is-error(v-if="state === 'error'")
         i.mintui.mintui-field-error
   .custom-model(v-if="optionsVisible", @click="optionsVisible = false")
   mt-popup.option-list(v-model="optionsVisible", position="center")
@@ -29,6 +29,10 @@ export default {
     state: {
       type: String,
       default: 'default'
+    },
+    cellClass: {
+      type: Array,
+      default () { return [] }
     },
     options: {
       type: Array,
