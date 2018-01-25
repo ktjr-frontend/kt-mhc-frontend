@@ -7,15 +7,15 @@ section.login
     .fields
       kt-field(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
         span(slot="label")
-          i.iconfont.icon-user-solid2
+          i.iconfont.icon-yonghu
       kt-field(type="number", label='手机号', placeholder='请输入验证码', v-model='user.captcha', :state="getFieldState('user.captcha')", @click.native="showFieldError($event, 'user.captcha')")
         span(slot="label")
-          i.iconfont.icon-verification
+          i.iconfont.icon-yanzhengma
         mt-button(type='default', @click.stop.prevent='toGetMsgCode()', :disabled='countdownVisible')
           span(v-show='!countdownVisible') 获取验证码
           kt-countdown(ref='fnCountdown', v-show='countdownVisible', @countdown-over='onCountdownOver()')
     .form-buttons
-      mt-button.mint-button-block(type='primary', size='large') 立即登录
+      mt-button.mint-button-block(type='primary', size='large') 登录
       //- .note-line
         kt-checkbox(v-model="agreement", :value="false", :state="getFieldState('agreement')")
           span.pl10 我已阅读并同意

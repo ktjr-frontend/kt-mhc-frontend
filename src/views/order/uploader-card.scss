@@ -9,7 +9,7 @@ em {
   color: $error-color;
 }
 
-.body {
+.photo-body {
   padding: 10px;
 }
 
@@ -54,7 +54,7 @@ em {
     top: 50%;
     left: 50%;
     font-size: 25px;
-    color: $placeholder-color;
+    color: $primary-font-color;
     transform: translateY(-50%) translateX(-50%);
   }
   input {

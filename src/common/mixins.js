@@ -29,6 +29,19 @@ export default {
         routerForward() {
           this.$store.commit('updateTransitionName', 'slideRightFade')
           this.$router.forward()
+        },
+
+        // 计算popbox高度
+        updatePopBoxHeight(subtractHeight = 0) {
+          let headerHeight = 0
+          const $app = this.$root.$children[0]
+
+          this.$nextTick(() => {
+            if ($app.headerShow) {
+              headerHeight = $app.$refs.header.$el.getBoundingClientRect().height
+            }
+            this.$refs.popBoxContainer.style.height = `${window.innerHeight - headerHeight - subtractHeight}px`
+          })
         }
       },
 

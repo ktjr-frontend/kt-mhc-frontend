@@ -3,7 +3,7 @@ export default [{
   name: 'pickCard',
   component: resolve => require(['@/views/pickup/PickCarForm.vue'], resolve),
   meta: {
-    title: '委托函申请',
+    title: '提车函申请',
     tabBarVisible: false,
     skipAuth: false,
     hasFixedButtons: true,

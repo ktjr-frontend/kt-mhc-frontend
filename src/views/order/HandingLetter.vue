@@ -1,14 +1,16 @@
 <template lang="pug">
-  section.letters(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+  section.letters
+    mt-header(ref="header", title="上传手续函照片")
+      mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header
       | 上传手续函照片
-    .body.flex.flex-wrap.flex-start
+    .photo-body.flex.flex-wrap.flex-start
       .preview(v-for="letter in model.letters")
-        i.iconfont.icon-qinchu(@click="deleteLetter(letter)")
+        i.iconfont.icon-qingchu(@click="deleteLetter(letter)")
         img(v-if="letter.previewUrl", :src="letter.previewUrl")
       .upload-input
         i.iconfont.icon-paizhao
-        input(type="file", accept="image/*;", @change="photoChange($event)")
+        input(ref="file", type="file", accept="image/*;", @change="photoChange($event)")
     .footer
       .note-line
         h4 上传注意事项：
@@ -31,6 +33,10 @@ import { Indicator } from 'mint-ui'
 // const FILE_NOT_EMPTY = 'has_file'
 
 export default {
+  props: {
+    close: Function
+  },
+
   methods: {
     init() {
 
@@ -38,6 +44,7 @@ export default {
 
     deleteLetter(letter) {
       this.model.letters = remove(this.model.letters, c => c !== letter)
+      this.$refs.file.value = ''
     },
 
     showPreview(url, letter) {
@@ -67,7 +74,7 @@ export default {
         this.showPreview(rst.base64, letter)
       }).catch(err => {
         Indicator.close()
-        this.$toast(err || this.$t('archive.photoID.imgLoadErr'), 'error')
+        this.$toast(err || '上传失败', 'error')
       })
     },
 
@@ -133,12 +140,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 @import "~views/order/uploader-card.scss";

@@ -2,16 +2,16 @@
   section.category
     //- .logo
       img(src="~assets/images/icon.png")
-    .card-container.box-border.box-border-tb
-      .card.box-border.box-border-r
+    .card-container.box-border.box-border-t
+      .card
         router-link.card-inner(:to="{name: 'orders'}")
           i.iconfont.icon-dingdan.el-blue
-          p 订单
-      .card.box-border.box-border-r
+          p 订单融资
+      .card.box-border.box-border-tb
         router-link.card-inner(:to="{name: 'mine'}")
           i.iconfont.icon-wode.el-green
           p 我的
-      .card
+      //- .card
         .card-inner(@click="more()")
           i.iconfont.icon-gengduo.el-light-gray
           p 更多
@@ -43,7 +43,7 @@ export default {
     position: relative;
     font-size: 12px;
     height: 33.33vw;
-    width: 33.33vw; // box-sizing: border-box;
+    width: 100%; // box-sizing: border-box;
     background-color: white;
     &:active {
       background: $border-color;

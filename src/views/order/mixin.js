@@ -73,6 +73,35 @@ export default {
   },
 
   methods: {
+    // 关闭订单
+    async closeOrder(order) {
+      const action = await this.$confirm('确定关闭订单？')
+      if (action === 'confirm') {
+        order.status = this.ORDER_STATUS_MAP.CLOSED
+      }
+    },
+
+    // 编辑订单
+    editOrder(order) {
+      console.log(order)
+      this.$router.push({
+        name: 'orderEdit',
+        params: {
+          id: order.id
+        }
+      })
+    },
+
+    // 订单详情
+    goToDetail(order) {
+      this.$router.push({
+        name: 'orderDetail',
+        params: {
+          id: order.id
+        }
+      })
+    },
+
     canEditStatus(status) {
       return includes([
         ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,

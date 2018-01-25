@@ -11,6 +11,7 @@ import interceptors from '@/common/interceptors.js'
 import KtFilters from '@/common/filters.js'
 import KtMixins from '@/common/mixins.js'
 import KtDirectives from '@/common/directives.js'
+import clickoutside from '@/common/clickoutside.js'
 import SimpleVueValidation from 'simple-vue-validator'
 import { getReadTime } from '@/common/utils.js'
 
@@ -48,6 +49,9 @@ import KtIcon from '@/components/KtIcon.vue'
 import KtCheckbox from '@/components/KtCheckbox.vue'
 import KtActionsheet from '@/components/KtActionsheet.vue'
 import KtMsgbox from '@/components/KtMsgbox.vue'
+import KtCardItem from '@/components/KtCardItem.vue'
+import KtPopupInput from '@/components/KtPopupInput.vue'
+import KtAddressSelect from '@/components/KtAddressSelect.vue'
 
 // vuex化路由
 sync(store, router)
@@ -83,10 +87,14 @@ Vue.component(KtIcon.name, KtIcon)
 Vue.component(KtCheckbox.name, KtCheckbox)
 Vue.component(KtActionsheet.name, KtActionsheet)
 Vue.component(KtMsgbox.name, KtMsgbox)
+Vue.component(KtCardItem.name, KtCardItem)
+Vue.component(KtPopupInput.name, KtPopupInput)
+Vue.component(KtAddressSelect.name, KtAddressSelect)
 
 Vue.use(KtFilters)
 Vue.use(KtMixins)
 Vue.use(KtDirectives)
+Vue.use(clickoutside)
 
 // 表单验证
 Vue.use(SimpleVueValidation, {

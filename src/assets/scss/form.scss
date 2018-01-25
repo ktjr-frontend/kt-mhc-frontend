@@ -89,7 +89,12 @@ form,
   }
 }
 .form-buttons-placeholder{
-  height: 44px;
+  min-height: 44px;
+  .button-tip {
+    padding: 10px;
+  }
+  pointer-events: none;
+  opacity: 0;
 }
 .form-buttons {
   // padding: 20px 15px;
@@ -99,6 +104,11 @@ form,
     right: 0;
     bottom: 0;
     z-index: 999;
-    background: white;
+    // background: white;
+  }
+  .button-tip {
+    padding: 10px;
+    color: $placeholder-color;
+    text-align: center;
   }
 }

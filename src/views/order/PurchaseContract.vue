@@ -1,14 +1,16 @@
 <template lang="pug">
-  section.contracts(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+  section.contracts
+    mt-header(ref="header", title="上传合同")
+      mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header
       | 上传采购合同照片
-    .body.flex.flex-wrap.flex-start
+    .photo-body.flex.flex-wrap.flex-start
       .preview(v-for="contract in model.contracts")
         i.iconfont.icon-qingchu(@click="deleteContract(contract)")
         img(v-if="contract.previewUrl", :src="contract.previewUrl")
       .upload-input
         i.iconfont.icon-paizhao
-        input(type="file", accept="image/*;", @change="photoChange($event)")
+        input(ref="file", type="file", accept="image/*;", @change="photoChange($event)")
     .footer
       .note-line
         h4 上传注意事项：
@@ -31,6 +33,10 @@ import { Indicator } from 'mint-ui'
 // const FILE_NOT_EMPTY = 'has_file'
 
 export default {
+  props: {
+    close: Function
+  },
+
   methods: {
     init() {
 
@@ -38,6 +44,7 @@ export default {
 
     deleteContract(contract) {
       this.model.contracts = remove(this.model.contracts, c => c !== contract)
+      this.$refs.file.value = ''
     },
 
     showPreview(url, contract) {
@@ -67,7 +74,7 @@ export default {
         this.showPreview(rst.base64, contract)
       }).catch(err => {
         Indicator.close()
-        this.$toast(err || this.$t('archive.photoID.imgLoadErr'), 'error')
+        this.$toast(err || '上传失败', 'error')
       })
     },
 

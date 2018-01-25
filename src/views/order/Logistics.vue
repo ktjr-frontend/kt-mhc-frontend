@@ -1,5 +1,7 @@
 <template lang="pug">
-section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+section.logistics-form
+  mt-header(ref="header", title="物流信息")
+    mt-button(icon="back", slot="left", @click.prevent="close") 返回
   form(@submit.prevent="submit")
     section
       .fields
@@ -13,7 +15,7 @@ section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.
           span(slot="label") 运输类型 <em>*</em>
     section.mt10
       .fields
-        kt-date-picker.input-right(label='empty', :readonly="true" placeholder='请选择', v-model='model.deliverDate', :state="getFieldState('model.deliverDate')", @click.native="showFieldError($event, 'model.deliverDate')")
+        kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.deliverDate', :state="getFieldState('model.deliverDate')", @click.native="showFieldError($event, 'model.deliverDate')")
           div(slot="label")
             | 发运时间 <em>*</em>
         kt-field(type="text", label='empty', placeholder='请输入发运时间', v-model='model.deliverContact', :state="getFieldState('model.deliverContact')", @click.native="showFieldError($event, 'model.deliverContact')")
@@ -42,11 +44,9 @@ section.logistics-form(:class="this.$root.$children[0].headerShow ? this.$style.
 
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
-import KtAddressSelect from '@/components/KtAddressSelect.vue'
 
 export default {
   mixins: [ValidatorMixin],
-  components: { KtAddressSelect },
   props: {
     close: Function
   },
@@ -120,12 +120,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 .note-line {

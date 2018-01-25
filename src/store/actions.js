@@ -31,6 +31,7 @@ export default {
     if (data.code === RET_CODE_MAP.OK) {
       const user = data.data
       await dispatch('updateUser', user)
+      commit('updateStateCode', '1') // 只是用来标记用户信息获取成功
     }
     return data
   },

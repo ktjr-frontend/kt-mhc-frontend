@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  mt-cell(is-link, :class="{'empty': !currentValue}", :state="state", @click.native="showAddressOptions",  :value="currentValue || '请选择'")
+  mt-cell(:is-link="!readonly", :class="{'empty': !currentValue}", :state="state", @click.native="showAddressOptions",  :value="currentValue || '请选择'")
     span(slot="title")
       slot(name="label") 起始地 <em>*</em>
     div
@@ -12,7 +12,7 @@ div
   .custom-model(v-if="addressOptionsVisible", @click="addressOptionsVisible = false")
   mt-popup(v-model="addressOptionsVisible", position="bottom", :showToolbar="true")
     mt-picker.popup-picker(:showToolbar="true", :slots='addressList', @change='onAddressChange')
-      .picker-header
+      .picker-header.ui-border-b
         mt-button.fl.cancel.no-border(@click="addressOptionsVisible = false") 取消
         mt-button.fr.confirm.no-border(@click="confirmAddress") 确定
 </template>
@@ -59,7 +59,9 @@ const addressList = [{
 }]
 
 export default {
+  name: 'kt-address-select',
   props: {
+    readonly: Boolean,
     value: String,
     state: String
   },
@@ -67,6 +69,7 @@ export default {
   methods: {
     // 显示地址选择器
     showAddressOptions() {
+      if (this.readonly) return
       this.addressOptionsVisible = true
     },
 

@@ -3,7 +3,7 @@ export default [{
   name: 'orders',
   component: resolve => require(['@/views/order/Index.vue'], resolve),
   meta: {
-    title: '订单宝',
+    title: '订单融资',
     tabBarVisible: false,
     skipAuth: false,
     hasFixedButtons: true,

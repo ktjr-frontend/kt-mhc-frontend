@@ -1,11 +1,13 @@
 <template lang="pug">
-section.vehicle-list(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+section.vehicle-list
+  mt-header(ref="header", title="选择车辆")
+    mt-button(icon="back", slot="left", @click.prevent="backButtonAction") 返回
   header.flex.search-header(v-show="activeStep === '1-1' || activeStep === '2-1'")
     //- div.flex-item
     mt-button.mint-button-block(type='primary', size='large', @click="showVehicleSearch('2-1')")
       i.iconfont.icon-sousuo.mr5
       | 快速选择车型（输入指导价）
-  section.body.mt10
+  section.body
     .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
       ul.standard-list
         mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showVehicleList(s)", is-link, :title="s.name")
@@ -43,7 +45,7 @@ section.vehicle-list(:class="this.$root.$children[0].headerShow ? this.$style.ha
     //- .step-block(v-show="activeStep === '2-4' || activeStep === '1-5'")
   .custom-model(v-if="appearTrimOptionsVisible", @click="appearTrimOptionsVisible = false")
   mt-popup(v-model="appearTrimOptionsVisible", position="bottom", :showToolbar="true")
-    .picker-header
+    .picker-header.ui-border-b
       mt-button.fl.cancel.no-border(@click="appearTrimOptionsVisible = false") 取消
       mt-button.fr.confirm.no-border(@click="confirmAppearTrim") 确定
     mt-picker.apprear-trim-picker(:slots='appearTrimList' @change='onApprearTrimChange')

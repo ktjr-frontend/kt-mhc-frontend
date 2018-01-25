@@ -8,7 +8,7 @@ div
       //- span.mint-field-state.is-error(v-if="state === 'error'")
       //-   i.mintui.mintui-field-error
   .custom-model(v-if="pickerVisible && customModelVisible", @click="closePicker")
-  mt-datetime-picker(ref="datePicker", :value='currentValue', @confirm="confirm", type='date', year-format='{value} 年', month-format='{value} 月', date-format='{value} 日')
+  mt-datetime-picker(ref="datePicker", :value='currentValue', @cancel="pickerVisible = false", @confirm="confirm", type='date', year-format='{value} 年', month-format='{value} 月', date-format='{value} 日')
 </template>
 
 <script>

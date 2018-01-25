@@ -18,7 +18,7 @@
     transition(:name="transitionName", appear, mode="out-in")
       router-view(ref="routerView")
   mt-popup.popup-box.side-menu(v-model='sideMenuVisible', position='right')
-    ul(:class="this.headerShow ? this.$style.hasHeader : ''")
+    ul
       li
         router-link(:to="{name:'menu'}", :class="{'is-selected': $route.name === 'menu'}")
           i.iconfont.icon-home
@@ -26,7 +26,7 @@
       li.ui-border-t
         router-link(:to="{name:'orders'}", :class="{'is-selected': fisrtTabItemIsSelected}")
           i.iconfont.icon-dingdan
-          | 订单宝
+          | 订单融资
       li.ui-border-t
         router-link(:to="{name:'mine'}", :class="{'is-selected': secondTabItemIsSelected}")
           i.iconfont.icon-wode
@@ -35,7 +35,7 @@
     mt-tab-item#orders(:class="{'is-selected': fisrtTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-order
-      | 订单宝
+      | 订单融资
     mt-tab-item#stocks(:class="{'is-selected': secondTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-wode
@@ -65,7 +65,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_zm4fx9zwg2t0ggb9.css')
+  require('http://at.alicdn.com/t/font_527342_x206remsl8a1yvi.css')
 }
 
 export default {
@@ -109,8 +109,6 @@ export default {
   },
 
   methods: {
-    // ...mapActions(),
-
     // container层swiper
     onAppSwiper(direction, event) {
       if (direction === 'swipeleft') {
@@ -231,12 +229,6 @@ export default {
 }
 </script>
 
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
-
 <style lang="scss">
 @import '~assets/fonts/franklin/franklin.css';
 @import '~assets/scss/base.scss';
@@ -285,6 +277,7 @@ small {
 }
 
 .side-menu {
+  margin-top: $header-height;
   li {
     .iconfont {
       margin-right: 5px;

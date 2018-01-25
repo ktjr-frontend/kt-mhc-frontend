@@ -1,6 +1,6 @@
 <template lang="pug">
   label.kt-checkbox
-    input(type="checkbox", v-model="currentValue")
+    input(type="checkbox", v-model="currentValue", @change="onInput")
     span.checkbox-label
       slot
     span.mint-field-state(:class="stateClass")
@@ -34,11 +34,19 @@ export default {
   watch: {
     value(val) {
       this.currentValue = val
-    },
+    }
 
-    currentValue(val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
+    // currentValue(val) {
+    //   this.$emit('input', val)
+    //   this.$emit('change', val)
+    // }
+  },
+
+  methods: {
+    // 用change事件替代 watch方式，避免全选与子选择之间的逻辑问题
+    onInput(event) {
+      this.$emit('input', event.target.checked)
+      this.$emit('change', event.target.checked)
     }
   },
 

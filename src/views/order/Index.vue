@@ -2,7 +2,11 @@
   section.orders
     header
       h2 我的额度（元）
-      p.amount 0
+      p.amount-line
+        | 总额度：
+        span.amount.mr10 0
+        | 已用额度：
+        span.amount 0
       button.show-amount-tip(@click="showAmountTip") 额度说明
     .search-column.flex.scroll-fixed(ref="searchColumn")
       .flex-item
@@ -26,14 +30,14 @@
           .content-row.flex
             .content-left.flex-item 订单描述：{{order.desc}}
             .content-right 共 {{order.count}} 辆
-          .content-row 订单简称：{{order.name}}
+          //- .content-row 订单简称：{{order.name}}
         .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
           button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 关闭订单
           button.ui-border-radius.warning(v-if="canEditStatus(order.status)", @click="editOrder(order)") 编辑资料
       .no-more-data(v-if="noMoreData")
         small 已经到底了
     mt-popup.popup-box(v-model='searchBoxVisible', position='right')
-      search(:close="closeSearchBox")
+      search(:close="closeSearchBox", ref="searchBox")
     mt-popup.popup-box(v-model='procedureBoxVisible', position='right')
       apply-procedure(:close="closeProcedureBox")
     //- mt-actionsheet(:actions='applyActions', v-model='applySheetVisible')
@@ -43,16 +47,15 @@
       .tab-item.flex1(@click="showApplyActions")
         i.iconfont.icon-car
         p 申请提车
-      .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
+      //- .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
         i.iconfont.icon-key
         p 申请手续
       .tab-item.flex2.tab-btn
-        button(@click="$router.push({name: 'orderEdit', params: {id: 'add'}})") 申请订单宝
+        button(@click="$router.push({name: 'orderEdit', params: {id: 'add'}})") 申请订单融资
 
 </template>
 
 <script>
-import KtCardItem from '@/components/KtCardItem.vue'
 import Search from '@/views/order/Search.vue'
 import ApplyProcedure from '@/views/order/ApplyProcedure.vue'
 import { orders } from '@/common/resources.js'
@@ -61,7 +64,7 @@ import OrderMixin from '@/views/order/mixin.js'
 
 export default {
   mixins: [OrderMixin],
-  components: { KtCardItem, Search, ApplyProcedure },
+  components: { Search, ApplyProcedure },
   methods: {
     showAmountTip() {
       this.$msgBox({
@@ -91,6 +94,9 @@ export default {
     // 显示搜索框
     showSearchBox() {
       this.searchBoxVisible = true
+      this.$nextTick(() => {
+        this.$refs.searchBox.updateContainerHeight()
+      })
     },
 
     closeSearchBox() {
@@ -108,35 +114,10 @@ export default {
 
     // 显示申请action菜单
     showApplyActions() {
-      this.applySheetVisible = true
-    },
-
-    // 关闭订单
-    async closeOrder(order) {
-      const action = await this.$confirm('确定关闭订单？')
-      if (action === 'confirm') {
-        order.status = this.ORDER_STATUS_MAP.CLOSED
-      }
-    },
-
-    // 编辑订单
-    editOrder(order) {
       this.$router.push({
-        name: 'orderEdit',
-        params: {
-          id: order.id
-        }
+        name: 'pickCard'
       })
-    },
-
-    // 订单详情
-    goToDetail(order) {
-      this.$router.push({
-        name: 'orderDetail',
-        params: {
-          id: order.id
-        }
-      })
+      // this.applySheetVisible = true
     },
 
     // 筛选
@@ -246,19 +227,13 @@ header {
   }
 }
 
-.buttons {
-  padding: 10px 0;
-  button {
-    background: none;
-    margin-left: 10px;
-    line-height: 20px;
-  }
+.amount-line {
+  margin-top: 15px;
 }
 
 .amount {
   font-size: 30px;
-  font-family: franklin;
-  margin-top: 15px;
+  font-family: franklin; // margin-top: 15px;
 }
 
 .show-amount-tip {
@@ -277,6 +252,7 @@ header {
   position: relative;
   z-index: 9;
   button {
+    white-space: nowrap;
     padding: 5px;
     background: $minor-bg-color;
     border: 0;
@@ -303,6 +279,7 @@ header {
   padding: 10px 5px;
   li {
     width: 33.33%;
+    white-space: nowrap;
   }
   .inner {
     padding: 5px 8px;

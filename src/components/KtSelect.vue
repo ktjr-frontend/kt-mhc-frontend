@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  mt-cell(is-link, :class="[{'empty': !currentValue}, ...cellClass]", :state="state", @click.native="showOptions", :value="currentValue || '请选择'")
+  mt-cell(:is-link="!readonly", :class="[{'empty': !currentValue}, ...cellClass]", :state="state", @click.native="showOptions", :value="currentValue || '请选择'")
     span(slot="title")
       slot(name="label")
     div
@@ -22,8 +22,8 @@ export default {
   name: 'kt-select',
   props: {
     label: String,
+    readonly: Boolean,
     // placeholder: String,
-    // readonly: Boolean,
     // disabled: Boolean,
     // disableClear: Boolean,
     state: {
@@ -45,6 +45,7 @@ export default {
 
   methods: {
     showOptions() {
+      if (this.readonly) return
       this.optionsVisible = true
     }
   },

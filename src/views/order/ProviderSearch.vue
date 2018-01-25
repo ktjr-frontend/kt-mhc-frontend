@@ -1,5 +1,7 @@
 <template lang="pug">
-  section.search-providers(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+  section.search-providers
+    mt-header(ref="header", title="选择供应商")
+      mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
@@ -64,12 +66,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 .iconfont {

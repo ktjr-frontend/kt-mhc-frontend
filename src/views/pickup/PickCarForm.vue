@@ -10,7 +10,7 @@
           kt-date-picker.has-border.input-right(:custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
             div(slot="label")
               | 预计提车时间 <em>*</em>
-          kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
+          //- kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
             span(slot="label") 选择提车公司 <em>*</em>
           .note-row
             .inner
@@ -40,17 +40,16 @@
       .tab-item.flex2.tab-btn
         button(@click="submit") 提交
     mt-popup.popup-box.popup-box-top(v-model='pickTemplateVisible', position='top')
-      .picker-header(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
-        div 下载提车函模板
-        mt-button.right.cancel.no-border(@click="pickTemplateVisible = false") 关闭
+      mt-header(ref="header", title="下载提车函模板")
+        mt-button(icon="back", slot="left", @click.prevent="pickTemplateVisible = false") 返回
       .picker-body
         .picker-row.flex
-          input.flex-item(placeholder="请输入邮箱账号", v-model="receiveEmail")
+          input.flex-item.mr5(placeholder="请输入邮箱账号", v-model="receiveEmail")
           mt-button(type="primary", size="small", @click="sendToEmail") 发送至邮箱
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
       vehicle-list(ref="vehicleList", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.picker-box(v-model="pickerListVisible", position="bottom")
-      .picker-header
+      .picker-header.ui-border-b
         mt-button.fr.cancel.no-border(@click="pickerListVisible = false") 关闭
       .picker-list
         mt-cell.has-hint(v-for="p in pickerList", @click.native="onSelectPicker(p)")
@@ -75,9 +74,9 @@ export default {
     'model.pickDate' (value) {
       return this.validate(value).required('请选择提车时间')
     },
-    'model.pickCompany' (value) {
-      return this.validate(value).required('请选择提车公司')
-    },
+    // 'model.pickCompany' (value) {
+    //   return this.validate(value).required('请选择提车公司')
+    // },
     'model.pickerName' (value) {
       return this.validate(value).required('请填写提车人姓名')
     },
@@ -90,16 +89,16 @@ export default {
   },
 
   methods: {
-    // 自定义顶部标题栏的返回按钮行为
-    backButtonAction() {
-      if (this.vehicleListVisible) {
-        this.vehicleListVisible = false
-      } else if (this.pickTemplateVisible) {
-        this.pickTemplateVisible = false
-      } else {
-        this.routerBack()
-      }
-    },
+    // // 自定义顶部标题栏的返回按钮行为
+    // backButtonAction() {
+    //   if (this.vehicleListVisible) {
+    //     this.vehicleListVisible = false
+    //   } else if (this.pickTemplateVisible) {
+    //     this.pickTemplateVisible = false
+    //   } else {
+    //     this.routerBack()
+    //   }
+    // },
 
     // 提车函模板
     showPickTemplate() {
@@ -207,7 +206,7 @@ export default {
         provider: '',
         vehicle: { count: null },
         pickDate: '',
-        pickCompany: '',
+        // pickCompany: '',
         pickerName: '',
         pickerPhone: '',
         pickerIdCard: ''

@@ -1,13 +1,13 @@
 <template lang="pug">
-  section.payment-certs
-    mt-header(ref="header", title="选择供应商")
+  section.vehicle-photos
+    mt-header(ref="header", title="上传实车照片")
       mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header
-      | 上传支付凭证
+      | 上传实车照片
     .photo-body.flex.flex-wrap.flex-start
-      .preview(v-for="paymentCert in model.paymentCerts")
-        i.iconfont.icon-qingchu(@click="deletePaymentCert(paymentCert)")
-        img(v-if="paymentCert.previewUrl", :src="paymentCert.previewUrl")
+      .preview(v-for="photo in model.photos")
+        i.iconfont.icon-qingchu(@click="deletePhoto(photo)")
+        img(v-if="photo.previewUrl", :src="photo.previewUrl")
       .upload-input
         i.iconfont.icon-paizhao
         input(ref="file", type="file", accept="image/*;", @change="photoChange($event)")
@@ -42,18 +42,18 @@ export default {
 
     },
 
-    deletePaymentCert(paymentCert) {
-      this.model.paymentCerts = remove(this.model.paymentCerts, c => c !== paymentCert)
+    deletePhoto(photo) {
+      this.model.photos = remove(this.model.photos, c => c !== photo)
       this.$refs.file.value = ''
     },
 
-    showPreview(url, paymentCert) {
+    showPreview(url, photo) {
       const img = new Image()
       img.src = url
       img.onload = () => {
-        paymentCert.previewUrl = url
-        this.model.paymentCerts.push(paymentCert)
-        // paymentCert.img = img
+        photo.previewUrl = url
+        this.model.photos.push(photo)
+        // photo.img = img
         Indicator.close()
         // const maxW = this.$els[ns].getBoundingClientRect().width
         // this[ns].previewImgStyle = {
@@ -69,9 +69,9 @@ export default {
       lrz(file, {
         quality: 0.7 //1 的话方向会错
       }).then(rst => {
-        const paymentCert = {}
-        paymentCert.rst = rst
-        this.showPreview(rst.base64, paymentCert)
+        const photo = {}
+        photo.rst = rst
+        this.showPreview(rst.base64, photo)
       }).catch(err => {
         Indicator.close()
         this.$toast(err || '上传失败', 'error')
@@ -79,8 +79,8 @@ export default {
     },
 
     async submit() {
-      if (!this.model.paymentCerts.length) {
-        this.$toast('请上传支付凭证照片', 'error')
+      if (!this.model.photos.length) {
+        this.$toast('请上传实车照片', 'error')
         return
       }
 
@@ -128,9 +128,9 @@ export default {
   data() {
     return {
       model: {
-        paymentCerts: []
+        photos: []
       },
-      paymentCerts: [{
+      photos: [{
         rst: {},
         file: null,
         previewUrl: '',
@@ -140,12 +140,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 @import "~views/order/uploader-card.scss";

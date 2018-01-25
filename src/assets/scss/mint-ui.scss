@@ -6,6 +6,13 @@ body {
     font-size: $font-size-m;
   }
 
+  .overflow-scroll {
+    overflow: auto;
+    overflow-y: scroll;
+    touch-action: pan-y;
+    max-height: 100vh;
+  }
+
   .mint-indicator-wrapper {
     z-index: 99999;
   }
@@ -137,6 +144,23 @@ body {
         .em,
         em {
           color: $primary-font-color;
+        }
+      }
+    }
+    &.input-file-cell {
+      &:active {
+        background-color: rgba(0, 0, 0, .1);
+      }
+      .avata {
+        padding: 10px 0;
+        input {
+          opacity: 0;
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
         }
       }
     }
@@ -347,7 +371,7 @@ body {
     color: white;
     background-color: $header-bg-color;
     &.is-fixed {
-      z-index: 9999;
+      z-index: 999;
     }
   }
 

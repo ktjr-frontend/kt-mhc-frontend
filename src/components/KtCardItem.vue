@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: 'kt-card-item',
   props: {
     headerLeft: String,
     headerRight: String,
@@ -22,6 +23,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.card-footer {
+  .buttons {
+    padding: 10px 0;
+    button {
+      background: none;
+      margin-left: 10px;
+      line-height: 20px;
+    }
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .card-item {

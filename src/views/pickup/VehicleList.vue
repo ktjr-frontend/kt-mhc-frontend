@@ -1,5 +1,7 @@
 <template lang="pug">
-  section.search-vehicles(:class="headerShow ? this.$style.hasHeader : ''")
+  section.search-vehicles
+    mt-header(ref="header", title="车辆信息")
+      mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header.flex.search-header(v-if="headerVisible")
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
@@ -26,11 +28,11 @@
               //- img.mr10(:src="r.icon", slot="icon", width="18")
               .custom-content
                 p {{r.model}}
-                small.note 共 {{r.children.length}} 两
+                small.note 共 {{r.children.length}} 辆
           section
             mt-cell.no-border(v-for="sub in r.children", :key="sub.frameNo", title="empty")
               .custom-title.flex.flex-start(slot="title")
-                kt-checkbox.mr10(v-model="sub.checked", @change="syncParentStatus(r)")
+                kt-checkbox.mr10(v-model="sub.checked", @change="syncParentStatus(r, sub)")
                 //- img.mr10(:src="r.icon", slot="icon", width="18")
                 .custom-content
                   p 车架号：{{sub.frameNo}}
@@ -38,7 +40,7 @@
     .fixed-footer-placeholder
     footer.fixed-footer.flex
       .flex-item.flex-start.pl10
-        kt-checkbox(v-model="checked", @change="checkAll")
+        kt-checkbox(:value="checked", @input="checkAll")
           span.pl10 全选
           span.pl10 已选 [ {{checkedCar.length}} ]
       .tab-item(v-if="from !== 'interestTransfer'", style="width:80px;")
@@ -90,17 +92,21 @@ export default {
       this.checked = every(this.searchResult, sr => sr.checked)
     },
 
-    syncParentStatus(r) {
+    // 同步父级选择状态
+    syncParentStatus(r, sub) {
       r.checked = every(r.children, c => c.checked)
       this.syncGlobalStatus()
     },
 
+    // 同步子集选择状态
     syncChildStatus(r) {
       each(r.children, c => { c.checked = r.checked })
       this.syncGlobalStatus()
     },
 
-    checkAll() {
+    // 全选
+    checkAll(val) {
+      this.checked = val
       each(this.searchResult, sr => {
         sr.checked = this.checked
         each(sr.children, c => {
@@ -136,10 +142,6 @@ export default {
   },
 
   computed: {
-    headerShow() {
-      return this.$root.$children[0].headerShow && this.from !== 'interestTransfer'
-    },
-
     checkedCar() {
       return chain(this.searchResult).map(sr => sr.children).flatten().filter(c => c.checked).value()
     },
@@ -171,12 +173,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 .iconfont {

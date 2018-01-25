@@ -1,5 +1,7 @@
 <template lang="pug">
-  section.search-vehicles(:class="this.$root.$children[0].headerShow ? this.$style.hasHeader : ''")
+  section.search-vehicles
+    //- mt-header(ref="header", title="选择车辆")
+    //-   mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header.flex.search-header(v-if="headerVisible")
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
@@ -96,12 +98,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.has-header {
-  margin-top: $header-height;
-}
-</style>
 
 <style lang="scss" scoped>
 .iconfont {

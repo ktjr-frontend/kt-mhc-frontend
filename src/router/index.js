@@ -20,15 +20,18 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   const nextAsync = function(opt) { // 避免watch先于popstate事件执行的问题
     setTimeout(() => { opt ? next(opt) : next() })
   }
-  const { user, token } = store.getters
+  const { user, token, stateCode } = store.getters
   if (!to.meta.skipAuth) { // 需要登录权限的页面
     if (!token || !user.phone) {
       nextAsync({ name: 'login', query: { redirect: to.fullPath } })
+    } else if (stateCode) {
+      nextAsync()
     } else {
+      await store.dispatch('getUser')
       nextAsync()
     }
   } else { // 不需要权限的页面不拦截

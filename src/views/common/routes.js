@@ -21,7 +21,7 @@ export default [{
     tabBarVisible: false,
     headerShow: true,
     headerBackShow: true,
-    skipAuth: true
+    skipAuth: false
   }
 }, {
   path: '*',
