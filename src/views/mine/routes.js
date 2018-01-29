@@ -47,7 +47,7 @@ export default [{
   name: 'wayBill',
   component: resolve => require(['@/views/mine/WayBill.vue'], resolve),
   meta: {
-    title: '企业认证',
+    title: '我的运单',
     tabBarVisible: false,
     headerShow: true,
     headerBackShow: true,

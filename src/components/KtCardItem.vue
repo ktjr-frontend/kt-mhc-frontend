@@ -26,6 +26,19 @@ export default {
 </script>
 
 <style lang="scss">
+.card-item {
+  &.stress {
+    .left {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: $primary-font-color;
+    }
+    .right {
+      color: $primary-font-color;
+    }
+  }
+}
+
 .card-footer {
   .buttons {
     padding: 10px 0;
@@ -65,6 +78,9 @@ export default {
 .card-body {
   position: relative;
   padding: 10px 0;
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .arrow {

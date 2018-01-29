@@ -28,6 +28,26 @@ const wayBillStatusList = [{
   value: '4'
 }]
 
+const wayBillVehicleStatusList = [{
+  label: '待验车',
+  value: '1'
+}, {
+  label: '待发运',
+  value: '2'
+}, {
+  label: '在途',
+  value: '3'
+}, {
+  label: '到达',
+  value: '4'
+}, {
+  label: '完成',
+  value: '5'
+}, {
+  label: '失效',
+  value: '6'
+}]
+
 const transportTypeList = [{
   label: '大板车',
   value: '1'
@@ -38,6 +58,7 @@ const transportTypeList = [{
 
 const companyTypeMap = keyBy(companyTypeList, 'value')
 const wayBillStatusMap = keyBy(wayBillStatusList, 'value')
+const wayBillVehicleStatusMap = keyBy(wayBillVehicleStatusList, 'value')
 const transportTypeMap = keyBy(transportTypeList, 'value')
 
 export default {
@@ -48,7 +69,10 @@ export default {
     wayBillStatusFormat(value) {
       return wayBillStatusMap[value] ? wayBillStatusMap[value].label : ''
     },
-    tranportTypeFormat(value) {
+    wayBillVehicleStatusFormat(value) {
+      return wayBillVehicleStatusMap[value] ? wayBillVehicleStatusMap[value].label : ''
+    },
+    transportTypeFormat(value) {
       return transportTypeMap[value] ? transportTypeMap[value].label : ''
     }
   },
@@ -59,6 +83,8 @@ export default {
       companyTypeMap,
       wayBillStatusList,
       wayBillStatusMap,
+      wayBillVehicleStatusList,
+      wayBillVehicleStatusMap,
       transportTypeList,
       transportTypeMap
     }

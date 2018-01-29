@@ -69,7 +69,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_s9nv4id3tyhnnrk9.css')
+  require('http://at.alicdn.com/t/font_527342_g2zadd35mavpldi.css')
 }
 
 export default {

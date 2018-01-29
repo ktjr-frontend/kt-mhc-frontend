@@ -17,7 +17,7 @@
       .order-status-body(:style="statusFilterStyle", v-show="statusFilterVisible", @touchstart="statusFilterVisible = false")
         ul.order-status-list.flex.flex-start.flex-wrap
           li(v-for="item in orderStatusList", :key="item.value")
-            .inner.ui-border-radius(@touchstart.stop="search(item)", :class="{'selected': filter.status === item.value}") {{item.name}}
+            .inner.ui-border-radius(@touchstart.stop="search(item)", :class="{'selected': filter.status === item.value}") {{item.label}}
     .card-body(v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
       .no-data(v-if="!orderList.length")
         i.iconfont.icon-car
@@ -159,15 +159,15 @@ export default {
           throw res
         })
 
+      if (isMore) this.orderList = this.orderList.concat(res.data.result)
+      else this.orderList = res.data.result
+
       if (res.data.result.length) {
         this.loading = false
       } else {
         this.loading = true
         this.noMoreData = true
       }
-
-      if (isMore) this.orderList = this.orderList.concat(res.data.result)
-      else this.orderList = res.data.result
     }
   },
 
@@ -317,10 +317,5 @@ header {
 
 .content-right {
   text-align: right;
-}
-
-.no-more-data {
-  text-align: center;
-  padding: 10px;
 }
 </style>

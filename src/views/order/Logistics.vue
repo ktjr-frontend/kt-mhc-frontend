@@ -11,7 +11,7 @@ section.logistics-form
           span(slot="label") 目的地 <em>*</em>
     section.mt10
       .fields
-        kt-select(:options="tranportTypeList", v-model="model.tranportType", :state="getFieldState('model.tranportType')", @click.native="showFieldError($event, 'model.tranportType')")
+        kt-select(:options="transportTypeList", v-model="model.tranportType", :state="getFieldState('model.tranportType')", @click.native="showFieldError($event, 'model.tranportType')")
           span(slot="label") 运输类型 <em>*</em>
     section.mt10
       .fields

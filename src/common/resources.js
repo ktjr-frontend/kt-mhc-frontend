@@ -24,3 +24,4 @@ export const providers = resource('providers', {}, {}, { _showLoadingStatus: tru
 export const vehicles = resource('vehicles', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 汽车列表
 export const company = resource('company', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 公司列表
 export const wayBills = resource('way_bills', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 运单列表
+export const wayBillVehicles = resource('way_bill_vehicles/:id', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 运单列表

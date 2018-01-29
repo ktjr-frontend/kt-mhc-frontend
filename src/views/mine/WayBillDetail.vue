@@ -21,9 +21,6 @@
         span(slot="title") 订单宝号：{{wayBill.orderNumber}}
         small 已绑定
     section.mt10
-      mt-cell.title-simple-cell(is-link, :to="{name: 'wayBillVehicle', params: {id: wayBill.vehicleId}}")
-        span(slot="title") 车辆信息
-    section
       mt-cell.title-simple-cell.ui-border-b
         span(slot="title") 费用信息
     section.kt-cell
@@ -38,7 +35,43 @@
         .kt-cell-td {{wayBill.taxFee | ktCurrency}}
       .kt-cell-row.ui-border-t
         .kt-cell-th 总价
-        .kt-cell-td {{totalFee | ktCurrency}}
+        .kt-cell-td
+          em {{totalFee | ktCurrency}}
+    section.mt10
+      mt-cell.title-simple-cell(is-link, :to="{name: 'wayBillVehicle', params: {id: wayBill.vehicleId}}")
+        span(slot="title") 车辆信息
+    section.mt10
+      mt-cell.title-simple-cell.ui-border-b
+        span(slot="title") 承运商
+    section.kt-cell
+      .kt-cell-row
+        .kt-cell-th 承运商
+        .kt-cell-td {{wayBill.carryCompany}}
+      .kt-cell-row
+        .kt-cell-th 联系人
+        .kt-cell-td {{wayBill.carryContact}}
+      .kt-cell-row
+        .kt-cell-th 税费
+        .kt-cell-td {{wayBill.carryPhone}}
+    section.mt10
+      mt-cell.title-simple-cell.ui-border-b
+        span(slot="title") 起运信息
+    section.kt-cell
+      .kt-cell-row
+        .kt-cell-th 起运时间
+        .kt-cell-td {{wayBill.beginDate | moment('YYYY-MM-DD')}}
+      .kt-cell-row
+        .kt-cell-th 起运地联系人
+        .kt-cell-td {{wayBill.beginContact}}
+      .kt-cell-row
+        .kt-cell-th 联系方式
+        .kt-cell-td {{wayBill.beginPhone}}
+      .kt-cell-row
+        .kt-cell-th 起运地址
+        .kt-cell-td {{wayBill.beginAddress}}
+      .kt-cell-row
+        .kt-cell-th 备注
+        .kt-cell-td {{wayBill.decs}}
 
 </template>
 

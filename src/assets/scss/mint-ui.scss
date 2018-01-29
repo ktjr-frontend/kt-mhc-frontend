@@ -26,8 +26,15 @@ body {
     padding: 2px 10px;
   }
 
-  .mint-navbar .mint-tab-item.is-selected {
-    margin-bottom: -1px;
+  .mint-navbar {
+    overflow-x: scroll;
+    touch-action: pan-x;
+    .mint-tab-item {
+      min-width: 4em;
+      &.is-selected {
+        margin-bottom: -1px;
+      }
+    }
   }
 
   .mint-popup-bottom {

@@ -65,7 +65,7 @@ import {
   Field,
   Cell
 } from 'mint-ui'
-import Clickoutside from '@/common/clickoutside.js'
+import Clickoutside from '@/common/directives/clickoutside.js'
 
 export default {
   name: 'kt-field',

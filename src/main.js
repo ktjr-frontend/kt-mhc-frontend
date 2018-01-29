@@ -11,14 +11,17 @@ import '@/common/resources.js'
 import interceptors from '@/common/interceptors.js'
 import KtFilters from '@/common/filters.js'
 import KtMixins from '@/common/mixins.js'
-import KtDirectives from '@/common/directives.js'
-import clickoutside from '@/common/clickoutside.js'
+import TouchDirective from '@/common/directives/touch.js'
+import ClickoutsideDirective from '@/common/directives/clickoutside.js'
+import InfiniteScrollDirective from '@/common/directives/infinite_scroll.js'
 import SimpleVueValidation from 'simple-vue-validator'
 import { getReadTime } from '@/common/utils.js'
 
 import {
   Cell,
   CellSwipe,
+  Swipe,
+  SwipeItem,
   Field,
   Radio,
   Checklist,
@@ -39,8 +42,8 @@ import {
   IndexList,
   IndexSection,
   Popup,
-  Spinner,
-  InfiniteScroll
+  Spinner
+  // InfiniteScroll
 } from 'mint-ui'
 
 import KtField from '@/components/KtField.vue'
@@ -62,6 +65,8 @@ sync(store, router)
 // mint-ui 组件
 Vue.component(Cell.name, Cell)
 Vue.component(CellSwipe.name, CellSwipe)
+Vue.component(Swipe.name, Swipe)
+Vue.component(SwipeItem.name, SwipeItem)
 Vue.component(Field.name, Field)
 Vue.component(Radio.name, Radio)
 Vue.component(Checklist.name, Checklist)
@@ -80,7 +85,7 @@ Vue.component(Popup.name, Popup)
 Vue.component(IndexList.name, IndexList)
 Vue.component(IndexSection.name, IndexSection)
 Vue.component(Spinner.name, Spinner)
-Vue.use(InfiniteScroll)
+// Vue.use(InfiniteScroll)
 
 // 自定义组件
 Vue.component(KtField.name, KtField)
@@ -98,8 +103,9 @@ Vue.component(KtAddressSelect.name, KtAddressSelect)
 
 Vue.use(KtFilters)
 Vue.use(KtMixins)
-Vue.use(KtDirectives)
-Vue.use(clickoutside)
+Vue.use(TouchDirective)
+Vue.use(ClickoutsideDirective)
+Vue.use(InfiniteScrollDirective)
 
 // 表单验证
 Vue.use(SimpleVueValidation, {

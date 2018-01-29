@@ -84,8 +84,118 @@ const waybills = [{
   name: '开好车物流测试公司2号'
 }]
 
+const waybillVehicles = [{
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '1',
+  frameNo: 'LSVHH1771123111101',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}, {
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '2',
+  frameNo: 'LSVHH1771123111102',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}, {
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '3',
+  frameNo: 'LSVHH1771123111103',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}, {
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '4',
+  frameNo: 'LSVHH1771123111104',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}, {
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '5',
+  frameNo: 'LSVHH1771123111105',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}, {
+  id: '1',
+  model: '中规/国产 安凯客车 宝斯通',
+  status: '6',
+  frameNo: 'LSVHH1771123111106',
+  price: 32.00,
+  transportFee: 4500,
+  insuranceFee: 1000,
+  photos: {
+    normal: {
+      front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
+      nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
+    },
+    exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
+  }
+}]
+
 module.exports = router => {
-  // 公司列表
+  // 运单列表
   router.get('/way_bills', (req, res) => {
     const page = Number(req.query.page) || 1
     const size = Number(req.query.size) || 10
@@ -103,6 +213,27 @@ module.exports = router => {
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
       result: filterWaybills.slice(startIndex, size + startIndex)
+    })
+  })
+
+  // 运单车辆列表
+  router.get('/way_bill_vehicles/:id', (req, res) => {
+    const page = Number(req.query.page) || 1
+    const size = Number(req.query.size) || 10
+    const status = req.query.status || ''
+    const startIndex = (page - 1) * 10
+    let filterWaybillVehicles = []
+
+    filterWaybillVehicles = waybillVehicles.filter(c => {
+      if (!status) {
+        return true
+      }
+      return c.status === status
+    })
+
+    console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
+    res.jsonOk({
+      result: filterWaybillVehicles.slice(startIndex, size + startIndex)
     })
   })
 }
