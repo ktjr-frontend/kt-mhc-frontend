@@ -33,9 +33,9 @@
               | 实际打款保证金 <em>*</em>
               p.title-hint 最低为代购金额的20%，请输入您的实际<br>打款保证金金额，多打款不计入订单
             span(slot="input1-append") 元
-            template(slot="input2")
+            //- template(slot="input2")
               input.mint-field-core(:value="!bailRate ? '' :bailRate | ktCurrency('','')", placeholder="自动计算", readonly)
-            span(slot="input2-append") %
+            //- span(slot="input2-append") %
           mt-cell.sub-cell.has-hint(:class="{'empty': !advanceMoney}")
             span {{!advanceMoney ? '自动计算' : advanceMoney}}<span>元</span>
             div(slot="title")
@@ -68,7 +68,7 @@
         h4 注意事项
         ol
           li 合同总金额，即纸质合同金额，必须和每辆车金额之和相等。如有出入，请联系供应商修改合同
-          li 已支付金额包含打款至供应商的定金，尾款及其他无须开通金融平台垫付的款项，将不计入代购金额，需要后续上传截图证明
+          li 已支付金额包含打款至供应商的定金，尾款及其他无须开好车平台垫付的款项，将不计入代购金额，需要后续上传截图证明
           li 保证金需要打款至平台账户，需要后续上传截图证明，实际打款请与填入金额一致，否则会影响放款速度；实际比输入多打不计入订单，如需要退款，请联系相关业务员
       .form-buttons-placeholder
       .form-buttons.fixed
@@ -210,6 +210,9 @@ export default {
 
       this.$refs.logistics.init(this.model.logistics)
       this.logisticsVisible = true
+      this.$nextTick(() => {
+        this.$refs.logistics.updatePopBoxHeight()
+      })
     },
 
     closeLogistics() {

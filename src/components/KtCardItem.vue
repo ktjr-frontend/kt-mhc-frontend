@@ -7,7 +7,7 @@
       .arrow
         slot(name="arrow")
           | {{arrow}}
-        i.iconfont.icon-you
+        i.iconfont.icon-you(v-if="arrowVisible")
       slot
     .card-footer
       slot(name="footer")
@@ -19,6 +19,7 @@ export default {
   props: {
     headerLeft: String,
     headerRight: String,
+    arrowVisible: Boolean,
     arrow: String
   }
 }

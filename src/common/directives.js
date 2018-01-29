@@ -65,7 +65,7 @@ export default {
           handler = binding.value
           each(evtsArray, function(et) {
             hm.on(et, function(e) {
-              if (e.target.hasAttribute('disable-swipe')) return
+              if (e.target.hasAttribute('disable-swipe') || e.target.closest('[disable-swipe]')) return
               handler(et, e)
             })
           })

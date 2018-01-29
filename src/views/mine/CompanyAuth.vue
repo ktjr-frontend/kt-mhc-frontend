@@ -1,8 +1,11 @@
 <template lang="pug">
 section.company-auth
-  mt-header(ref="header", title="企业认证")
-    mt-button(icon="back", slot="left", @click="close") 返回
-  form.overflow-scroll(ref="popBoxContainer", @submit.prevent="submit")
+  mt-header(ref="header", title="企业认证", v-if="headerVisible")
+    mt-button(icon="back", slot="left", @click.prevent="close") 返回
+    mt-button(slot="right", v-if="menuVisible")
+      small
+        a(@click="toggleSideMenu") 菜单
+  form(:class="{'overflow-scroll': headerVisible}", ref="popBoxContainer", @submit.prevent="submit")
     section.top-alert(v-if="model.status !== 'initial'")
       span.el-orange(v-if="model.status === 'checking'") 您的企业实名认证信息正在审核中
       span.el-green(v-else-if="model.status === 'passed'") 您已经通过了企业实名认证
@@ -15,6 +18,9 @@ section.company-auth
         span(slot="label") 所在城市 <em>*</em>
       kt-select.has-border(:readonly="readonly", :options="companyTypeList", v-model="model.companyType", :state="getFieldState('model.companyType')", @click.native="showFieldError($event, 'model.companyType')")
         span(slot="label") 公司类型 <em>*</em>
+      vehicle-model-select.has-border(v-if="model.companyType === '1'", :readonly="readonly", v-model="model.mainModels", :state="getFieldState('model.mainModels')", @click.native="showFieldError($event, 'model.mainModels')")
+        span(slot="label") 主营品牌 <em>*</em>
+
     section.mt10
       mt-cell.title-simple-cell.ui-border-b
         span(slot="title")
@@ -32,7 +38,7 @@ section.company-auth
               img(v-if="businessLicense.previewUrl", :src="businessLicense.previewUrl")
             .upload-input
               i.iconfont.icon-paizhao(v-if="!businessLicense.previewUrl")
-              span.tip(v-else="businessLicense.previewUrl") 图片仅用于<br>开通金融审核
+              span.tip(v-else="businessLicense.previewUrl") 图片仅用于<br>开好车审核
               input(v-if="!readonly", ref="businessLicense", type="file", accept="image/*;", @change="photoChange($event, 'businessLicense')")
           .photo-item-desc 营业执照
         .photo-item(v-if="model.companyType === '1'")
@@ -42,7 +48,7 @@ section.company-auth
               img(v-if="overdoorPhoto.previewUrl", :src="overdoorPhoto.previewUrl")
             .upload-input
               i.iconfont.icon-paizhao(v-if="!overdoorPhoto.previewUrl")
-              span.tip(v-else="overdoorPhoto.previewUrl") 图片仅用于<br>开通金融审核
+              span.tip(v-else="overdoorPhoto.previewUrl") 图片仅用于<br>开好车审核
               input(v-if="!readonly", ref="overdoorPhoto", type="file", accept="image/*;", @change="photoChange($event, 'overdoorPhoto')")
           .photo-item-desc 门头照片
         .photo-item(v-if="model.companyType === '1'")
@@ -52,7 +58,7 @@ section.company-auth
               img(v-if="receptionPhoto.previewUrl", :src="receptionPhoto.previewUrl")
             .upload-input
               i.iconfont.icon-paizhao(v-if="!receptionPhoto.previewUrl")
-              span.tip(v-else="receptionPhoto.previewUrl") 图片仅用于<br>开通金融审核
+              span.tip(v-else="receptionPhoto.previewUrl") 图片仅用于<br>开好车审核
               input(v-if="!readonly", ref="receptionPhoto", type="file", accept="image/*;", @change="photoChange($event, 'receptionPhoto')")
           .photo-item-desc 前台照片
     section.mt10
@@ -78,7 +84,7 @@ section.company-auth
           .upload-input.flex
             i.iconfont.icon-paizhao(v-if="!businessCard.previewUrl")
             span.tip(v-if="!businessCard.previewUrl") 上传 <em>名片</em> 正面
-            span.tip(v-if="businessCard.previewUrl") 图片仅用于<br>开通金融审核
+            span.tip(v-if="businessCard.previewUrl") 图片仅用于<br>开好车审核
             input(v-if="!readonly", ref="businessCard", type="file", accept="image/*;", @change="photoChange($event, 'businessCard')")
       .photo-body(v-else)
         .photo-item
@@ -88,7 +94,7 @@ section.company-auth
               img(v-if="workCertify.previewUrl", :src="workCertify.previewUrl")
             .upload-input
               i.iconfont.icon-paizhao(v-if="!workCertify.previewUrl")
-              span.tip(v-else="workCertify.previewUrl") 图片仅用于<br>开通金融审核
+              span.tip(v-else="workCertify.previewUrl") 图片仅用于<br>开好车审核
               input(v-if="!readonly", ref="workCertify", type="file", accept="image/*;", @change="photoChange($event, 'workCertify')")
           .photo-item-desc 在职证明
         .photo-item(v-if="model.status !== 'passed'")
@@ -115,21 +121,38 @@ import { Indicator } from 'mint-ui'
 import { mapGetters } from 'vuex'
 import MineMixin from '@/views/mine/mixin.js'
 import WorkCertifyTemplate from '@/views/mine/WorkCertifyTemplate.vue'
+import VehicleModelSelect from '@/views/mine/VehicleModelSelect.vue'
 
 // const FILE_NOT_EMPTY = 'has_file'
 
 export default {
   mixins: [ValidatorMixin, MineMixin],
-  components: { WorkCertifyTemplate },
+  components: { WorkCertifyTemplate, VehicleModelSelect },
   props: {
-    close: Function
+    close: Function,
+    headerVisible: false,
+    menuVisible: false
   },
 
   methods: {
+    // 自定义顶部标题栏的返回按钮行为
+    backButtonAction() {
+      if (this.workCertifyVisible) {
+        this.$refs.workCertify.backButtonAction()
+      } else {
+        this.close()
+      }
+    },
+
     init(name) {
       if (!includes(['checking', 'passed'], this.model.status)) {
         this.model.name = name || this.model.name
       }
+    },
+
+    toggleSideMenu() {
+      const $app = this.$root.$children[0]
+      $app.sideMenuVisible = !$app.sideMenuVisible
     },
 
     showWorkCertify() {
@@ -204,6 +227,13 @@ export default {
     },
     'model.companyType' (value) {
       return this.validate(value).required('请选择公司类型')
+    },
+    'model.mainModels' (value) {
+      const validator = this.validate(value)
+      if (this.model.companyType === '1') {
+        validator.required('请选择主营品牌')
+      }
+      return validator
     },
     'model.userName' (value) {
       return this.validate(value).required('请输入真实姓名')
@@ -296,6 +326,7 @@ export default {
         status: 'initial',
         userName: '',
         idCard: '',
+        mainModels: '',
         businessLicense: '',
         businessCard: '',
         receptionPhoto: '',

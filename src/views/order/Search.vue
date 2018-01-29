@@ -1,19 +1,19 @@
 <template lang="pug">
   section.search-orders
-    mt-header(ref="header", title="订单搜索")
+    mt-header(ref="header", title="订单搜索", v-if="openType === 'popup'")
       mt-button(icon="back", slot="left", @click.prevent="close") 返回
     header.flex.search-header(ref="searchHeader")
       .search-input.flex-item.flex
         i.iconfont.icon-sousuo
         input.flex-item(type="search", @input="inputChange($event)" @keyup.13="search", :value="filter.value", placeholder="搜索")
         i.iconfont.icon-qingchu(v-if="filter.value", @click="clearSearch")
-      button.cancel-btn(@click="close") 取消
+      button.cancel-btn(@click.prevent="cancel") 取消
     section.body
       mt-navbar(v-model='tabActive', ref="navBar")
         mt-tab-item#frameNo 车架号后6位
         mt-tab-item#model 车型
         mt-tab-item#provider 供应商/经销商
-      mt-tab-container.overflow-scroll(v-model='tabActive', ref="tabContainer")
+      mt-tab-container.overflow-scroll(v-model='tabActive', :swipeable="true", disable-swipe, ref="tabContainer")
         mt-tab-container-item#frameNo
           .no-data(v-if="!orderList.length")
             i.iconfont.icon-car
@@ -76,7 +76,22 @@ export default {
     close: Function
   },
 
+  mounted() {
+    if (this.openType === 'page') {
+      this.updateContainerHeight()
+    }
+  },
+
   methods: {
+    // 点击取消
+    cancel() {
+      if (this.close) {
+        this.close()
+      } else {
+        this.routerBack()
+      }
+    },
+
     clearSearch() {
       this.filter.value = ''
       this.orderList = []
@@ -130,6 +145,7 @@ export default {
 
   data() {
     return {
+      openType: 'page',
       orderList: [],
       tabActive: 'frameNo',
       filter: {

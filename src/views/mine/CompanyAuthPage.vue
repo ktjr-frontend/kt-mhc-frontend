@@ -1,14 +1,12 @@
 <template lang="pug">
   section.company-auth-rounded
-    mt-popup.popup-box(v-model='companyAuthVisible', position='right')
-      company-auth(ref="companyAuth", :close="closeCompanyAuth", @popup-confirmed="companyAuthConfirm")
-    kt-popup-input(@popup-confirmed="popInputConfirm", @input="popInputOnInput", ref="popupInput", :visible="popupInputVisible", @visible-change="(value) => popupInputVisible = value")
-      mt-header(ref="header", title="公司名称", slot="header")
-        mt-button(icon="back", slot="left", @click.prevent="popupInputVisible = false") 返回
+    kt-input(v-show="!companyAuthVisible", @input-confirmed="inputConfirm", @input="inputOnInput", ref="input")
       section.mt10
         mt-cell(v-for="c in companyList", :key="c.id", @click.native="selectCompany(c)")
           span(slot="title") {{c.name}}
           i.iconfont.icon-company(slot="icon")
+    //- mt-popup.popup-box(v-model='companyAuthVisible', position='right')
+    company-auth(v-show="companyAuthVisible", ref="companyAuth", :close="closeCompanyAuth", :header-visible="false", @popup-confirmed="companyAuthConfirm")
 </template>
 
 <script>
@@ -23,8 +21,8 @@ export default {
     ...mapGetters(['user'])
   },
 
-  props: {
-    value: Boolean
+  mounted() {
+    this.showCompany()
   },
 
   methods: {
@@ -32,8 +30,8 @@ export default {
     backButtonAction() {
       if (this.companyAuthVisible) {
         this.$refs.companyAuth.backButtonAction()
-      } else if (this.popupInputVisible) {
-        this.popupInputVisible = false
+      } else if (this.inputVisible) {
+        this.inputVisible = false
       } else {
         this.routerBack()
       }
@@ -42,7 +40,7 @@ export default {
     // 显示公司
     showCompany() {
       if (includes(['initial', 'rejected'], this.user.company.status)) {
-        this.showPopupInput({
+        this.$refs.input.init({
           customType: 'editCompanyName',
           placeholder: '请输入营业执照上的公司全称',
           value: this.user.company.name || '',
@@ -54,25 +52,18 @@ export default {
       }
     },
 
-    // 显示公司搜索
-    showPopupInput(opt) {
-      this.$refs.popupInput.init(opt)
-      this.popupInputVisible = true
-    },
-
     // 搜索公司
-    popInputOnInput: debounce(function(value) {
+    inputOnInput: debounce(function(value) {
       company.get({ name: value }).then(res => res.json()).then(res => {
         this.companyList = res.data.result
       })
     }, 300),
 
     selectCompany(c) {
-      this.$refs.popupInput.updateValue(c.name)
+      this.$refs.input.updateValue(c.name)
     },
 
-    popInputConfirm(opt) {
-      // this.popupInputVisible = false
+    inputConfirm(opt) {
       if (opt.customType === 'editCompanyName') {
         this.showCompanyAuth()
         this.companyName = opt.value
@@ -81,21 +72,24 @@ export default {
 
     // 公司信息第二步
     showCompanyAuth() {
-      this.$refs.companyAuth.init(this.companyName)
       this.companyAuthVisible = true
       this.$nextTick(() => {
-        this.$refs.companyAuth.updatePopBoxHeight()
+        this.$refs.companyAuth.init(this.companyName)
+        // this.$refs.companyAuth.updatePopBoxHeight()
       })
     },
 
     closeCompanyAuth() {
-      this.companyAuthVisible = false
+      if (includes(['initial', 'rejected'], this.user.company.status)) {
+        this.companyAuthVisible = false
+      } else {
+        this.routerBack()
+      }
     },
 
     companyAuthConfirm(companyAuth = {}) {
       this.companyAuth = companyAuth
-      this.companyAuthVisible = false
-      this.popupInputVisible = false
+      this.routerBack()
     }
   },
 
@@ -105,16 +99,11 @@ export default {
         this.showCompany()
       } else {
         this.companyAuthVisible = false
-        this.popupInputVisible = false
       }
     },
 
-    popupInputVisible() {
-      this.$emit('input', this.popupInputVisible)
-    },
-
     companyAuthVisible() {
-      if (!this.popupInputVisible && !this.companyAuthVisible) {
+      if (!this.companyAuthVisible) {
         this.$emit('input', false)
       }
     }
@@ -122,7 +111,6 @@ export default {
 
   data() {
     return {
-      popupInputVisible: false,
       companyAuthVisible: false,
       companyName: '',
       companyAuth: {},

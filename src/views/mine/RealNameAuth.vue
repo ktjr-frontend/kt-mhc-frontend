@@ -26,7 +26,7 @@
             .upload-input.flex
               i.iconfont.icon-paizhao(v-if="!photo.previewUrl")
               span.tip(v-if="!photo.previewUrl") 上传 <em>名片</em> 正面
-              span.tip(v-if="photo.previewUrl") 图片仅用于开通金融审核
+              span.tip(v-if="photo.previewUrl") 图片仅用于开好车审核
               input(v-if="!readonly", ref="file", type="file", accept="image/*;", @change="photoChange($event)")
       .footer-tips
         p 如您无法提供名片照片，可以提供以下任一材料代替

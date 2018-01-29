@@ -8,7 +8,7 @@
       //- mt-button.of-v(v-if="msgCountBtnVisible", slot="left", @click="$router.push({name: 'messageList'})")
         i.iconfont.icon-xiaoxi-solid.ft18.pos-r
           span.badge-red.badge-top 10
-      mt-button(slot="right")
+      mt-button(slot="right", v-if="sideMenuBarVisible")
         small
           a(@click="sideMenuVisible = !sideMenuVisible") 菜单
       //- mt-button(slot="right", v-if="msgListBtnVisible")
@@ -24,19 +24,23 @@
           i.iconfont.icon-home
           | 首页
       li.ui-border-t
-        router-link(:to="{name:'orders'}", :class="{'is-selected': fisrtTabItemIsSelected}")
+        router-link(:to="{name:'orders'}", :class="{'is-selected': orderTabItemIsSelected}")
           i.iconfont.icon-dingdan
           | 订单融资
       li.ui-border-t
-        router-link(:to="{name:'mine'}", :class="{'is-selected': secondTabItemIsSelected}")
+        router-link(:to="{name:'depositAccount'}", :class="{'is-selected': depositTabItemIsSelected}")
+          i.iconfont.icon-baozhengjinguanli
+          | 保证金账户
+      li.ui-border-t
+        router-link(:to="{name:'mine'}", :class="{'is-selected': mineTabItemIsSelected}")
           i.iconfont.icon-wode
           | 我的
   mt-tabbar(:fixed="true", v-show="tabBarVisible", ref="tabbar")
-    mt-tab-item#orders(:class="{'is-selected': fisrtTabItemIsSelected}")
+    mt-tab-item#orders(:class="{'is-selected': orderTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-order
       | 订单融资
-    mt-tab-item#stocks(:class="{'is-selected': secondTabItemIsSelected}")
+    mt-tab-item#stocks(:class="{'is-selected': mineTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-wode
       | 我的
@@ -65,7 +69,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_x206remsl8a1yvi.css')
+  require('http://at.alicdn.com/t/font_527342_s9nv4id3tyhnnrk9.css')
 }
 
 export default {
@@ -188,10 +192,13 @@ export default {
 
   computed: {
     ...mapGetters(['route', 'stateCode', 'isPopStated']),
-    fisrtTabItemIsSelected() {
+    orderTabItemIsSelected() {
       return includes(['orders', 'orderEdit', 'orderDetail'], this.$store.state.route.name)
     },
-    secondTabItemIsSelected() {
+    depositTabItemIsSelected() {
+      return includes(['depositAccount'], this.$store.state.route.name)
+    },
+    mineTabItemIsSelected() {
       return includes(['mine', 'profile'], this.$store.state.route.name)
     },
     msgCountBtnVisible() {
@@ -202,6 +209,9 @@ export default {
     },
     tabBarVisible() {
       return this.$store.state.route.meta.tabBarVisible
+    },
+    sideMenuBarVisible() {
+      return !includes(['login', 'register', 'register2'], this.$store.state.route.name)
     },
     headerShow() {
       // !this.isInWeixin &&
@@ -253,7 +263,8 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   transition: background .5s;
-  &.login {
+  &.login,
+  &.register {
     background-color: white;
   }
 }

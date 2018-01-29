@@ -89,16 +89,16 @@ export default {
   },
 
   methods: {
-    // // 自定义顶部标题栏的返回按钮行为
-    // backButtonAction() {
-    //   if (this.vehicleListVisible) {
-    //     this.vehicleListVisible = false
-    //   } else if (this.pickTemplateVisible) {
-    //     this.pickTemplateVisible = false
-    //   } else {
-    //     this.routerBack()
-    //   }
-    // },
+    // 自定义顶部标题栏的返回按钮行为
+    backButtonAction() {
+      if (this.vehicleListVisible) {
+        this.vehicleListVisible = false
+      } else if (this.pickTemplateVisible) {
+        this.pickTemplateVisible = false
+      } else {
+        this.routerBack()
+      }
+    },
 
     // 提车函模板
     showPickTemplate() {

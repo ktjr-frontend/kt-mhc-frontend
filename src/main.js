@@ -5,6 +5,7 @@ import App from '@/App'
 import store from '@/store'
 import { sync } from 'vuex-router-sync'
 import '@/common/global_set.js'
+import '@/common/pollyfill.js'
 import router from '@/router'
 import '@/common/resources.js'
 import interceptors from '@/common/interceptors.js'
@@ -20,6 +21,7 @@ import {
   CellSwipe,
   Field,
   Radio,
+  Checklist,
   Header,
   Button,
   Toast,
@@ -50,6 +52,7 @@ import KtCheckbox from '@/components/KtCheckbox.vue'
 import KtActionsheet from '@/components/KtActionsheet.vue'
 import KtMsgbox from '@/components/KtMsgbox.vue'
 import KtCardItem from '@/components/KtCardItem.vue'
+import KtInput from '@/components/KtInput.vue'
 import KtPopupInput from '@/components/KtPopupInput.vue'
 import KtAddressSelect from '@/components/KtAddressSelect.vue'
 
@@ -61,6 +64,7 @@ Vue.component(Cell.name, Cell)
 Vue.component(CellSwipe.name, CellSwipe)
 Vue.component(Field.name, Field)
 Vue.component(Radio.name, Radio)
+Vue.component(Checklist.name, Checklist)
 Vue.component(Header.name, Header)
 Vue.component(Button.name, Button)
 Vue.component(Progress.name, Progress)
@@ -88,6 +92,7 @@ Vue.component(KtCheckbox.name, KtCheckbox)
 Vue.component(KtActionsheet.name, KtActionsheet)
 Vue.component(KtMsgbox.name, KtMsgbox)
 Vue.component(KtCardItem.name, KtCardItem)
+Vue.component(KtInput.name, KtInput)
 Vue.component(KtPopupInput.name, KtPopupInput)
 Vue.component(KtAddressSelect.name, KtAddressSelect)
 

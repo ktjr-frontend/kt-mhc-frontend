@@ -13,6 +13,10 @@ body {
     max-height: 100vh;
   }
 
+  .mint-tab-item {
+    color: $primary-font-color;
+  }
+
   .mint-indicator-wrapper {
     z-index: 99999;
   }
@@ -38,7 +42,7 @@ body {
   }
 
   .mint-field-core {
-    font-size: $font-size-m;
+    font-size: $font-size-s;
     display: flex;
     padding: 0;
     background: none;
@@ -61,7 +65,7 @@ body {
     }
     &.no-border {
       .mint-cell-wrapper {
-        background-image: none;
+        background-image: none!important;
       }
     }
     &:not(.ui-border-t):first-child {
@@ -170,9 +174,8 @@ body {
     }
   }
 
-  .has-border .mint-cell:first-child {
+  .has-border>.mint-cell:first-child {
     .mint-cell-wrapper {
-      // back
       background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
       background-origin: content-box;
     }

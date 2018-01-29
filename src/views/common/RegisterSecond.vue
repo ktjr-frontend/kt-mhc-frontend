@@ -1,39 +1,35 @@
 <template lang="pug">
-section.login
+section.register
   //- div.logo
-    img(src='~assets/images/logo.jpg')
     small 免审核借款1000元
   form.form(@submit.prevent='submit()')
     .fields-header
-      h3 登录
+      h3 设置用户名密码
     .fields
-      kt-field(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
+      kt-field(type="number", label='姓名', placeholder='请填写您的真实姓名', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
         span(slot="label")
           i.iconfont.icon-yonghu
-      kt-field.ui-border-b(type="number", label='mima', placeholder='请输入密码', v-model='user.password', :state="getFieldState('user.password')", @click.native="showFieldError($event, 'user.password')")
+      kt-field.ui-border-b(type="number", label='密码', placeholder='请输入密码', v-model='user.captcha', :state="getFieldState('user.captcha')", @click.native="showFieldError($event, 'user.captcha')")
         span(slot="label")
           i.iconfont.icon-yanzhengma
         //- mt-button(type='default', @click.stop.prevent='toGetMsgCode()', :disabled='countdownVisible')
           span(v-show='!countdownVisible') 获取验证码
           kt-countdown(ref='fnCountdown', v-show='countdownVisible', @countdown-over='onCountdownOver()')
     .form-buttons
-      mt-button.mint-button-block(type='primary', size='large') 登录
-      .note-line
-        router-link(:to="{name: 'register'}") 注册
-        router-link.fr(:to="{name: 'register'}") 忘记密码
+      mt-button.mint-button-block(type='primary', size='large') 下一步
+      //- .note-line
+        kt-checkbox(v-model="agreement", :value="false", :state="getFieldState('agreement')")
+          span.pl10 我已阅读并同意
+          router-link(:to="{name: 'registerAgreement'}")
+            |《注册与服务合同》
 </template>
 
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
 import CommonMixin from '@/views/common_mixin.js'
 import {
-  RET_CODE_MAP,
-  STORE_KEY_LAST_LOGINED_PHONE
-} from '@/constants.js'
-import {
   mapActions
 } from 'vuex'
-import { read } from '@/storage'
 import store from '@/store'
 
 export default {
@@ -46,11 +42,11 @@ export default {
         }
       })
     },
-    'user.phone' (value) {
-      return this.validate(value).required('请输入手机号').digit('请正确输入手机号').regex('^1[3-9]\\d{9}$', '请正确输入手机号')
+    'user.name' (value) {
+      return this.validate(value).required('请输入手机号')
     },
     'user.password' (value) {
-      return this.validate(value).required('请输入密码').digit('请正确输入密码').length(6, '请正确输入密码')
+      return this.validate(value).required('请输入密码').length(6, '最少6位密码')
     }
   },
 
@@ -67,22 +63,15 @@ export default {
     }
   },
 
-  mounted() {
-    this.redirect = decodeURIComponent(this.$route.query.redirect || '')
-    this.user.phone = this.$store.getters.user.phone || read(STORE_KEY_LAST_LOGINED_PHONE) || ''
-  },
-
   methods: {
     ...mapActions(['login', 'getUser', 'updateToken']),
     async submit() {
       const success = await this.$validate()
       if (success) {
-        const data = await this.login(this.user)
-        if (data.code === RET_CODE_MAP.OK) {
-          this.$router.push({
-            path: this.redirect || '/'
-          })
-        }
+        // const data = await this.login(this.user)
+        this.$router.push({
+          name: 'registerSecond'
+        })
       } else {
         this.$toast(this.validation.firstError(), 'error')
       }
@@ -95,7 +84,7 @@ export default {
       redirect: null, //登录后跳转页面
       agreement: true,
       user: {
-        phone: '',
+        name: '',
         password: ''
         // loginType: this.isWeixin() ? 2 : (~NODE_ENV.indexOf('app') ? 1 : 0)
       }

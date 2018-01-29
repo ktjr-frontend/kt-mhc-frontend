@@ -1,0 +1,86 @@
+.login,
+.register {
+  input::-moz-placeholder {
+    font-size: $font-size-xl!important;
+  }
+
+  input:-ms-input-placeholder {
+    font-size: $font-size-xl!important;
+  }
+
+  input::-webkit-input-placeholder {
+    font-size: $font-size-xl!important;
+  }
+  .mint-cell-title {
+    width: 30px!important;
+    .iconfont {
+      color: #c0cad8;
+      font-size: 20px;
+    }
+  }
+  .mint-cell {
+    min-height: 60px;
+    &:first-child {
+      .mint-cell-wrapper {
+        background-image: none;
+      }
+    }
+    &:last-child {
+      background-image: linear-gradient(0deg, $border-color, $border-color 50%, transparent 50%);
+      background-size: 100% 1px;
+      background-repeat: no-repeat;
+      background-position: bottom;
+    }
+  }
+  .mint-button {
+    height: 50px;
+    font-size: $font-size-xl;
+  }
+  .mint-field-core {
+    font-size: $font-size-xl;
+  }
+  .mint-field-other {
+    .mint-button {
+      height: 35px;
+      width: 85px;
+      margin-left: 3px;
+      font-size: $font-size-xxs;
+    }
+  }
+  .form-buttons {
+    padding: 10px 0;
+    margin-top: 20px;
+  }
+  .form {
+    padding: 37px 25px 0;
+  }
+  .mint-cell-wrapper {
+    padding: 0;
+    font-size: $font-size-xl;
+  }
+
+  .note-line {
+    color: $minor-font-color;
+    font-size: $font-size-xs;
+    padding: 10px 0;
+  }
+  .fields-header {
+    padding: 0 0 15px;
+    h3 {
+      color: $primary-font-color;
+      font-size: $font-size-xxl;
+    }
+  }
+  .logo {
+    background: white;
+    text-align: center; // background: white;
+    padding: 10px;
+    img {
+      max-width: 50%;
+      max-width: 30vh;
+    }
+    small {
+      display: block;
+    }
+  }
+}

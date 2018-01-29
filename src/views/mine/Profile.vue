@@ -13,7 +13,7 @@
       mt-cell.readonly(title="联系方式", :value="user.phone")
       mt-cell(is-link, title="邮箱", :value="user.email", @click.native="showPopupInput({customType: 'email', placeholder: '请输入邮箱', value: user.email, title: '邮箱', label: '邮箱', validators: [{name: 'email', message: '请正确填写邮箱'}]})")
     kt-popup-input(@popup-confirmed="popInputConfirm", ref="popupInput", :visible="popupInputVisible", @visible-change="(value) => popupInputVisible = value")
-    company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
+    //- company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
 </template>
 
 <script>
@@ -21,22 +21,22 @@ import lrz from 'lrz'
 import { cloneDeep, includes } from 'lodash'
 // import { fileUploader, userPhotos } from '@/common/resources.js'
 import { Indicator } from 'mint-ui'
-import CompanyAuthRounded from '@/views/mine/CompanyAuthRounded.vue'
+// import CompanyAuthRounded from '@/views/mine/CompanyAuthRounded.vue'
 
 export default {
-  components: { CompanyAuthRounded },
+  // components: { CompanyAuthRounded },
   methods: {
     // 自定义顶部标题栏的返回按钮行为
-    // backButtonAction() {
-    //   if (this.companyAuthVisible) {
-    //     this.$refs.companyAuthRounded.backButtonAction()
-    //   } else if (this.popupInputVisible) {
-    //     this.popupInputVisible = false
-    //     // this.$refs.popupInput.close()
-    //   } else {
-    //     this.routerBack()
-    //   }
-    // },
+    backButtonAction() {
+      if (this.companyAuthVisible) {
+        this.$refs.companyAuthRounded.backButtonAction()
+      } else if (this.popupInputVisible) {
+        this.popupInputVisible = false
+        // this.$refs.popupInput.close()
+      } else {
+        this.routerBack()
+      }
+    },
 
     showPreview(url) {
       const img = new Image()
@@ -74,13 +74,14 @@ export default {
     },
 
     showCompany() {
-      this.companyAuthVisible = true
-    },
-
-    companyAuthConfirm(companyAuth = {}) {
-      this.companyAuth = companyAuth
-      this.companyAuthVisible = false
+      this.$router.push({ name: 'companyAuth' })
+      // this.companyAuthVisible = true
     }
+
+    // companyAuthConfirm(companyAuth = {}) {
+    //   this.companyAuth = companyAuth
+    //   this.companyAuthVisible = false
+    // }
   },
 
   computed: {

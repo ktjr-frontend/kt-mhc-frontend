@@ -7,6 +7,10 @@
         router-link.card-inner(:to="{name: 'orders'}")
           i.iconfont.icon-dingdan.el-blue
           p 订单融资
+      .card.box-border.box-border-t
+        router-link.card-inner(:to="{name: 'depositAccount'}")
+          i.iconfont.icon-baozhengjinguanli.el-orange
+          p 保证金账户
       .card.box-border.box-border-tb
         router-link.card-inner(:to="{name: 'mine'}")
           i.iconfont.icon-wode.el-green

@@ -2,7 +2,7 @@
 section.logistics-form
   mt-header(ref="header", title="物流信息")
     mt-button(icon="back", slot="left", @click.prevent="close") 返回
-  form(@submit.prevent="submit")
+  form.overflow-scroll(ref="popBoxContainer", @submit.prevent="submit")
     section
       .fields
         kt-address-select(:state="getFieldState('model.startAddress')", v-model="model.startAddress")
@@ -11,17 +11,17 @@ section.logistics-form
           span(slot="label") 目的地 <em>*</em>
     section.mt10
       .fields
-        kt-select(:options="tranportTypes", v-model="model.tranportType", :state="getFieldState('model.tranportType')", @click.native="showFieldError($event, 'model.tranportType')")
+        kt-select(:options="tranportTypeList", v-model="model.tranportType", :state="getFieldState('model.tranportType')", @click.native="showFieldError($event, 'model.tranportType')")
           span(slot="label") 运输类型 <em>*</em>
     section.mt10
       .fields
         kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.deliverDate', :state="getFieldState('model.deliverDate')", @click.native="showFieldError($event, 'model.deliverDate')")
           div(slot="label")
             | 发运时间 <em>*</em>
-        kt-field(type="text", label='empty', placeholder='请输入发运时间', v-model='model.deliverContact', :state="getFieldState('model.deliverContact')", @click.native="showFieldError($event, 'model.deliverContact')")
+        kt-field(type="text", label='empty', placeholder='请输入发货联系人', v-model='model.deliverContact', :state="getFieldState('model.deliverContact')", @click.native="showFieldError($event, 'model.deliverContact')")
           div(slot="label")
             | 发货联系人 <em>*</em>
-        kt-field(type="number", label='empty', placeholder='发货人姓名', v-model='model.deliverPhone', :state="getFieldState('model.deliverPhone')", @click.native="showFieldError($event, 'model.deliverPhone')")
+        kt-field(type="number", label='empty', placeholder='发货人联系方式', v-model='model.deliverPhone', :state="getFieldState('model.deliverPhone')", @click.native="showFieldError($event, 'model.deliverPhone')")
           div(slot="label")
             | 联系方式 <em>*</em>
         kt-field(type="text", label='empty', :readonly="true", placeholder='同起始地', v-model='model.startAddress')
@@ -44,9 +44,10 @@ section.logistics-form
 
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
+import MineMixin from '@/views/mine/mixin.js'
 
 export default {
-  mixins: [ValidatorMixin],
+  mixins: [ValidatorMixin, MineMixin],
   props: {
     close: Function
   },
@@ -99,13 +100,7 @@ export default {
   data() {
     return {
       agreement: false,
-      tranportTypes: [{
-        label: '大板车',
-        value: '1'
-      }, {
-        label: '救援车',
-        value: '2'
-      }],
+      // tranportTypeList: ,
       model: {
         startAddress: null,
         endAddress: null,

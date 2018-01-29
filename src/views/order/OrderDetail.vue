@@ -6,7 +6,7 @@
         mt-tab-item#2 车辆信息
         mt-tab-item#3 在途信息
         mt-tab-item#4 资金信息
-      mt-tab-container(v-model='tabActive')
+      mt-tab-container(v-model='tabActive', :swipeable="true", disable-swipe)
         mt-tab-container-item#1
           .order-info-header.ui-border-t
             .header-row.flex
@@ -143,10 +143,5 @@ export default {
 
 .header-row {
   padding: 5px 0;
-}
-
-.iconfont {
-  width: 30px;
-  text-align: center; // float: left;
 }
 </style>

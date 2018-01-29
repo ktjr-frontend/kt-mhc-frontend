@@ -11,6 +11,18 @@ export default [{
     headerShow: true
   }
 }, {
+  path: '/h5/orders_search',
+  name: 'ordersSearch',
+  component: resolve => require(['@/views/order/Search.vue'], resolve),
+  meta: {
+    title: '订单搜索',
+    tabBarVisible: false,
+    skipAuth: false,
+    hasFixedButtons: true,
+    headerBackShow: true,
+    headerShow: true
+  }
+}, {
   path: '/h5/order_edit/:id',
   name: 'orderEdit',
   component: resolve => require(['@/views/order/OrderForm.vue'], resolve),

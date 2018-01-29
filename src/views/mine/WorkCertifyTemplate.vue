@@ -16,7 +16,7 @@
     .custom-model(v-if="pickTemplateVisible", @click="pickTemplateVisible = false")
     mt-popup.popup-box.popup-box-top(v-model='pickTemplateVisible', position='top')
       mt-header(ref="header", title="下载在职证明模板")
-        mt-button(icon="back", slot="left", @click="pickTemplateVisible = false") 返回
+        mt-button(icon="back", slot="left", @click.prevent="pickTemplateVisible = false") 返回
       .picker-body
         .picker-row.flex
           input.flex-item.mr5(placeholder="请输入邮箱账号", v-model="receiveEmail")
@@ -30,6 +30,15 @@ export default {
   },
 
   methods: {
+    // 自定义顶部标题栏的返回按钮行为
+    backButtonAction() {
+      if (this.pickTemplateVisible) {
+        this.pickTemplateVisible = false
+      } else {
+        this.close()
+      }
+    },
+
     // 发送提车函模板到邮箱
     sendToEmail() {
       if (!this.receiveEmail.match(/[0-9a-zA-Z_]+@\w+/)) {

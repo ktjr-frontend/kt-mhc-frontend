@@ -4,7 +4,7 @@
       mt-navbar(v-model='tabActive')
         mt-tab-item#1 可申请
         mt-tab-item#2 已申请
-      mt-tab-container(v-model='tabActive')
+      mt-tab-container(v-model='tabActive', :swipeable="true", disable-swipe)
         mt-tab-container-item#1
           .no-data
             i.iconfont.icon-car

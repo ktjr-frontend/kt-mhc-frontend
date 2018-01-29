@@ -7,7 +7,7 @@
         span.amount.mr10 0
         | 已用额度：
         span.amount 0
-      button.show-amount-tip(@click="showAmountTip") 额度说明
+      button.show-amount-tip(@click="showAmountTip") 额度利率说明
     .search-column.flex.scroll-fixed(ref="searchColumn")
       .flex-item
         button(@click="showSearchBox") 搜索车架号、供应商/经销商、车型等关键词
@@ -22,7 +22,7 @@
       .no-data(v-if="!orderList.length")
         i.iconfont.icon-car
         p 没有订单数据
-      kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow='order.status | orderStatusFormat')
+      kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow-visible="true", :arrow='order.status | orderStatusFormat')
         span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
         .content(@click="goToDetail(order)")
           .content-row 垫资金额：{{order.amount | ktCurrency}}
@@ -72,8 +72,8 @@ export default {
         message: `
           <section class="dialog-message">
             <p>我的额度为以下两种模式之和：</p>
-            <p>对于代购车辆&le;2辆车的订单，累计额度为<em>150万</em>；</p>
-            <p>对于订购车辆&gt;2辆车的订单，累计额度为<em>400万</em>；</p>
+            <p>对于代购车辆&le;2辆车的订单，累计额度为<em>150万</em>，利率<em>5%</em>；</p>
+            <p>对于订购车辆&gt;2辆车的订单，累计额度为<em>400万</em>，利率<em>4.5%</em>；</p>
           </section>
         `
       })
@@ -93,14 +93,19 @@ export default {
 
     // 显示搜索框
     showSearchBox() {
-      this.searchBoxVisible = true
-      this.$nextTick(() => {
-        this.$refs.searchBox.updateContainerHeight()
+      this.$router.push({
+        name: 'ordersSearch'
       })
+
+      // this.searchBoxVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs.searchBox.updateContainerHeight()
+      // })
     },
 
     closeSearchBox() {
-      this.searchBoxVisible = false
+      this.routerBack()
+      // this.searchBoxVisible = false
     },
 
     // 显示申请手续

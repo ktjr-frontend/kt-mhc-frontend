@@ -1,4 +1,4 @@
-import { find, includes } from 'lodash'
+import { includes, keyBy } from 'lodash'
 import { ORDER_STATUS_MAP } from '@/constants.js'
 
 const orderStatusList = [{
@@ -57,6 +57,8 @@ const orderStatusList = [{
   value: ORDER_STATUS_MAP.WAIT_FOT_SETTLEMENT
 }]
 
+const orderStatusMap = keyBy(orderStatusList, 'value')
+
 const orderStatusClassMap = {
 
 }
@@ -64,8 +66,7 @@ const orderStatusClassMap = {
 export default {
   filters: {
     orderStatusFormat(value) {
-      const status = find(orderStatusList, od => od.value === value)
-      return status ? status.name : ''
+      return orderStatusMap[value] ? orderStatusMap[value].label : ''
     },
     orderStatusClass(value) {
       return orderStatusClassMap[value] || ''

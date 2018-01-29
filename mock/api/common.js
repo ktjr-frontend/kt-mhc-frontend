@@ -21,7 +21,7 @@ module.exports = router => {
         code: 200003 + parseInt(Math.random() * 2, 10),
         message: '用户被禁用或者状态异常'
       })
-    } else if (req.session.captcha !== parseInt(data.captcha, 10)) {
+    } else if (req.session.captcha !== parseInt(data.password, 10)) {
       res.json({
         code: 200002,
         message: '验证码错误'

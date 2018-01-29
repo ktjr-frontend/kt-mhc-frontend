@@ -15,7 +15,7 @@
           span(v-else-if="user.status === 'rejected'") 实名认证失败
           span(v-else-if="user.status === 'initial'") 未实名认证
           i.icon-circle(v-if="user.status !== 'passed'")
-        .flex-item.flex(@click="showCompany")
+        .flex-item.flex(@click="$router.push({name: 'companyAuth'})")
           i.iconfont.icon-gongsi
           span(v-if="user.company.status === 'passed'") {{user.company.companyType | companyTypeFormat}}
           span(v-if="user.company.status === 'checking'") 企业认证审核中
@@ -28,7 +28,7 @@
     section
       mt-cell(is-link, title="我的订单融资", :to="{name: 'orders'}")
         i.iconfont.icon-dingdan2.el-blue(slot="icon")
-      mt-cell(is-link, title="我的运单")
+      mt-cell(is-link, title="我的运单", :to="{name: 'wayBill'}")
         i.iconfont.icon-yunshu.el-blue(slot="icon")
       mt-cell(is-link, title="我的车辆")
         i.iconfont.icon-cheliang.el-blue(slot="icon")
@@ -36,19 +36,19 @@
         i.iconfont.icon-dingdan3.el-blue(slot="icon")
       mt-cell(is-link, title="信息认证")
         i.iconfont.icon-verification.el-blue(slot="icon")
-    company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
+    //- company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
     .form-buttons
       mt-button.mint-button-block(type='primary', size='large', @click="$store.dispatch('logout')") 退出登录
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import CompanyAuthRounded from '@/views/mine/CompanyAuthRounded.vue'
+// import CompanyAuthRounded from '@/views/mine/CompanyAuthRounded.vue'
 import MineMixin from '@/views/mine/mixin.js'
 
 export default {
   mixins: [MineMixin],
-  components: { CompanyAuthRounded },
+  // components: { CompanyAuthRounded },
   computed: {
     ...mapGetters(['user'])
   },
@@ -63,19 +63,19 @@ export default {
     //   }
     // },
 
-    showCompany() {
-      this.companyAuthVisible = true
-    },
+    // showCompany() {
+    //   this.companyAuthVisible = true
+    // },
 
-    companyAuthConfirm(companyAuth = {}) {
-      this.companyAuth = companyAuth
-      this.companyAuthVisible = false
-    }
+    // companyAuthConfirm(companyAuth = {}) {
+    //   this.companyAuth = companyAuth
+    //   this.companyAuthVisible = false
+    // }
   },
 
   data() {
     return {
-      companyAuthVisible: false
+      // companyAuthVisible: false
     }
   }
 }
