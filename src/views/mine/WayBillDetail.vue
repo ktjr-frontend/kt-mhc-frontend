@@ -38,7 +38,7 @@
         .kt-cell-td
           em {{totalFee | ktCurrency}}
     section.mt10
-      mt-cell.title-simple-cell(is-link, :to="{name: 'wayBillVehicle', params: {id: wayBill.vehicleId}}")
+      mt-cell.title-simple-cell(is-link, :to="{name: 'wayBillVehicles', params: {id: wayBill.vehicleId}}")
         span(slot="title") 车辆信息
     section.mt10
       mt-cell.title-simple-cell.ui-border-b

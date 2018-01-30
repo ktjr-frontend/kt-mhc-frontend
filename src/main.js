@@ -58,6 +58,7 @@ import KtCardItem from '@/components/KtCardItem.vue'
 import KtInput from '@/components/KtInput.vue'
 import KtPopupInput from '@/components/KtPopupInput.vue'
 import KtAddressSelect from '@/components/KtAddressSelect.vue'
+import KtImageView from '@/components/KtImageView.vue'
 
 // vuex化路由
 sync(store, router)
@@ -100,6 +101,7 @@ Vue.component(KtCardItem.name, KtCardItem)
 Vue.component(KtInput.name, KtInput)
 Vue.component(KtPopupInput.name, KtPopupInput)
 Vue.component(KtAddressSelect.name, KtAddressSelect)
+Vue.component(KtImageView.name, KtImageView)
 
 Vue.use(KtFilters)
 Vue.use(KtMixins)

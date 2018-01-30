@@ -15,7 +15,7 @@ section.vehicle-list
       mt-index-list
         mt-index-section(v-for="(item, key) in vehicleList", :key="key", :index="key")
           mt-cell(v-for="v in item", :title='v.name', @click.native="showVehicleSearch('1-2')")
-            img(slot='icon', :src='v.icon' width='24' height='24')
+            img(slot='icon', :src='v.icon', width='24', height='24')
     .step-block(v-show="activeStep === '2-2' || activeStep === '1-3'")
       vehicle-search(ref="vehicleSearch", :close="closeVehicleSearch", @select-vehicle="onSelectVehicle")
     .step-block.pt10(v-show="activeStep === '2-3' || activeStep === '1-4'")
@@ -28,7 +28,7 @@ section.vehicle-list
       form(@submit.prevent="submit")
         section
           .fields
-            mt-cell(is-link, :class="{'empty': !model.appearTrim}", :state="getFieldState('model.appearTrim')", @click.native="showAppearTrimOptions",  :value="model.appearTrim || '请选择'")
+            mt-cell(is-link, :class="{'empty': !model.appearTrim}", :state="getFieldState('model.appearTrim')", @click.native="showAppearTrimOptions", :value="model.appearTrim || '请选择'")
               span(slot="title") 外观内饰 <em>*</em>
               div
                 span.va-m {{model.appearTrim || '请选择'}}

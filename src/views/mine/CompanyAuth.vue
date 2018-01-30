@@ -100,16 +100,17 @@ section.company-auth
         .photo-item(v-if="model.status !== 'passed'")
           .photo-item-inner
             .preview.demo
-              img(v-if="workCertify.demo", :src="workCertify.demo")
+              img(v-if="workCertify.demo", :src="workCertify.demo", @click="imgViewVisible = true")
           .photo-item-desc 示例
     mt-popup.popup-box(v-model='workCertifyVisible', position='right')
       work-certify-template(ref="workCertify", :close="closeWorkCertify", @popup-confirmed="workCertifyConfirm")
     .form-buttons-placeholder(v-if="!readonly")
-      .button-tip 所有证件图片仅供于开通金额审核
+      .button-tip 所有证件图片仅供于开好车审核
       mt-button.mint-button-block(type='primary', size='large') 提交
     .form-buttons.fixed(v-if="!readonly")
-      .button-tip 所有证件图片仅供于开通金额审核
+      .button-tip 所有证件图片仅供于开好车审核
       mt-button.mint-button-block(type='primary', size='large') 提交
+  kt-image-view(:list="imgList", v-model="imgViewVisible", :default-index="defaultIndex")
 </template>
 
 <script>
@@ -287,9 +288,15 @@ export default {
 
   data() {
     const user = this.$store.getters.user
+    const demoWorkCertify = require('@/assets/images/work-certify-demo.jpeg')
     return {
       workCertifyVisible: false,
       depositType: '',
+      imgList: [{
+        url: demoWorkCertify
+      }],
+      defaultIndex: 0,
+      imgViewVisible: false,
       businessLicense: {
         rst: {},
         file: null,
@@ -318,7 +325,7 @@ export default {
         rst: {},
         file: null,
         previewUrl: user.company.workCertify,
-        demo: require('@/assets/images/work-certify-demo.jpeg'),
+        demo: demoWorkCertify,
         previewImgStyle: {}
       },
       model: merge({

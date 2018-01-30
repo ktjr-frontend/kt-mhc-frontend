@@ -12,7 +12,7 @@
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList", :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
-          mt-cell(is-link, @click.native="showVehiclePhoto", :class="{'empty': !modelShow.vehiclePhoto}",  :value="modelShow.vehiclePhoto ? '已上传' : '请上传'", :state="getFieldState('model.vehiclePhoto')")
+          //- mt-cell(is-link, @click.native="showVehiclePhoto", :class="{'empty': !modelShow.vehiclePhoto}",  :value="modelShow.vehiclePhoto ? '已上传' : '请上传'", :state="getFieldState('model.vehiclePhoto')")
             span(slot="title") 实车照片 <em>*</em>
           //- kt-field(type='textarea', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
       section.mt10
@@ -80,7 +80,7 @@
       vehicle-list(ref="vehicleList", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.popup-box(v-model='logisticsVisible', position='right')
       logistics(ref="logistics", :close="closeLogistics", @popup-confirmed="logisticsConfirm")
-    mt-popup.popup-box(v-model='vehiclePhotoVisible', position='right')
+    //- mt-popup.popup-box(v-model='vehiclePhotoVisible', position='right')
       vehicle-photo(ref="vehiclePhoto", :close="closeVehiclePhoto", @popup-confirmed="vehiclePhotoConfirm")
     mt-popup.popup-box(v-model='purchaseContractVisible', position='right')
       purchase-contract(ref="purchaseContract", :close="closePurchaseContract", @popup-confirmed="purchaseContractConfirm")
@@ -145,8 +145,8 @@ export default {
         this.providerSearchVisible = false
       } else if (this.logisticsVisible) {
         this.logisticsVisible = false
-      } else if (this.vehiclePhotoVisible) {
-        this.vehiclePhotoVisible = false
+        // } else if (this.vehiclePhotoVisible) {
+        // this.vehiclePhotoVisible = false
       } else if (this.purchaseContractVisible) {
         this.purchaseContractVisible = false
       } else if (this.handingLetterVisible) {
@@ -226,25 +226,25 @@ export default {
     },
 
     // 车辆照片
-    showVehiclePhoto() {
-      if (!this.model.vehicle.count) {
-        this.$toast('请选择车辆')
-        return
-      }
+    // showVehiclePhoto() {
+    //   if (!this.model.vehicle.count) {
+    //     this.$toast('请选择车辆')
+    //     return
+    //   }
 
-      this.$refs.vehiclePhoto.init(this.model.vehiclePhoto)
-      this.vehiclePhotoVisible = true
-    },
+    //   this.$refs.vehiclePhoto.init(this.model.vehiclePhoto)
+    //   this.vehiclePhotoVisible = true
+    // },
 
-    closeVehiclePhoto() {
-      this.vehiclePhotoVisible = false
-    },
+    // closeVehiclePhoto() {
+    //   this.vehiclePhotoVisible = false
+    // },
 
-    vehiclePhotoConfirm(vehiclePhoto = {}) {
-      this.model.vehiclePhoto = vehiclePhoto
-      this.modelShow.vehiclePhoto = '已上传'
-      this.vehiclePhotoVisible = false
-    },
+    // vehiclePhotoConfirm(vehiclePhoto = {}) {
+    //   this.model.vehiclePhoto = vehiclePhoto
+    //   this.modelShow.vehiclePhoto = '已上传'
+    //   this.vehiclePhotoVisible = false
+    // },
 
     // 合同信息
     showPurchaseContract() {
@@ -405,7 +405,7 @@ export default {
       providerSearchVisible: false,
       vehicleListVisible: false,
       logisticsVisible: false,
-      vehiclePhotoVisible: false,
+      // vehiclePhotoVisible: false,
       purchaseContractVisible: false,
       handingLetterVisible: false,
       paymentCertVisible: false,
@@ -415,7 +415,7 @@ export default {
         method() {
           _self.depositSheetVisible = true
           _self.showDepositCert('offline_bank')
-          // _self.$router.push({ name: 'pickCard' })
+          // _self.$router.push({ name: 'pickCar' })
         }
       }, {
         name: '线下非银行卡',
@@ -427,7 +427,7 @@ export default {
       }],
       modelShow: {
         logistics: '',
-        vehiclePhoto: '',
+        // vehiclePhoto: '',
         purchaseContract: '',
         handingLetter: '',
         paymentCert: '',
@@ -437,7 +437,7 @@ export default {
         provider: '',
         vehicle: { count: null },
         logistics: null,
-        vehiclePhoto: null,
+        // vehiclePhoto: null,
         purchaseContract: null,
         paymentCert: null,
         depositCert: null,

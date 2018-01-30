@@ -69,8 +69,10 @@ export default {
     submit() {
       if (!this.checkedList.length) {
         this.$toast('请选择主营品牌', 'error')
+        return
       } else if (this.checkedList.length > 3) {
         this.$toast('最多选择3个', 'error')
+        return
       }
       this.currentValue = this.checkedList
       // this.$emit('input', this.checkedList)

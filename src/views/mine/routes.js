@@ -43,9 +43,9 @@ export default [{
     skipAuth: false
   }
 }, {
-  path: '/h5/way_bill',
-  name: 'wayBill',
-  component: resolve => require(['@/views/mine/WayBill.vue'], resolve),
+  path: '/h5/way_bills',
+  name: 'wayBills',
+  component: resolve => require(['@/views/mine/WayBills.vue'], resolve),
   meta: {
     title: '我的运单',
     tabBarVisible: false,
@@ -54,7 +54,7 @@ export default [{
     skipAuth: false
   }
 }, {
-  path: '/h5/way_bill/:id',
+  path: '/h5/way_bills/:id',
   name: 'wayBillDetail',
   component: resolve => require(['@/views/mine/WayBillDetail.vue'], resolve),
   meta: {
@@ -65,11 +65,44 @@ export default [{
     skipAuth: false
   }
 }, {
-  path: '/h5/way_bill_vihicle/:id',
-  name: 'wayBillVehicle',
-  component: resolve => require(['@/views/mine/WayBillVehicle.vue'], resolve),
+  path: '/h5/way_bill_vihicles/:id',
+  name: 'wayBillVehicles',
+  component: resolve => require(['@/views/mine/WayBillVehicles.vue'], resolve),
   meta: {
     title: '车辆信息',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/my_cars',
+  name: 'myCars',
+  component: resolve => require(['@/views/mine/MyCars.vue'], resolve),
+  meta: {
+    title: '我的车辆',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/pick_car_letters',
+  name: 'pickCarLetters',
+  component: resolve => require(['@/views/mine/PickCarLetters.vue'], resolve),
+  meta: {
+    title: '提车委托函列表',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/pick_car_letters/:id',
+  name: 'pickCarLetterDetail',
+  component: resolve => require(['@/views/mine/PickCarLetterDetail.vue'], resolve),
+  meta: {
+    title: '提车委托函详情',
     tabBarVisible: false,
     headerShow: true,
     headerBackShow: true,

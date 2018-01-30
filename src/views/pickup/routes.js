@@ -1,6 +1,6 @@
 export default [{
   path: '/h5/pickup_apply',
-  name: 'pickCard',
+  name: 'pickCar',
   component: resolve => require(['@/views/pickup/PickCarForm.vue'], resolve),
   meta: {
     title: '提车函申请',

@@ -120,7 +120,7 @@ export default {
     // 显示申请action菜单
     showApplyActions() {
       this.$router.push({
-        name: 'pickCard'
+        name: 'pickCar'
       })
       // this.applySheetVisible = true
     },
@@ -196,7 +196,7 @@ export default {
         name: '申请提车',
         method() {
           _self.applySheetVisible = true
-          _self.$router.push({ name: 'pickCard' })
+          _self.$router.push({ name: 'pickCar' })
         }
       }, {
         name: `

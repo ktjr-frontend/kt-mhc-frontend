@@ -1,14 +1,14 @@
 <template lang="pug">
   section.search-vehicles
-    mt-header(ref="header", title="车辆信息")
+    mt-header(ref="header", title="车辆信息", v-if="mtHeaderVisible")
       mt-button(icon="back", slot="left", @click.prevent="close") 返回
-    header.flex.search-header(v-if="headerVisible")
+    header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.price", placeholder="输入车架号快速搜索")
-        i.iconfont.icon-qingchu(v-if="filter.price", @click="clearSearch")
+        input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.frameNo", placeholder="输入车架号快速搜索")
+        i.iconfont.icon-qingchu(v-if="filter.frameNo", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
-    .header-sub.ui-border-t
+    .header-sub.ui-borderNo
       //- .custom-model(v-if="repositoryListVisible", @click="repositoryListVisible = false")
       .select-repository
         div.select-value(@click="repositoryListVisible = !repositoryListVisible")
@@ -24,7 +24,7 @@
         template(v-for="r in searchResult")
           mt-cell.ui-border-b(title="empty", :key="r.id")
             .custom-title.flex.flex-start(slot="title")
-              kt-checkbox.mr10(v-model="r.checked", @change="syncChildStatus(r)")
+              kt-checkbox.mr10(v-show="!readonly", v-model="r.checked", @change="syncChildStatus(r)")
               //- img.mr10(:src="r.icon", slot="icon", width="18")
               .custom-content
                 p {{r.model}}
@@ -32,22 +32,23 @@
           section
             mt-cell.no-border(v-for="sub in r.children", :key="sub.frameNo", title="empty")
               .custom-title.flex.flex-start(slot="title")
-                kt-checkbox.mr10(v-model="sub.checked", @change="syncParentStatus(r, sub)")
+                kt-checkbox.mr10(v-show="!readonly", v-model="sub.checked", @change="syncParentStatus(r, sub)")
                 //- img.mr10(:src="r.icon", slot="icon", width="18")
                 .custom-content
                   p 车架号：{{sub.frameNo}}
                   small.note 外观内饰：{{sub.appearTrim}}
     .fixed-footer-placeholder
     footer.fixed-footer.flex
-      .flex-item.flex-start.pl10
+      .flex-item.flex-start.pl10(v-show="!readonly")
         kt-checkbox(:value="checked", @input="checkAll")
           span.pl10 全选
           span.pl10 已选 [ {{checkedCar.length}} ]
-      .tab-item(v-if="from !== 'interestTransfer'", style="width:80px;")
-        button(@click="submit") 提交
+      .tab-item(v-if="from !== 'interestTransfer'", :style="{width: readonly ? '100%' : '80px'}")
+        button(@click.prevent="submit" v-if="!readonly") 提交
+        button(@click.prevent="readonly = false" v-else) 申请提车
       template(v-else)
         .tab-item(style="width: 50px;")
-          button.simple(@click="close") 取消
+          button.simple(@click.prevent="close") 取消
         .tab-item(style="min-width: 80px;")
           button(@click="submit") 转移物权
 </template>
@@ -62,6 +63,7 @@ const iconsMap = {
 
 export default {
   props: {
+    mtHeaderVisible: true,
     close: Function,
     from: String
   },
@@ -72,10 +74,10 @@ export default {
       this.search()
     },
 
-    reset() {
-      this.searchResult = []
-      this.filter.price = ''
-    },
+    // reset() {
+    //   this.searchResult = []
+    //   this.filter.price = ''
+    // },
 
     searchInputChange(event) {
       this.filter.price = event.target.value
@@ -83,7 +85,10 @@ export default {
     },
 
     init() {
-      this.headerVisible = true
+      if (this.from === 'mine') {
+        this.readonly = true
+      }
+      // this.headerVisible = true
       this.search()
     },
 
@@ -154,6 +159,7 @@ export default {
 
   data() {
     return {
+      readonly: false, // 控制是否可以编辑
       checked: [],
       repositoryListVisible: false,
       repositoryList: [{
@@ -164,10 +170,10 @@ export default {
         value: '2'
       }],
       selectRepository: '1',
-      headerVisible: true,
+      // headerVisible: true,
       searchResult: [],
       filter: {
-        price: ''
+        frameNo: ''
       }
     }
   }

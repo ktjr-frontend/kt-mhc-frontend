@@ -70,6 +70,11 @@ body {
         color: $error-color!important;
       }
     }
+    &.minor-title {
+      .mint-cell-title {
+        color: $placeholder-color;
+      }
+    }
     &.no-border {
       .mint-cell-wrapper {
         background-image: none!important;
@@ -116,6 +121,10 @@ body {
       }
     }
     &.title-cell {
+      .mint-cell-title,
+      .mint-cell-value {
+        font-size: 1.1em;
+      }
       &:before {
         content: '';
         position: absolute;

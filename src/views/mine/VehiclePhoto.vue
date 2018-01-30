@@ -44,12 +44,11 @@
 
 <script>
 import { values, map } from 'lodash'
-import KtImageView from '@/components/KtImageView.vue'
 
 export default {
-  components: { KtImageView },
   props: {
-    photos: Object
+    photos: Object,
+    close: Function
   },
 
   watch: {
@@ -61,6 +60,14 @@ export default {
   },
 
   methods: {
+    // 自定义顶部标题栏的返回按钮行为
+    backButtonAction() {
+      if (this.imgViewVisible) {
+        this.imgViewVisible = false
+      } else {
+        this.close()
+      }
+    },
     showImgView(index) {
       this.defaultIndex = index
       this.imgViewVisible = true

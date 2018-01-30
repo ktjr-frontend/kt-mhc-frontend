@@ -56,10 +56,21 @@ const transportTypeList = [{
   value: '2'
 }]
 
+const pickCarStatusList = [{
+  label: '签章成功',
+  label2: '可提车',
+  value: '1'
+}, {
+  label: '未签章',
+  label2: '不可提车',
+  value: '2'
+}]
+
 const companyTypeMap = keyBy(companyTypeList, 'value')
 const wayBillStatusMap = keyBy(wayBillStatusList, 'value')
 const wayBillVehicleStatusMap = keyBy(wayBillVehicleStatusList, 'value')
 const transportTypeMap = keyBy(transportTypeList, 'value')
+const pickCarStatusMap = keyBy(pickCarStatusList, 'value')
 
 export default {
   filters: {
@@ -74,6 +85,13 @@ export default {
     },
     transportTypeFormat(value) {
       return transportTypeMap[value] ? transportTypeMap[value].label : ''
+    },
+    pickCarLetterStatusFormat(value) {
+      return pickCarStatusMap[value] ? pickCarStatusMap[value].label : ''
+    },
+    // 是否可以提车
+    pickCarLetterStatusFormat2(value) {
+      return pickCarStatusMap[value] ? pickCarStatusMap[value].label2 : ''
     }
   },
 
@@ -86,7 +104,9 @@ export default {
       wayBillVehicleStatusList,
       wayBillVehicleStatusMap,
       transportTypeList,
-      transportTypeMap
+      transportTypeMap,
+      pickCarStatusMap,
+      pickCarStatusList
     }
   }
 }

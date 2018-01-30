@@ -28,6 +28,10 @@
           i.iconfont.icon-dingdan
           | 订单融资
       li.ui-border-t
+        router-link(:to="{name:'pickCar'}", :class="{'is-selected': pickCarTabItemIsSelected}")
+          i.iconfont.icon-che
+          | 申请提车
+      li.ui-border-t
         router-link(:to="{name:'depositAccount'}", :class="{'is-selected': depositTabItemIsSelected}")
           i.iconfont.icon-baozhengjinguanli
           | 保证金账户
@@ -195,11 +199,17 @@ export default {
     orderTabItemIsSelected() {
       return includes(['orders', 'orderEdit', 'orderDetail'], this.$store.state.route.name)
     },
+    pickCarTabItemIsSelected() {
+      return includes(['pickCar'], this.$store.state.route.name)
+    },
     depositTabItemIsSelected() {
       return includes(['depositAccount'], this.$store.state.route.name)
     },
     mineTabItemIsSelected() {
-      return includes(['mine', 'profile'], this.$store.state.route.name)
+      return includes([
+        'mine', 'profile', 'realNameAuth', 'companyAuth',
+        'wayBill', 'wayBillDetail', 'wayBillVehicle'
+      ], this.$store.state.route.name)
     },
     msgCountBtnVisible() {
       return includes(['mine'], this.$store.state.route.name)

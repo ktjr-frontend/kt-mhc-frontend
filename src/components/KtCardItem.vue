@@ -1,13 +1,13 @@
 <template lang="pug">
   .card-item
-    .card-header.ui-border-b
+    .card-header.ui-border-b(v-if="headerLeft || headerRight")
       .left {{headerLeft}}
       .right {{headerRight}}
     .card-body
       .arrow
         slot(name="arrow")
           | {{arrow}}
-        i.iconfont.icon-you(v-if="arrowVisible")
+        i.iconfont.icon-you.ml5(v-if="arrowVisible")
       slot
     .card-footer
       slot(name="footer")
