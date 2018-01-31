@@ -13,25 +13,47 @@ export default [{
     skipAuth: true
   }
 }, {
-  path: '/h5/register',
-  name: 'register',
-  component: resolve => require(['@/views/common/Register.vue'], resolve),
+  path: '/h5/register_step1',
+  name: 'registerStep1',
+  component: resolve => require(['@/views/common/RegisterStep1.vue'], resolve),
   meta: {
     title: '注册',
     tabBarVisible: false,
     headerShow: true,
-    headerBackShow: false,
+    headerBackShow: true,
     skipAuth: true
   }
 }, {
-  path: '/h5/register_second',
-  name: 'registerSecond',
-  component: resolve => require(['@/views/common/RegisterSecond.vue'], resolve),
+  path: '/h5/register_step2',
+  name: 'registerStep2',
+  component: resolve => require(['@/views/common/RegisterStep2.vue'], resolve),
   meta: {
     title: '设置密码',
     tabBarVisible: false,
     headerShow: true,
-    headerBackShow: false,
+    headerBackShow: true,
+    skipAuth: true
+  }
+}, {
+  path: '/h5/forget_password_step1',
+  name: 'forgetPasswordStep1',
+  component: resolve => require(['@/views/common/ForgetPasswordStep1.vue'], resolve),
+  meta: {
+    title: '忘记密码',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: true
+  }
+}, {
+  path: '/h5/forget_password_step2',
+  name: 'forgetPasswordStep2',
+  component: resolve => require(['@/views/common/ForgetPasswordStep2.vue'], resolve),
+  meta: {
+    title: '重设密码',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
     skipAuth: true
   }
 }, {

@@ -2,7 +2,7 @@
   section.picker-letter
     .top-alert
       p.mb5.el-green(v-if="model.status === '1'") 签章成功，完成提车委托函申请，可提车
-      p.mb5.el-orange(v-if="model.status === '2'") 尚未签章，请耐心等待
+      p.mb5.el-orange(v-else-if="model.status === '2'") 尚未签章，请耐心等待
       small {{model.signDate | moment('YYYY-MM-DD HH:mm:ss')}}
     section
       mt-cell(title="提车人姓名", :value="model.pickContact")

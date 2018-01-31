@@ -1,16 +1,13 @@
 <template lang="pug">
 section.login
-  //- div.logo
-    img(src='~assets/images/logo.jpg')
-    small 免审核借款1000元
   form.form(@submit.prevent='submit()')
     .fields-header
       h3 登录
     .fields
-      kt-field(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
+      kt-field.icon-title(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
         span(slot="label")
           i.iconfont.icon-yonghu
-      kt-field.ui-border-b(type="number", label='mima', placeholder='请输入密码', v-model='user.password', :state="getFieldState('user.password')", @click.native="showFieldError($event, 'user.password')")
+      kt-field.icon-title.ui-border-b(type="number", label='mima', placeholder='请输入密码', v-model='user.password', :state="getFieldState('user.password')", @click.native="showFieldError($event, 'user.password')")
         span(slot="label")
           i.iconfont.icon-yanzhengma
         //- mt-button(type='default', @click.stop.prevent='toGetMsgCode()', :disabled='countdownVisible')
@@ -19,8 +16,8 @@ section.login
     .form-buttons
       mt-button.mint-button-block(type='primary', size='large') 登录
       .note-line
-        router-link(:to="{name: 'register'}") 注册
-        router-link.fr(:to="{name: 'register'}") 忘记密码
+        router-link(:to="{name: 'registerStep1'}") 注册
+        router-link.fr(:to="{name: 'forgetPasswordStep1'}") 忘记密码
 </template>
 
 <script>

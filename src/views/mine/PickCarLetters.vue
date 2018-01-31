@@ -24,11 +24,11 @@
 
 <script>
 import { pickCarLetters } from '@/common/resources.js'
-import mineMixin from '@/views/mine/mixin.js'
+import MineMixin from '@/views/mine/mixin.js'
 import { debounce } from 'lodash'
 
 export default {
-  mixins: [mineMixin],
+  mixins: [MineMixin],
   mounted() {
     this._fetchData()
   },

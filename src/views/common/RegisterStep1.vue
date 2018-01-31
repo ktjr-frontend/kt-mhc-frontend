@@ -1,15 +1,13 @@
 <template lang="pug">
 section.register
-  //- div.logo
-    small 免审核借款1000元
   form.form(@submit.prevent='submit()')
     .fields-header
       h3 新用户注册
     .fields
-      kt-field(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
+      kt-field.icon-title(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
         span(slot="label")
           i.iconfont.icon-yonghu
-      kt-field.ui-border-b(type="number", label='验证码', placeholder='请输入验证码', v-model='user.captcha', :state="getFieldState('user.captcha')", @click.native="showFieldError($event, 'user.captcha')")
+      kt-field.icon-title.ui-border-b(type="number", label='验证码', placeholder='请输入验证码', v-model='user.captcha', :state="getFieldState('user.captcha')", @click.native="showFieldError($event, 'user.captcha')")
         span(slot="label")
           i.iconfont.icon-yanzhengma
         mt-button(type='default', @click.stop.prevent='toGetMsgCode()', :disabled='countdownVisible')
@@ -28,24 +26,19 @@ section.register
 import ValidatorMixin from '@/views/validator_mixin.js'
 import CommonMixin from '@/views/common_mixin.js'
 import {
-  STORE_KEY_LAST_LOGINED_PHONE
-} from '@/constants.js'
-import {
   mapActions
 } from 'vuex'
-import { read } from '@/storage'
-import store from '@/store'
 
 export default {
   mixins: [CommonMixin, ValidatorMixin],
   validators: {
-    'agreement' (value) {
-      return this.validate(value).custom(() => {
-        if (!this.agreement) {
-          return '请阅读并同意《注册与服务合同》'
-        }
-      })
-    },
+    // 'agreement' (value) {
+    //   return this.validate(value).custom(() => {
+    //     if (!this.agreement) {
+    //       return '请阅读并同意《注册与服务合同》'
+    //     }
+    //   })
+    // },
     'user.phone' (value) {
       return this.validate(value).required('请输入手机号').digit('请正确输入手机号').regex('^1[3-9]\\d{9}$', '请正确输入手机号')
     },
@@ -54,32 +47,14 @@ export default {
     }
   },
 
-  async beforeRouteEnter(to, from, next) {
-    if (to.query.accesstoken) {
-      (to.query.accesstoken)
-      store.dispatch('updateToken', to.query.accesstoken)
-      await store.dispatch('getUser')
-      next({
-        name: to.query.to || 'menu'
-      })
-    } else {
-      next()
-    }
-  },
-
-  mounted() {
-    this.redirect = decodeURIComponent(this.$route.query.redirect || '')
-    this.user.phone = this.$store.getters.user.phone || read(STORE_KEY_LAST_LOGINED_PHONE) || ''
-  },
-
   methods: {
-    ...mapActions(['login', 'getUser', 'updateToken']),
+    ...mapActions(['login']),
     async submit() {
       const success = await this.$validate()
       if (success) {
         // const data = await this.login(this.user)
         this.$router.push({
-          name: 'registerSecond'
+          name: 'registerStep2'
         })
       } else {
         this.$toast(this.validation.firstError(), 'error')
@@ -88,14 +63,11 @@ export default {
   },
 
   data() {
-    // const NODE_ENV = process.env.NODE_ENV
     return {
-      redirect: null, //登录后跳转页面
       agreement: true,
       user: {
         phone: '',
         captcha: ''
-        // loginType: this.isWeixin() ? 2 : (~NODE_ENV.indexOf('app') ? 1 : 0)
       }
     }
   }

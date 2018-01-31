@@ -18,9 +18,9 @@
         .flex-item.flex(@click="$router.push({name: 'companyAuth'})")
           i.iconfont.icon-gongsi
           span(v-if="user.company.status === 'passed'") {{user.company.companyType | companyTypeFormat}}
-          span(v-if="user.company.status === 'checking'") 企业认证审核中
-          span(v-if="user.company.status === 'rejected'") 企业认证失败
-          span(v-if="user.company.status === 'initial'") 未企业认证
+          span(v-else-if="user.company.status === 'checking'") 企业认证审核中
+          span(v-else-if="user.company.status === 'rejected'") 企业认证失败
+          span(v-else-if="user.company.status === 'initial'") 未企业认证
           i.icon-circle(v-if="user.company.status !== 'passed'")
     section.mt10
       mt-cell.title-simple-cell.ui-border-b
@@ -34,7 +34,7 @@
         i.iconfont.icon-cheliang.el-blue(slot="icon")
       mt-cell(is-link, title="我的提车函", :to="{name: 'pickCarLetters'}")
         i.iconfont.icon-dingdan3.el-blue(slot="icon")
-      mt-cell(is-link, title="信息认证")
+      mt-cell(is-link, title="信息认证", :to="{name: 'infoCertify'}")
         i.iconfont.icon-verification.el-blue(slot="icon")
     //- company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
     .form-buttons

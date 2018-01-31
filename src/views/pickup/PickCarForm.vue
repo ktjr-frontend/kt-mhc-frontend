@@ -47,7 +47,7 @@
           input.flex-item.mr5(placeholder="请输入邮箱账号", v-model="receiveEmail")
           mt-button(type="primary", size="small", @click="sendToEmail") 发送至邮箱
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
-      vehicle-list(ref="vehicleList", :mtHeaderVisible="true", from="pickup", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
+      vehicle-list(ref="vehicleList", :mt-header-visible="true", from="pickup", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.picker-box(v-model="pickerListVisible", position="bottom")
       .picker-header.ui-border-b
         mt-button.fr.cancel.no-border(@click="pickerListVisible = false") 关闭

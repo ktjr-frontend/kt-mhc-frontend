@@ -108,4 +108,15 @@ export default [{
     headerBackShow: true,
     skipAuth: false
   }
+}, {
+  path: '/h5/info_certify',
+  name: 'infoCertify',
+  component: resolve => require(['@/views/mine/InfoCertify.vue'], resolve),
+  meta: {
+    title: '信息认证',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
 }]

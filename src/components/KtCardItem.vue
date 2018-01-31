@@ -1,8 +1,10 @@
 <template lang="pug">
-  .card-item
+  .card-item(@click="$emit('click')")
     .card-header.ui-border-b(v-if="headerLeft || headerRight")
-      .left {{headerLeft}}
-      .right {{headerRight}}
+      .left
+        slot(name="headerLeft") {{headerLeft}}
+      .right
+        slot(name="headerRight") {{headerRight}}
     .card-body
       .arrow
         slot(name="arrow")
@@ -30,11 +32,21 @@ export default {
   &.stress {
     .left {
       font-size: 1.2em;
-      font-weight: bold;
+      // font-weight: bold;
       color: $primary-font-color;
     }
     .right {
       color: $primary-font-color;
+    }
+  }
+  .stress {
+    font-size: 1.2em;
+    color: $primary-font-color;
+    .iconfont {
+      font-weight: normal;
+      font-size: 1.4em;
+      vertical-align: -2px;
+      color: $primary-color;
     }
   }
 }

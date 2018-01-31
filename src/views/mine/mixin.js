@@ -66,11 +66,26 @@ const pickCarStatusList = [{
   value: '2'
 }]
 
+const certifyStatusList = [{
+  label: '未认证',
+  value: 'initial'
+}, {
+  label: '已认证',
+  value: 'passed'
+}, {
+  label: '审核中',
+  value: 'checking'
+}, {
+  label: '认证失败',
+  value: 'rejected'
+}]
+
 const companyTypeMap = keyBy(companyTypeList, 'value')
 const wayBillStatusMap = keyBy(wayBillStatusList, 'value')
 const wayBillVehicleStatusMap = keyBy(wayBillVehicleStatusList, 'value')
 const transportTypeMap = keyBy(transportTypeList, 'value')
 const pickCarStatusMap = keyBy(pickCarStatusList, 'value')
+const certifyStatusMap = keyBy(certifyStatusList, 'value')
 
 export default {
   filters: {
@@ -92,6 +107,9 @@ export default {
     // 是否可以提车
     pickCarLetterStatusFormat2(value) {
       return pickCarStatusMap[value] ? pickCarStatusMap[value].label2 : ''
+    },
+    certifyStatusFormat(value) {
+      return certifyStatusMap[value] ? certifyStatusMap[value].label : ''
     }
   },
 
@@ -106,7 +124,9 @@ export default {
       transportTypeList,
       transportTypeMap,
       pickCarStatusMap,
-      pickCarStatusList
+      pickCarStatusList,
+      certifyStatusMap,
+      certifyStatusList
     }
   }
 }

@@ -73,7 +73,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_g2zadd35mavpldi.css')
+  require('http://at.alicdn.com/t/font_527342_jq5we5opf83erk9.css')
 }
 
 export default {
@@ -207,8 +207,9 @@ export default {
     },
     mineTabItemIsSelected() {
       return includes([
-        'mine', 'profile', 'realNameAuth', 'companyAuth',
-        'wayBill', 'wayBillDetail', 'wayBillVehicle'
+        'mine', 'profile'
+        // , 'realNameAuth', 'companyAuth',
+        // 'wayBill', 'wayBillDetail', 'wayBillVehicle'
       ], this.$store.state.route.name)
     },
     msgCountBtnVisible() {
@@ -221,7 +222,10 @@ export default {
       return this.$store.state.route.meta.tabBarVisible
     },
     sideMenuBarVisible() {
-      return !includes(['login', 'register', 'register2'], this.$store.state.route.name)
+      return !includes([
+        'login', 'registerStep1', 'registerStep2',
+        'forgetPasswordStep1', 'forgetPasswordStep2'
+      ], this.$store.state.route.name)
     },
     headerShow() {
       // !this.isInWeixin &&
@@ -274,7 +278,10 @@ body {
   overflow: hidden;
   transition: background .5s;
   &.login,
-  &.register {
+  &.registerStep1,
+  &.registerStep2,
+  &.forgetPasswordStep1,
+  &.forgetPasswordStep2 {
     background-color: white;
   }
 }
