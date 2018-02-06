@@ -30,7 +30,9 @@
               small 已经到底了
     mt-popup.popup-box(v-model="photosVisible", position="right")
       mt-header(ref="header", title="验车照片")
-        mt-button(icon="back", slot="left", @click.prevent="photosVisible = false") 返回
+        //- mt-button(icon="back", slot="left", @click.prevent="photosVisible = false") 返回
+        div(slot="left")
+          i.p10.iconfont.icon-guanbi(@click.prevent="photosVisible = false")
       vehicle-photo(:photos="activePhotos", ref="vehiclePhoto", :close="() => {photosVisible = false}")
 </template>
 
@@ -101,7 +103,7 @@ export default {
       this.loading = true
       if (this.filter.status === '0') this.filter.status = null
 
-      const res = await wayBillVehicles.get(this.pruneParams(this.filter)).then(res => res.json()).catch(res => {
+      const res = await wayBillVehicles.get({ id: this.$route.params.id, ...this.pruneParams(this.filter) }).then(res => res.json()).catch(res => {
         this.loading = false
         throw res
       })

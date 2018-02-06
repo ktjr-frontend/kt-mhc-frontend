@@ -15,7 +15,10 @@
           span(v-else-if="user.status === 'rejected'") 实名认证失败
           span(v-else-if="user.status === 'initial'") 未实名认证
           i.icon-circle(v-if="user.status !== 'passed'")
-        .flex-item.flex(@click="$router.push({name: 'companyAuth'})")
+        //- .flex-item.flex.ui-border-r(@click="$router.push({name: 'depositAccount', query: {from : 'mine'}})")
+          i.iconfont.icon-baozhengjinguanli
+          span 保证金账户
+        .flex-item.flex(@click="goCompanyCertify")
           i.iconfont.icon-gongsi
           span(v-if="user.company.status === 'passed'") {{user.company.companyType | companyTypeFormat}}
           span(v-else-if="user.company.status === 'checking'") 企业认证审核中
@@ -26,7 +29,7 @@
       mt-cell.title-simple-cell.ui-border-b
         span(slot="title") 全部服务
     section
-      mt-cell(is-link, title="我的订单融资", :to="{name: 'orders'}")
+      mt-cell(is-link, title="我的订单融资", :to="{name: 'orders', query: {from: 'mine'}}")
         i.iconfont.icon-dingdan2.el-blue(slot="icon")
       mt-cell(is-link, title="我的运单", :to="{name: 'wayBills'}")
         i.iconfont.icon-yunshu.el-blue(slot="icon")
@@ -71,6 +74,13 @@ export default {
     //   this.companyAuth = companyAuth
     //   this.companyAuthVisible = false
     // }
+    goCompanyCertify() {
+      if (this.user.status === 'passed') {
+        this.$router.push({ name: 'companyAuth' })
+      } else {
+        this.$toast('请先实名认证')
+      }
+    }
   },
 
   data() {

@@ -47,7 +47,7 @@ export default [
       }, request._timeout)
     }
     if (request._showLoadingStatus) { // 是否显示loading状态
-      Indicator.open()
+      Indicator.open({ spinnerType: 'double-bounce' })
       clearTimeout(indicatorHandle)
     }
 

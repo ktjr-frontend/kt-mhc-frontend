@@ -80,12 +80,21 @@ const certifyStatusList = [{
   value: 'rejected'
 }]
 
+const messageStatusList = [{
+  label: '未读',
+  value: '1'
+}, {
+  label: '已读',
+  value: '2'
+}]
+
 const companyTypeMap = keyBy(companyTypeList, 'value')
 const wayBillStatusMap = keyBy(wayBillStatusList, 'value')
 const wayBillVehicleStatusMap = keyBy(wayBillVehicleStatusList, 'value')
 const transportTypeMap = keyBy(transportTypeList, 'value')
 const pickCarStatusMap = keyBy(pickCarStatusList, 'value')
 const certifyStatusMap = keyBy(certifyStatusList, 'value')
+const messageStatusMap = keyBy(messageStatusList, 'value')
 
 export default {
   filters: {
@@ -110,6 +119,17 @@ export default {
     },
     certifyStatusFormat(value) {
       return certifyStatusMap[value] ? certifyStatusMap[value].label : ''
+    },
+    messageStatusFormat(value) {
+      return messageStatusMap[value] ? messageStatusMap[value].label : ''
+    }
+  },
+
+  methods: {
+    headerClose() {
+      this.$router.push({
+        name: 'mine'
+      })
     }
   },
 
@@ -123,10 +143,12 @@ export default {
       wayBillVehicleStatusMap,
       transportTypeList,
       transportTypeMap,
-      pickCarStatusMap,
       pickCarStatusList,
+      pickCarStatusMap,
+      certifyStatusList,
       certifyStatusMap,
-      certifyStatusList
+      messageStatusList,
+      messageStatusMap
     }
   }
 }

@@ -53,10 +53,11 @@ module.exports = router => {
       idCard: '222012121313111111',
       name: '张三',
       businessCard: demoImg,
+      workCertify: demoImg,
       nickname: '昵称', //optional 微信昵称
       desc: '我是中国人',
       email: '281231@qq.com',
-      status: 'checking',
+      status: 'passed',
       company: {
         name: '开通金融信息服务有限公司',
         status: 'rejected',
@@ -70,6 +71,7 @@ module.exports = router => {
         city: '北京-北京-海淀区',
         companyType: '2'
       },
+      advancedCertify: { status: 'initial', grantLetter: demoImg },
       avatarURL: ''
     }))
   })

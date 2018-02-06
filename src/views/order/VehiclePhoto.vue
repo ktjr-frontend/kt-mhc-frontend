@@ -1,7 +1,9 @@
 <template lang="pug">
   section.vehicle-photos
     mt-header(ref="header", title="上传实车照片")
-      mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      div(slot="left")
+        i.p10.iconfont.icon-guanbi(@click.prevent="close")
     header
       | 上传实车照片
     .photo-body.flex.flex-wrap.flex-start
@@ -28,7 +30,7 @@
 import lrz from 'lrz'
 import { remove } from 'lodash'
 // import { fileUploader, userPhotos } from '@/common/resources.js'
-import { Indicator } from 'mint-ui'
+// import { Indicator } from 'mint-ui'
 
 // const FILE_NOT_EMPTY = 'has_file'
 
@@ -54,7 +56,7 @@ export default {
         photo.previewUrl = url
         this.model.photos.push(photo)
         // photo.img = img
-        Indicator.close()
+        this.$indicator.close()
         // const maxW = this.$els[ns].getBoundingClientRect().width
         // this[ns].previewImgStyle = {
         //   maxWidth: `${maxW}px`
@@ -65,7 +67,7 @@ export default {
     photoChange(e) {
       const file = e.target.files[0]
       if (!file) return
-      Indicator.open()
+      this.$indicator.open({ spinnerType: 'double-bounce' })
       lrz(file, {
         quality: 0.7 //1 的话方向会错
       }).then(rst => {
@@ -73,7 +75,7 @@ export default {
         photo.rst = rst
         this.showPreview(rst.base64, photo)
       }).catch(err => {
-        Indicator.close()
+        this.$indicator.close()
         this.$toast(err || '上传失败', 'error')
       })
     },

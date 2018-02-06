@@ -4,7 +4,7 @@ export default [{
   component: resolve => require(['@/views/mine/Index.vue'], resolve),
   meta: {
     title: '我的',
-    tabBarVisible: false,
+    tabBarVisible: true,
     headerShow: true,
     headerBackShow: true,
     skipAuth: false
@@ -37,6 +37,17 @@ export default [{
   component: resolve => require(['@/views/mine/CompanyAuthPage.vue'], resolve),
   meta: {
     title: '企业认证',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/advanced_certify',
+  name: 'advancedCertify',
+  component: resolve => require(['@/views/mine/AdvancedCertify.vue'], resolve),
+  meta: {
+    title: '高级认证',
     tabBarVisible: false,
     headerShow: true,
     headerBackShow: true,

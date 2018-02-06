@@ -14,8 +14,10 @@ import { mapGetters } from 'vuex'
 import { company } from '@/common/resources.js'
 import { debounce, includes } from 'lodash'
 import CompanyAuth from '@/views/mine/CompanyAuth.vue'
+import MineMixin from '@/views/mine/mixin.js'
 
 export default {
+  mixins: [MineMixin],
   components: { CompanyAuth },
   computed: {
     ...mapGetters(['user'])

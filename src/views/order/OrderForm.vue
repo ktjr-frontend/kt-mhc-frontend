@@ -3,31 +3,29 @@
     form(@submit.prevent="submit")
       section
         .fields
-          mt-cell.em-cell(title='供应商信息', :state="getFieldState('model.provider')", :class="{'empty': !model.provider}", is-link, @click.native="showProviderSearch")
+          mt-cell(title='供应商信息', :state="getFieldState('model.provider')", :class="{'empty': !model.provider}", is-link, @click.native="showProviderSearch")
             span {{model.provider || '请选择'}}
           input(type="hidden", v-model="model.provider")
-      section
-        .fields-header 带 <em>*</em> 为必填
+      section.mt10
+        //- .fields-header 带 <em>*</em> 为必填
         .fields
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList", :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
+          mt-cell(is-link, @click.native="showLogistics", :class="{'empty': !modelShow.logistics}",  :value="modelShow.logistics || '请选择'", :state="getFieldState('model.logistics')")
+            span(slot="title") 选择物流 <em>*</em>
+          input(type="hidden", v-model="model.logistics")
           //- mt-cell(is-link, @click.native="showVehiclePhoto", :class="{'empty': !modelShow.vehiclePhoto}",  :value="modelShow.vehiclePhoto ? '已上传' : '请上传'", :state="getFieldState('model.vehiclePhoto')")
             span(slot="title") 实车照片 <em>*</em>
           //- kt-field(type='textarea', label='订单简称', placeholder='请输入备注（非必填）', v-model="model.desc")
       section.mt10
         .fields
-          mt-cell.title-cell
+          //- mt-cell.title-cell
             span(slot="title") 填写金额
           mt-cell.has-hint(:class="{'empty': !model.totalAmount}", :value="!model.vehicle.count ? '请选择车辆' : model.totalAmount + '元'")
             div(slot="title")
               | 合同总金额 <em>*</em>
               p.title-hint 采购和通总金额，与纸质合同总金额相等
-          kt-field.sub-cell.has-hint.input-right(type="number", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.payAmount', :state="getFieldState('model.payAmount')", @click.native="showFieldError($event, 'model.payAmount')")
-            div(slot="label")
-              | 已支付金额 <em>*</em>
-              p.title-hint 已经支付给供应商的打款金额
-            span 元
           kt-field.sub-cell.has-hint.input-right(type="number", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.bailAmount', :state="getFieldState('model.bailAmount')", @click.native="showFieldError($event, 'model.bailAmount')")
             div(slot="label")
               | 实际打款保证金 <em>*</em>
@@ -36,6 +34,11 @@
             //- template(slot="input2")
               input.mint-field-core(:value="!bailRate ? '' :bailRate | ktCurrency('','')", placeholder="自动计算", readonly)
             //- span(slot="input2-append") %
+          kt-field.sub-cell.has-hint.input-right(type="number", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.payAmount', :state="getFieldState('model.payAmount')", @click.native="showFieldError($event, 'model.payAmount')")
+            div(slot="label")
+              | 已支付金额 <em>*</em>
+              p.title-hint 已经支付给供应商的打款金额
+            span 元
           mt-cell.sub-cell.has-hint(:class="{'empty': !advanceMoney}")
             span {{!advanceMoney ? '自动计算' : advanceMoney}}<span>元</span>
             div(slot="title")
@@ -43,21 +46,21 @@
               p.title-hint 合同金额减去已支付金额
       section.mt10
         .fields
-          mt-cell.title-cell
+          //- mt-cell.title-cell
             span(slot="title") 上传资料
           mt-cell(is-link, @click.native="showPurchaseContract", :class="{'empty': !modelShow.purchaseContract}",  :value="modelShow.purchaseContract ? '已上传' : '请上传'", :state="getFieldState('model.purchaseContract')")
             span(slot="title") 采购合同 <em>*</em>
           input(type="hidden", v-model="model.purchaseContract")
-          mt-cell(is-link, @click.native="showPaymentCert", :class="{'empty': !modelShow.paymentCert}",  :value="modelShow.paymentCert ? '已上传' : '请上传'", :state="getFieldState('model.paymentCert')")
-            span(slot="title") 已支付凭证 <em>*</em>
-          input(type="hidden", v-model="model.paymentCert")
           mt-cell(is-link, @click.native="showDepositAction", :class="{'empty': !modelShow.depositCert}",  :value="modelShow.depositCert ? '已添加' : '请添加'", :state="getFieldState('model.depositCert')")
             span(slot="title") 保证金凭证 <em>*</em>
           input(type="hidden", v-model="model.depositCert")
+          mt-cell(is-link, @click.native="showPaymentCert", :class="{'empty': !modelShow.paymentCert}",  :value="modelShow.paymentCert ? '已上传' : '请上传'", :state="getFieldState('model.paymentCert')")
+            span(slot="title") 已支付凭证
+          input(type="hidden", v-model="model.paymentCert")
           mt-cell(is-link, @click.native="showHandingLetter", :class="{'empty': !modelShow.handingLetter}",  :value="modelShow.handingLetter ? '已上传' : '请上传'", :state="getFieldState('model.handingLetter')")
-            span(slot="title") 手续函照片 <em>*</em>
+            span(slot="title") 手续函照片
           input(type="hidden", v-model="model.handingLetter")
-      section.mt10
+      //- section.mt10
         .fields
           mt-cell.title-cell
             span(slot="title") 物流信息
@@ -73,7 +76,7 @@
       .form-buttons-placeholder
       .form-buttons.fixed
         mt-button.mint-button-block(type='primary', size='large') 提交
-    kt-actionsheet(:actions='depositActions', v-model='depositSheetVisible')
+    //- kt-actionsheet(:actions='depositActions', v-model='depositSheetVisible')
     mt-popup.popup-box(v-model='providerSearchVisible', position='right')
       provider-search(:close="closeProviderSearch", @popup-confirmed="providerConfirm")
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
@@ -103,7 +106,7 @@ import HandingLetter from '@/views/order/HandingLetter.vue'
 import PaymentCert from '@/views/order/PaymentCert.vue'
 import DepositCert from '@/views/order/DepositCert.vue'
 import { titleUpdater } from '@/common/crossers.js'
-import { some, includes } from 'lodash'
+// import { some, includes } from 'lodash'
 
 export default {
   components: { ProviderSearch, VehicleList, Logistics, PurchaseContract, VehiclePhoto, HandingLetter, PaymentCert, DepositCert },
@@ -115,27 +118,30 @@ export default {
     'model.vehicle.count' (value) {
       return this.validate(value).required('请选择车辆')
     },
+    'model.logistics' (value) {
+      return this.validate(value).required('请填写物流信息')
+    },
     'model.payAmount' (value) {
       return this.validate(value).required('请输入已支付金额')
     },
     'model.bailAmount' (value) {
       return this.validate(value).required('请输入实际打款保证金')
     },
-    'model.vehiclePhoto' (value) {
-      return this.validate(value).required('请上传实车照片')
-    },
+    // 'model.vehiclePhoto' (value) {
+    //   return this.validate(value).required('请上传实车照片')
+    // },
     'model.purchaseContract' (value) {
       return this.validate(value).required('请上传采购合同')
     },
     'model.depositCert' (value) {
       return this.validate(value).required('请添加保证金凭证')
-    },
-    'model.paymentCert' (value) {
-      return this.validate(value).required('请添加支付凭证')
-    },
-    'model.handingLetter' (value) {
-      return this.validate(value).required('请添加手续函照片')
     }
+    // 'model.paymentCert' (value) {
+    //   return this.validate(value).required('请添加支付凭证')
+    // },
+    // 'model.handingLetter' (value) {
+    //   return this.validate(value).required('请添加手续函照片')
+    // }
   },
 
   methods: {
@@ -326,7 +332,8 @@ export default {
         this.$toast('请选择车辆')
         return
       }
-      this.depositSheetVisible = true
+      this.showDepositCert('offline_bank')
+      // this.depositSheetVisible = true
     },
 
     closeDepositCert() {
@@ -342,24 +349,24 @@ export default {
     async submit() {
       const success = await this.$validate()
 
-      // 保证主要内容填写
-      const inValid = some(this.validation.errors, err => {
-        return includes(['model.provider', 'model.vehicle.count', 'model.payAmount', 'bailAmount'], err.field)
-      })
+      // // 保证主要内容填写
+      // const inValid = some(this.validation.errors, err => {
+      //   return includes(['model.provider', 'model.vehicle.count', 'model.payAmount', 'bailAmount'], err.field)
+      // })
 
-      if (inValid) {
-        this.$toast('请填写主要订单信息', 'error')
-        return
-      }
+      // if (inValid) {
+      //   this.$toast('请填写主要订单信息', 'error')
+      //   return
+      // }
 
       if (success) {
         this.$router.back()
         // to be done
       } else {
-        const action = await this.$confirm('信息不全，确定提交订单吗？')
-        if (action === 'confirm') {
-          this.$router.back()
-        }
+        // const action = await this.$confirm('信息不全，确定提交订单吗？')
+        // if (action === 'confirm') {
+        //   this.$router.back()
+        // }
         // this.$toast(this.validation.firstError(), 'error')
       }
     }

@@ -1,14 +1,16 @@
 <template lang="pug">
 section.vehicle-list
   mt-header(ref="header", title="选择车辆")
-    mt-button(icon="back", slot="left", @click.prevent="backButtonAction") 返回
-  header.flex.search-header(v-show="activeStep === '1-1' || activeStep === '2-1'")
+    //- mt-button(icon="back", slot="left", @click.prevent="backButtonAction") 返回
+    div(slot="left")
+      i.p10.iconfont.icon-guanbi(@click.prevent="backButtonAction")
+  //- header.flex.search-header(v-show="activeStep === '1-1' || activeStep === '2-1'")
     //- div.flex-item
     mt-button.mint-button-block(type='primary', size='large', @click="showVehicleSearch('2-1')")
       i.iconfont.icon-sousuo.mr5
       | 快速选择车型（输入指导价）
   section.body
-    .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
+    //- .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
       ul.standard-list
         mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showVehicleList(s)", is-link, :title="s.name")
     .step-block(v-show="activeStep === '1-2'")
@@ -72,16 +74,16 @@ export default {
     // 自定义后退按钮行为
     backButtonAction() {
       const [mainStep, minorStep] = this.activeStep.split('-')
-      if (+minorStep > 1) {
+      if (+minorStep > 2) {
         this.activeStep = [mainStep, minorStep - 1].join('-')
-      } else if (+minorStep === 1) {
+      } else if (+minorStep === 2) {
         this.close()
       }
     },
 
     // 重置步骤
     reset() {
-      this.activeStep = '1-1'
+      this.activeStep = '1-2'
     },
 
     // 下一步
@@ -95,10 +97,11 @@ export default {
       if (preStep === '1-2') {
         this.$refs.vehicleSearch.init(133)
         this.activeStep = '1-3'
-      } else if (preStep === '2-1') {
-        this.$refs.vehicleSearch.init()
-        this.activeStep = '2-2'
       }
+      // else if (preStep === '2-1') {
+      //   this.$refs.vehicleSearch.init()
+      //   this.activeStep = '2-2'
+      // }
     },
 
     // 显示车辆类型一级目录
@@ -163,7 +166,7 @@ export default {
   data() {
     return {
       selectedAppearTrim: '黑色-黑色',
-      activeStep: '1-1', // {主步骤}-{子步骤}
+      activeStep: '1-2', // {主步骤}-{子步骤}
       selectedVehicle: {},
       appearTrimOptionsVisible: false,
       appearTrimList: [{

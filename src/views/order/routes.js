@@ -27,7 +27,7 @@ export default [{
   name: 'orderEdit',
   component: resolve => require(['@/views/order/OrderForm.vue'], resolve),
   meta: {
-    title: '添加订单',
+    title: '申请订单',
     tabBarVisible: false,
     skipAuth: false,
     hasFixedButtons: true,

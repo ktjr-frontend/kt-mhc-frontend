@@ -1,7 +1,9 @@
 <template lang="pug">
   section.search-providers
     mt-header(ref="header", title="选择供应商")
-      mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      div(slot="left")
+        i.p10.iconfont.icon-guanbi(@click.prevent="close")
     header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo

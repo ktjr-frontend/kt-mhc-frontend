@@ -1,4 +1,4 @@
-const company = [{
+const letters = [{
   id: '1',
   pickContact: '张三',
   status: '1',
@@ -22,9 +22,9 @@ module.exports = router => {
     const page = Number(req.query.page) || 1
     const size = Number(req.query.size) || 10
     const startIndex = (page - 1) * 10
-    let filterCompany = []
+    let filterLetters = []
     console.log(name)
-    filterCompany = company.filter(c => {
+    filterLetters = letters.filter(c => {
       if (!name) {
         return true
       }
@@ -32,7 +32,7 @@ module.exports = router => {
     })
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
-      result: filterCompany.slice(startIndex, size + startIndex)
+      result: filterLetters.slice(startIndex, size + startIndex)
     })
   })
 }

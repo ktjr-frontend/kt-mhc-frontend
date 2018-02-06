@@ -10,7 +10,9 @@ section.vehicle-model-select
   //- .custom-model(v-if="popupVisible", @click="popupVisible = false")
   mt-popup.popup-box(v-model='popupVisible', position='right')
     mt-header(ref="header", title="主营品牌")
-      mt-button(icon="back", slot="left", @click.prevent="popupVisible = false") 返回
+      div(slot="left")
+        i.p10.iconfont.icon-guanbi(@click.prevent="popupVisible = false")
+      //- mt-button(icon="back", slot="left", @click.prevent="popupVisible = false") 返回
     .overflow-scroll(ref="popBoxContainer")
       template(v-for="(value, key) in vehicleList")
         section.mt10

@@ -5,8 +5,10 @@
 
 <script>
 import VehicleList from '@/views/pickup/VehicleList.vue'
+import MineMixin from '@/views/mine/mixin.js'
 
 export default {
+  mixins: [MineMixin],
   components: { VehicleList },
   mounted() {
     this.$refs.vehicleList.init()

@@ -5,7 +5,7 @@ const orderStatusList = [{
   label: '全部',
   value: '0'
 }, {
-  label: '待完善资料',
+  label: '待补齐资料',
   value: ORDER_STATUS_MAP.WAIT_FILL_MATERIAL
 }, {
   label: '待初审',

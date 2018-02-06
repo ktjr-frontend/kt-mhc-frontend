@@ -1,29 +1,23 @@
 <template lang="pug">
-  section.pick-car-letters
+  section.messages
     .card-body(v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
-      .no-data(v-if="!pickCarLetterList.length")
+      .no-data(v-if="!messageList.length")
         i.iconfont.icon-car
-        p 没有委托函信息
-      kt-card-item.stress(v-for='pickCarLetter in pickCarLetterList', :key='pickCarLetter.number', :arrow-visible="true")
-        span.color-primary(slot='arrow') {{pickCarLetter.status | pickCarLetterStatusFormat2}}
-        .content(@click.prevent="$router.push({name: 'pickCarLetterDetail', params: {id: pickCarLetter.id}})")
+        p 没有消息
+      kt-card-item(v-for='message in messageList', :key='message.id', :arrow-visible="true", :header-left="message.createDate | moment('YYYY-MM-DD HH:mm:ss')")
+        span.color-primary(slot='arrow') {{message.status | messageStatusFormat}}
+        .content(@click.prevent="$router.push({name: 'messageDetail', params: {id: message.id}})")
           .content-row.mb5
-            .stress 提车人：{{pickCarLetter.pickContact}}
+            .stress {{message.title}}
           .content-row.flex.minor-content
             .content-left.flex-item
-              | {{pickCarLetter.model}}
-            .content-right
-              | 共 {{pickCarLetter.count}} 辆
-          .content-row.minor-content
-            | 发起申请：{{pickCarLetter.startDate | moment('YYYY-MM-DD HH:mm:ss')}}
-          .content-row.minor-content
-            | 签章完成：{{pickCarLetter.signDate | moment('YYYY-MM-DD HH:mm:ss')}}
+              | {{message.message}}
       .no-more-data(v-if="noMoreData")
         small 已经到底了
 </template>
 
 <script>
-import { pickCarLetters } from '@/common/resources.js'
+import { messages } from '@/common/resources.js'
 import MineMixin from '@/views/mine/mixin.js'
 import { debounce } from 'lodash'
 
@@ -53,19 +47,19 @@ export default {
       this.loading = true
       if (this.filter.status === '0') this.filter.status = null
 
-      const res = await pickCarLetters.get(this.pruneParams(this.filter)).then(res => res.json()).catch(res => {
+      const res = await messages.get(this.pruneParams(this.filter)).then(res => res.json()).catch(res => {
         this.loading = false
         throw res
       })
 
-      if (isMore) this.pickCarLetterList = this.pickCarLetterList.concat(res.data.result)
-      else this.pickCarLetterList = res.data.result
+      if (isMore) this.messageList = this.messageList.concat(res.data.result)
+      else this.messageList = res.data.result
 
       if (res.data.result.length) {
         this.loading = false
       } else {
         this.loading = true
-        if (this.pickCarLetterList.length) this.noMoreData = true
+        if (this.messageList.length) this.noMoreData = true
       }
     }
   },
@@ -84,7 +78,7 @@ export default {
       },
       loading: false,
       noMoreData: false,
-      pickCarLetterList: []
+      messageList: []
     }
   }
 }

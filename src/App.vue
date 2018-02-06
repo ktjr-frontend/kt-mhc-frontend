@@ -4,11 +4,14 @@
   n-progress(parent=".app")
   transition(:name="transitionName", appear, mode="out-in")
     mt-header(ref="header", fixed="", :title="headerTitle", v-show="headerShow")
-      mt-button(v-if="headerBackShow", icon="back", slot="left", @click="back()") 返回
+      div(slot="left")
+        i.p10.iconfont.icon-houtui(@click="back()", v-if="!tabBarVisible")
+        i.p10.iconfont.icon-guanbi(@click="close()", v-if="headerCloseVisible")
+      //- mt-button(v-if="headerBackShow", icon="back", slot="left", @click="back()")
       //- mt-button.of-v(v-if="msgCountBtnVisible", slot="left", @click="$router.push({name: 'messageList'})")
         i.iconfont.icon-xiaoxi-solid.ft18.pos-r
           span.badge-red.badge-top 10
-      mt-button(slot="right", v-if="sideMenuBarVisible")
+      //- mt-button(slot="right", v-if="sideMenuBarVisible")
         small
           a(@click="sideMenuVisible = !sideMenuVisible") 菜单
       //- mt-button(slot="right", v-if="msgListBtnVisible")
@@ -17,10 +20,10 @@
   .container(:class="{'header-show': headerShow, 'has-fixed-buttons': hasFixedButtons}", ref="container", v-touch:swipe.swipeleft.swiperight="onAppSwiper")
     transition(:name="transitionName", appear, mode="out-in")
       router-view(ref="routerView")
-  mt-popup.popup-box.side-menu(v-model='sideMenuVisible', position='right')
+  //- mt-popup.popup-box.side-menu(v-model='sideMenuVisible', position='right')
     ul
       li
-        router-link(:to="{name:'menu'}", :class="{'is-selected': $route.name === 'menu'}")
+        router-link(:to="{name:'menu'}", :class="{'is-selected': homeTabItemIsSelected}")
           i.iconfont.icon-home
           | 首页
       li.ui-border-t
@@ -40,11 +43,23 @@
           i.iconfont.icon-wode
           | 我的
   mt-tabbar(:fixed="true", v-show="tabBarVisible", ref="tabbar")
+    mt-tab-item#menu(:class="{'is-selected': homeTabItemIsSelected}")
+      div(slot="icon")
+        i.iconfont.icon-home
+      | 首页
     mt-tab-item#orders(:class="{'is-selected': orderTabItemIsSelected}")
       div(slot="icon")
-        i.iconfont.icon-order
+        i.iconfont.icon-dingdan
       | 订单融资
-    mt-tab-item#stocks(:class="{'is-selected': mineTabItemIsSelected}")
+    mt-tab-item#messages(:class="{'is-selected': msgTabItemIsSelected}")
+      div(slot="icon")
+        i.iconfont.icon-xiaoxi
+      | 消息
+    mt-tab-item#service
+      div(slot="icon")
+        i.iconfont.icon-order
+      | 客服
+    mt-tab-item#mine(:class="{'is-selected': mineTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-wode
       | 我的
@@ -73,7 +88,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_jq5we5opf83erk9.css')
+  require('http://at.alicdn.com/t/font_527342_frtkjcyinx8khuxr.css')
 }
 
 export default {
@@ -143,12 +158,31 @@ export default {
       }
     },
 
+    // 关闭回首页
+    close() {
+      const routerView = this.$refs.routerView
+      if (routerView.headerClose) {
+        routerView.headerClose()
+      } else {
+        this.$router.push({
+          name: 'menu'
+        })
+      }
+    },
+
     // tab点击事件
     async tabClick(e, tab) {
       // await this.getUser()
-      this.$router.push({
-        name: tab
-      })
+      if (tab === 'service') {
+        this.$msgBox({
+          title: '客服电话',
+          message: '188123111123'
+        })
+      } else {
+        this.$router.push({
+          name: tab
+        })
+      }
     },
 
     // 右侧按钮触发事件
@@ -196,6 +230,12 @@ export default {
 
   computed: {
     ...mapGetters(['route', 'stateCode', 'isPopStated']),
+    headerCloseVisible() {
+      return !this.tabBarVisible && this
+    },
+    homeTabItemIsSelected() {
+      return includes(['menu'], this.$store.state.route.name)
+    },
     orderTabItemIsSelected() {
       return includes(['orders', 'orderEdit', 'orderDetail'], this.$store.state.route.name)
     },
@@ -204,6 +244,9 @@ export default {
     },
     depositTabItemIsSelected() {
       return includes(['depositAccount'], this.$store.state.route.name)
+    },
+    msgTabItemIsSelected() {
+      return includes(['messages'], this.$store.state.route.name)
     },
     mineTabItemIsSelected() {
       return includes([
@@ -252,6 +295,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.icon-houtui {
+  margin-left: -5px;
+  &:after {
+    content: '|';
+    display: inline-block;
+    color: lighten($header-bg-color, 8%);
+    transform: translateX(10px);
+  }
+}
+</style>
 
 <style lang="scss">
 @import '~assets/fonts/franklin/franklin.css';

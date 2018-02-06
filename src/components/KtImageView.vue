@@ -1,8 +1,8 @@
 <template lang="pug">
   mt-popup.popup-box(v-model="visible")
     header
-      span.index {{currentIndex + 1}}/{{imgList.length}}
       i.iconfont.icon-guanbi(@click.prevent="visible = false")
+      span.index {{currentIndex + 1}}/{{imgList.length}}
     mt-swipe(:stopPropagation="true", disable-swipe, @change="handleChange" :auto="0", :prevent="true", :showIndicators="false", :default-index="currentIndex")
       mt-swipe-item(v-for="img in imgList")
         img(:src="img.url")
@@ -64,8 +64,8 @@ header {
   text-align: center;
   .icon-guanbi {
     position: absolute;
-    right: 15px;
-    top: 15px;
+    left: 20px;
+    top: 13px;
     z-index: 999;
     &:active {
       color: $primary-color;

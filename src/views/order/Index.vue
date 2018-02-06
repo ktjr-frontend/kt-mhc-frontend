@@ -66,6 +66,12 @@ export default {
   mixins: [OrderMixin],
   components: { Search, ApplyProcedure },
   methods: {
+    headerClose() {
+      this.$router.push({
+        name: this.$route.query.from || 'menu'
+      })
+    },
+
     showAmountTip() {
       this.$msgBox({
         title: '额度详细说明',

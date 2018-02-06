@@ -1,11 +1,11 @@
 <template lang="pug">
   section.work-certify-template
-    mt-header(ref="header", title="在职证明说明")
+    mt-header(ref="header", title="授权书说明")
       //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
       div(slot="left")
         i.p10.iconfont.icon-guanbi(@click.prevent="close")
     .content
-      p.line 《在职证明》是用来证明您当前在申请的企业就职的文书。
+      p.line 《授权书》是用来证明您当前在申请的企业就职的文书。
 
       h3 要求如下
       ol
@@ -14,10 +14,10 @@
         li 公章上的公司名称与申请加入的公司名称一致
       p.line 您可以使用自己公司的《在职证明》，也可以下载卖好车提供的《在职证明模板》。
       .form-buttons
-        mt-button.mint-button-block(type='primary', size='large', @click.prevent="pickTemplateVisible = true") 获取在职证明模板
+        mt-button.mint-button-block(type='primary', size='large', @click.prevent="pickTemplateVisible = true") 获取授权书模板
     .custom-model(v-if="pickTemplateVisible", @click="pickTemplateVisible = false")
     mt-popup.popup-box.popup-box-top(v-model='pickTemplateVisible', position='top')
-      mt-header(ref="header", title="获取在职证明模板")
+      mt-header(ref="header", title="获取授权书模板")
         //- mt-button(icon="back", slot="left", @click.prevent="pickTemplateVisible = false") 返回
         div(slot="left")
           i.p10.iconfont.icon-guanbi(@click.prevent="pickTemplateVisible = false")

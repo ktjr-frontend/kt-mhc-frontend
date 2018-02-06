@@ -2,7 +2,7 @@
   section.order-form
     form(@submit.prevent="submit")
       section
-        .fields-header 带 <em>*</em> 为必填
+        //- .fields-header 带 <em>*</em> 为必填
         .fields
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? ('已选择' + model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
@@ -12,47 +12,53 @@
               | 预计提车时间 <em>*</em>
           //- kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
             span(slot="label") 选择提车公司 <em>*</em>
-          .note-row
+          //- .note-row
             .inner
               h3 提车公司说明
               p 请填写本次提车的下游买家公司名称；如果是自提，请填写您所在公司名称
       section.mt10
         .fields
+          mt-cell.title-cell
+            span(slot="title") 提车人信息
           kt-field(type="text", label='empty', placeholder='请输入姓名', v-model='model.pickerName', :state="getFieldState('model.pickerName')", @click.native="showFieldError($event, 'model.pickerName')")
             div(slot="label")
               | 提车人姓名 <em>*</em>
             mt-button(@click.prevent.stop="pickerListVisible = true") 选择提车人
-          kt-field(type="number", label='empty', placeholder='请输入手机号', v-model='model.pickerPhone', :state="getFieldState('model.pickerPhone')", @click.native="showFieldError($event, 'model.pickerPhone')")
-            div(slot="label")
-              | 手机号码 <em>*</em>
           kt-field(type="text", label='empty', placeholder='请输入身份证号', v-model='model.pickerIdCard', :state="getFieldState('model.pickerIdCard')", @click.native="showFieldError($event, 'model.pickerIdCard')")
             div(slot="label")
               | 身份证号码 <em>*</em>
-      .footer-tips
+          kt-field(type="number", label='empty', placeholder='请输入手机号', v-model='model.pickerPhone', :state="getFieldState('model.pickerPhone')", @click.native="showFieldError($event, 'model.pickerPhone')")
+            div(slot="label")
+              | 手机号号码 <em>*</em>
+          .form-buttons.text-center.pt20
+            a.underline(@click.prevent="showPickTemplate") 获取提车函模板
+      //- .footer-tips
         h4 温馨提示：
         ol
           li 仓管费用需要在仓库进行结算，提车前需要结算清仓管费用。
           li 若签章人暂时无法签章，可选择打印纸质委托函，盖章后拍照上传。
     .fixed-footer-placeholder
     footer.fixed-footer
-      .tab-item.flex1(@click="showPickTemplate")
+      //- .tab-item.flex1(@click="showPickTemplate")
         p 下载提车函模板
       .tab-item.flex2.tab-btn
         button(@click="submit") 提交
     mt-popup.popup-box.popup-box-top(v-model='pickTemplateVisible', position='top')
-      mt-header(ref="header", title="下载提车函模板")
-        mt-button(icon="back", slot="left", @click.prevent="pickTemplateVisible = false") 返回
+      mt-header(ref="header", title="获取提车函模板")
+        //- mt-button(icon="back", slot="left", @click.prevent="pickTemplateVisible = false") 返回
+        div(slot="left")
+          i.p10.iconfont.icon-guanbi(@click.prevent="pickTemplateVisible = false")
       .picker-body
         .picker-row.flex
           input.flex-item.mr5(placeholder="请输入邮箱账号", v-model="receiveEmail")
-          mt-button(type="primary", size="small", @click="sendToEmail") 发送至邮箱
+          mt-button(type="primary", size="small", @click.prevent="sendToEmail") 发送至邮箱
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
       vehicle-list(ref="vehicleList", :mt-header-visible="true", from="pickup", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.picker-box(v-model="pickerListVisible", position="bottom")
       .picker-header.ui-border-b
-        mt-button.fr.cancel.no-border(@click="pickerListVisible = false") 关闭
+        mt-button.fr.cancel.no-border(@click.prevent="pickerListVisible = false") 关闭
       .picker-list
-        mt-cell.has-hint(v-for="p in pickerList", @click.native="onSelectPicker(p)")
+        mt-cell.has-hint(v-for="p in pickerList", @click.prevent.native="onSelectPicker(p)")
           div(slot="title") {{p.name}}
             p.title-hint
               small {{p.idCard}}

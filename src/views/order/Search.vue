@@ -1,7 +1,9 @@
 <template lang="pug">
   section.search-orders
     mt-header(ref="header", title="订单搜索", v-if="openType === 'popup'")
-      mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
+      div(slot="left")
+        i.p10.iconfont.icon-guanbi(@click.prevent="close")
     header.flex.search-header(ref="searchHeader")
       .search-input.flex-item.flex
         i.iconfont.icon-sousuo

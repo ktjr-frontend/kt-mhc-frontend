@@ -62,7 +62,7 @@ export default [{
   component: resolve => require(['@/views/common/Menu.vue'], resolve),
   meta: {
     title: '开好车',
-    tabBarVisible: false,
+    tabBarVisible: true,
     headerShow: true,
     headerBackShow: true,
     skipAuth: false
@@ -73,6 +73,28 @@ export default [{
   component: resolve => require(['@/views/common/DepositAccount.vue'], resolve),
   meta: {
     title: '保证金专用账户',
+    tabBarVisible: false,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/messages',
+  name: 'messages',
+  component: resolve => require(['@/views/common/Messages.vue'], resolve),
+  meta: {
+    title: '消息',
+    tabBarVisible: true,
+    headerShow: true,
+    headerBackShow: true,
+    skipAuth: false
+  }
+}, {
+  path: '/h5/messages/:id',
+  name: 'messageDetail',
+  component: resolve => require(['@/views/common/MessageDetail.vue'], resolve),
+  meta: {
+    title: '消息详情',
     tabBarVisible: false,
     headerShow: true,
     headerBackShow: true,

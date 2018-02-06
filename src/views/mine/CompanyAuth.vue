@@ -1,7 +1,8 @@
 <template lang="pug">
 section.company-auth
   mt-header(ref="header", title="企业认证", v-if="headerVisible")
-    mt-button(icon="back", slot="left", @click.prevent="close") 返回
+    div(slot="left")
+      i.p10.iconfont.icon-guanbi(@click.prevent="close()")
     mt-button(slot="right", v-if="menuVisible")
       small
         a(@click="toggleSideMenu") 菜单
@@ -61,17 +62,17 @@ section.company-auth
               span.tip(v-else="receptionPhoto.previewUrl") 图片仅用于<br>开好车审核
               input(v-if="!readonly", ref="receptionPhoto", type="file", accept="image/*;", @change="photoChange($event, 'receptionPhoto')")
           .photo-item-desc 前台照片
-    section.mt10
+    //- section.mt10
       mt-cell.title-simple-cell.ui-border-b
         span(slot="title") 个人信息
-    section
+    //- section
       kt-field(type="text", :readonly="readonly", label='empty', placeholder='请输入真实姓名', v-model='model.userName', :state="getFieldState('model.userName')", @click.native="showFieldError($event, 'model.userName')")
         div(slot="label")
-          | 真实姓名 <em>*</em>
+          | 法人姓名 <em>*</em>
       kt-field(type="text", :readonly="readonly", label='empty', placeholder='请输入身份证号码', v-model='model.idCard', :state="getFieldState('model.idCard')", @click.native="showFieldError($event, 'model.idCard')")
         div(slot="label")
-          | 身份证号码 <em>*</em>
-    section.mt10(v-if="model.companyType")
+          | 法人身份证号 <em>*</em>
+    //- section.mt10(v-if="model.companyType")
       mt-cell.title-simple-cell.ui-border-b
         span(slot="title" v-if="model.companyType === '1'") 上传名片
         span(slot="title" v-else) 上传在职证明
@@ -102,7 +103,7 @@ section.company-auth
             .preview.demo
               img(v-if="workCertify.demo", :src="workCertify.demo", @click="imgViewVisible = true")
           .photo-item-desc 示例
-    mt-popup.popup-box(v-model='workCertifyVisible', position='right')
+    //- mt-popup.popup-box(v-model='workCertifyVisible', position='right')
       work-certify-template(ref="workCertify", :close="closeWorkCertify", @popup-confirmed="workCertifyConfirm")
     .form-buttons-placeholder(v-if="!readonly")
       .button-tip 所有证件图片仅供于开好车审核
@@ -110,7 +111,7 @@ section.company-auth
     .form-buttons.fixed(v-if="!readonly")
       .button-tip 所有证件图片仅供于开好车审核
       mt-button.mint-button-block(type='primary', size='large') 提交
-  kt-image-view(:list="imgList", v-model="imgViewVisible", :default-index="defaultIndex")
+  //- kt-image-view(:list="imgList", v-model="imgViewVisible", :default-index="defaultIndex")
 </template>
 
 <script>
@@ -118,17 +119,20 @@ import ValidatorMixin from '@/views/validator_mixin.js'
 import lrz from 'lrz'
 import { merge, includes } from 'lodash'
 // import { fileUploader, userPhotos } from '@/common/resources.js'
-import { Indicator } from 'mint-ui'
+// import { Indicator } from 'mint-ui'
 import { mapGetters } from 'vuex'
 import MineMixin from '@/views/mine/mixin.js'
-import WorkCertifyTemplate from '@/views/mine/WorkCertifyTemplate.vue'
+// import WorkCertifyTemplate from '@/views/mine/WorkCertifyTemplate.vue'
 import VehicleModelSelect from '@/views/mine/VehicleModelSelect.vue'
 
 // const FILE_NOT_EMPTY = 'has_file'
 
 export default {
   mixins: [ValidatorMixin, MineMixin],
-  components: { WorkCertifyTemplate, VehicleModelSelect },
+  components: {
+    // WorkCertifyTemplate,
+    VehicleModelSelect
+  },
   props: {
     close: Function,
     headerVisible: false,
@@ -156,27 +160,27 @@ export default {
       $app.sideMenuVisible = !$app.sideMenuVisible
     },
 
-    showWorkCertify() {
-      this.$refs.workCertify.init(this.companyName)
-      this.workCertifyVisible = true
-      this.$nextTick(() => {
-        this.$refs.workCertify.updatePopBoxHeight()
-      })
-    },
+    // showWorkCertify() {
+    //   this.$refs.workCertify.init(this.companyName)
+    //   this.workCertifyVisible = true
+    //   this.$nextTick(() => {
+    //     this.$refs.workCertify.updatePopBoxHeight()
+    //   })
+    // },
 
-    closeWorkCertify() {
-      this.workCertifyVisible = false
-    },
+    // closeWorkCertify() {
+    //   this.workCertifyVisible = false
+    // },
 
-    workCertifyConfirm(workCertify = {}) {
-      this.workCertify = workCertify
-      this.workCertifyVisible = false
-    },
+    // workCertifyConfirm(workCertify = {}) {
+    //   this.workCertify = workCertify
+    //   this.workCertifyVisible = false
+    // },
 
-    // 展示在职证明模板
-    showWorkCertifyTemp() {
-      this.workCertifyVisible = true
-    },
+    // // 展示在职证明模板
+    // showWorkCertifyTemp() {
+    //   this.workCertifyVisible = true
+    // },
 
     deletePhoto(ns) {
       this[ns].previewUrl = ''
@@ -190,21 +194,21 @@ export default {
       img.onload = () => {
         this[ns].previewUrl = url
         this.model[ns] = url
-        Indicator.close()
+        this.$indicator.close()
       }
     },
 
     photoChange(e, ns) {
       const file = e.target.files[0]
       if (!file) return
-      Indicator.open()
+      this.$indicator.open({ spinnerType: 'double-bounce' })
       lrz(file, {
         quality: 0.7 //1 的话方向会错
       }).then(rst => {
         this[ns].rst = rst
         this.showPreview(rst.base64, ns)
       }).catch(err => {
-        Indicator.close()
+        this.$indicator.close()
         this.$toast(err || '上传失败', 'error')
       })
     },
@@ -236,12 +240,12 @@ export default {
       }
       return validator
     },
-    'model.userName' (value) {
-      return this.validate(value).required('请输入真实姓名')
-    },
-    'model.idCard' (value) {
-      return this.validate(value).required('请输入身份证号码')
-    },
+    // 'model.userName' (value) {
+    //   return this.validate(value).required('请输入真实姓名')
+    // },
+    // 'model.idCard' (value) {
+    //   return this.validate(value).required('请输入身份证号码')
+    // },
     'model.businessLicense' (value) {
       const validator = this.validate(value)
       if (this.model.companyType !== '1') {
@@ -262,21 +266,21 @@ export default {
         validator.required('请上传前台照片')
       }
       return validator
-    },
-    'model.businessCard' (value) {
-      const validator = this.validate(value)
-      if (this.model.companyType === '1') {
-        validator.required('请上传名片')
-      }
-      return validator
-    },
-    'model.workCertify' (value) {
-      const validator = this.validate(value)
-      if (this.model.companyType !== '1') {
-        validator.required('请上传在职证明')
-      }
-      return validator
     }
+    // 'model.businessCard' (value) {
+    //   const validator = this.validate(value)
+    //   if (this.model.companyType === '1') {
+    //     validator.required('请上传名片')
+    //   }
+    //   return validator
+    // },
+    // 'model.workCertify' (value) {
+    //   const validator = this.validate(value)
+    //   if (this.model.companyType !== '1') {
+    //     validator.required('请上传在职证明')
+    //   }
+    //   return validator
+    // }
   },
 
   computed: {
@@ -354,82 +358,4 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.photo-body {
-  background-color: white;
-  display: flex;
-  padding: 20px 15px;
-  justify-content: space-around;
-  align-items: center;
-  .photo-item-inner {
-    height: 120px;
-    width: 120px;
-    position: relative;
-  }
-  .photo-item-desc {
-    text-align: center;
-    color: $placeholder-color;
-    margin-top: 10px;
-  }
-  .preview {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 120px;
-    img {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    .tip {
-      color: white;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      text-align: center;
-      transform: translateY(-50%), tranlateX(-50%);
-    }
-    .icon-qingchu {
-      position: absolute;
-      right: -.5em;
-      top: -.5em;
-      font-size: 20px;
-      color: $placeholder-color;
-      z-index: 999;
-      &:active {
-        color: $el-red;
-      }
-    }
-  }
-  .upload-input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-    z-index: 9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, .15);
-    overflow: hidden;
-    .tip {
-      text-align: center;
-      color: white;
-    }
-    input {
-      position: absolute;
-      opacity: 0;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .icon-paizhao {
-    font-size: 20px;
-    color: $primary-font-color;
-  }
-}
 </style>

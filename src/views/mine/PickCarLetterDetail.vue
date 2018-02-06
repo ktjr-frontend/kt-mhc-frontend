@@ -26,7 +26,10 @@
 </template>
 
 <script>
+import MineMixin from '@/views/mine/mixin.js'
+
 export default {
+  mixins: [MineMixin],
   data() {
     return {
       model: {

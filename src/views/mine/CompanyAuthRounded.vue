@@ -4,7 +4,9 @@
       company-auth(ref="companyAuth", :close="closeCompanyAuth", @popup-confirmed="companyAuthConfirm")
     kt-popup-input(@popup-confirmed="popInputConfirm", @input="popInputOnInput", ref="popupInput", :visible="popupInputVisible", @visible-change="(value) => popupInputVisible = value")
       mt-header(ref="header", title="公司名称", slot="header")
-        mt-button(icon="back", slot="left", @click.prevent="popupInputVisible = false") 返回
+        //- mt-button(icon="back", slot="left", @click.prevent="popupInputVisible = false") 返回
+        div(slot="left")
+          i.p10.iconfont.icon-guanbi(@click.prevent="popupInputVisible = false")
       section.mt10
         mt-cell(v-for="c in companyList", :key="c.id", @click.native="selectCompany(c)")
           span(slot="title") {{c.name}}
