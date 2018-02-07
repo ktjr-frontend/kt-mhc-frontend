@@ -263,6 +263,7 @@ header {
   position: relative;
   z-index: 9;
   button {
+    width: 100%;
     white-space: nowrap;
     padding: 5px;
     background: $minor-bg-color;
