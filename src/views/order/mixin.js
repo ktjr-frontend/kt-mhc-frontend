@@ -8,10 +8,10 @@ const orderStatusList = [{
   label: '待补齐资料',
   value: ORDER_STATUS_MAP.WAIT_FILL_MATERIAL
 }, {
-  label: '待初审',
+  label: '待审核',
   value: ORDER_STATUS_MAP.WAIT_FOR_FIRST_CHECK
 }, {
-  label: '初审未通过',
+  label: '审核未通过',
   value: ORDER_STATUS_MAP.FISRT_CHECK_REJECTED
 }, {
   label: '待验车',
@@ -50,7 +50,7 @@ const orderStatusList = [{
   label: '已完成',
   value: ORDER_STATUS_MAP.PICK_SUCCESS
 }, {
-  label: '已关闭',
+  label: '已取消',
   value: ORDER_STATUS_MAP.CLOSED
 }, {
   label: '待结算审核',
@@ -76,7 +76,7 @@ export default {
   methods: {
     // 关闭订单
     async closeOrder(order) {
-      const action = await this.$confirm('确定关闭订单？')
+      const action = await this.$confirm('确定取消订单？')
       if (action === 'confirm') {
         order.status = this.ORDER_STATUS_MAP.CLOSED
       }
@@ -95,7 +95,7 @@ export default {
 
     // 订单详情
     goToDetail(order) {
-      console.log(order)
+      // console.log(order)
       this.$router.push({
         name: 'orderDetail',
         params: {

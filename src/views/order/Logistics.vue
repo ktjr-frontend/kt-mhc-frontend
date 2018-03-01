@@ -40,7 +40,7 @@ section.logistics-form
         //-   div(slot="label")
         //-     | 发货地址 <em>*</em>
         //- kt-field(type="textarea", label=" ", v-model="model.detailAddress", :state="getFieldState('model.detailAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailAddress')")
-        kt-field(type="text", label="empty", :readonly="true", placeholder='自动计算', v-model='transportFee')
+        kt-field(type="text", label="empty", :readonly="true", placeholder='自动计算', :value='transportFee')
           div(slot="label")
             | 运输费用
           span(slot="input1-append") 元

@@ -47,7 +47,7 @@
       div(slot="icon")
         i.iconfont.icon-home
       | 首页
-    mt-tab-item#orders(:class="{'is-selected': orderTabItemIsSelected}")
+    //- mt-tab-item#orders(:class="{'is-selected': orderTabItemIsSelected}")
       div(slot="icon")
         i.iconfont.icon-dingdan
       | 订单融资

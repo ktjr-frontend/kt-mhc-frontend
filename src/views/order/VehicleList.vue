@@ -9,7 +9,7 @@ section.vehicle-list
     mt-button.mint-button-block(type='primary', size='large', @click="showVehicleSearch('2-1')")
       i.iconfont.icon-sousuo.mr5
       | 快速选择车型（输入指导价）
-  section.body
+  section.body.overflow-scroll(ref="popBoxContainer")
     //- .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
       ul.standard-list
         mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showVehicleList(s)", is-link, :title="s.name")
@@ -38,12 +38,16 @@ section.vehicle-list
                   i.mintui.mintui-field-error
             input(type="hidden", v-model="model.appearTrim")
             kt-field.has-hint.input-right(type="number", label='数量', placeholder='请输入', v-model='model.count', :state="getFieldState('model.count')", @click.native="showFieldError($event, 'model.count')")
-              div(slot="label") 数量  <em>*</em>
+              div(slot="label") 数量 <em>*</em>
               span(slot="input1-append") 辆
             kt-field.has-hint.input-right(type="number", label='单辆车合同单价', placeholder='请输入金额', v-model='model.price', :state="getFieldState('model.price')", @click.native="showFieldError($event, 'model.price')")
               div(slot="label") 单辆车合同单价 <em>*</em>
                 p.title-hint 给车型批次总价格
               span(slot="input1-append") 元
+          .fields.mt10
+            kt-field.has-hint.input-right(type="text", v-for="n in +model.count", label='车架号', placeholder='请输入车架号', :value="getFrameNo(n)", @input="updateFrameNo($event, n)", :state="getFieldState('model.frameNos')", @click.native="showFieldError($event, 'model.frameNos')")
+              div(slot="label") 车架号{{n}} <em>*</em>
+            input(type="hidden", v-model="model.frameNos")
     //- .step-block(v-show="activeStep === '2-4' || activeStep === '1-5'")
   .custom-model(v-if="appearTrimOptionsVisible", @click="appearTrimOptionsVisible = false")
   mt-popup(v-model="appearTrimOptionsVisible", position="bottom", :showToolbar="true")
@@ -59,6 +63,7 @@ section.vehicle-list
 <script>
 import VehicleSearch from '@/views/order/VehicleSearch.vue'
 import ValidatorMixin from '@/views/validator_mixin.js'
+import { some } from 'lodash'
 
 export default {
   mixins: [ValidatorMixin],
@@ -79,6 +84,15 @@ export default {
       } else if (+minorStep === 2) {
         this.close()
       }
+    },
+
+    getFrameNo(index) {
+      return this.model.frameNos[index - 1] || ''
+    },
+
+    updateFrameNo(value, index) {
+      console.log(index, value)
+      this.model.frameNos[index - 1] = value
     },
 
     // 重置步骤
@@ -146,6 +160,7 @@ export default {
       if (success) {
         this.$emit('popup-confirmed', this.model)
       } else {
+        console.log(this.validation)
         this.$toast(this.validation.firstError(), 'error')
       }
     }
@@ -160,6 +175,14 @@ export default {
     },
     'model.count' (value) {
       return this.validate(value).required('请输入购买数量')
+    },
+    'model.frameNos' (value) {
+      console.log(value)
+      return this.validate(value).custom(() => {
+        if (value.length < this.model.count || some(value, v => !v)) {
+          return '请填写所有车架号'
+        }
+      })
     }
   },
 
@@ -185,6 +208,7 @@ export default {
         textAlign: 'left'
       }],
       model: {
+        frameNos: [],
         appearTrim: null,
         count: null,
         price: null

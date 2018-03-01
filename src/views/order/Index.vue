@@ -32,12 +32,14 @@
             .content-right 共 {{order.count}} 辆
           //- .content-row 订单简称：{{order.name}}
         .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
-          button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 关闭订单
+          button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
           button.ui-border-radius.warning(v-if="canEditStatus(order.status)", @click="editOrder(order)") 编辑资料
       .no-more-data(v-if="noMoreData")
         small 已经到底了
     mt-popup.popup-box(v-model='searchBoxVisible', position='right')
       search(:close="closeSearchBox", ref="searchBox")
+    mt-popup.popup-box(v-model='cancelOrderVisible', position='right')
+      cancel-order-reason(:close="closeCancelOrderBox", @popup-confirmed="cancelOrderConfirm", ref="cancelOrder")
     mt-popup.popup-box(v-model='procedureBoxVisible', position='right')
       apply-procedure(:close="closeProcedureBox")
     //- mt-actionsheet(:actions='applyActions', v-model='applySheetVisible')
@@ -58,18 +60,34 @@
 <script>
 import Search from '@/views/order/Search.vue'
 import ApplyProcedure from '@/views/order/ApplyProcedure.vue'
+import CancelOrderReason from '@/views/order/CancelOrderReason.vue'
 import { orders } from '@/common/resources.js'
 import { debounce } from 'lodash'
 import OrderMixin from '@/views/order/mixin.js'
 
 export default {
   mixins: [OrderMixin],
-  components: { Search, ApplyProcedure },
+  components: { Search, ApplyProcedure, CancelOrderReason },
   methods: {
     headerClose() {
       this.$router.push({
         name: this.$route.query.from || 'menu'
       })
+    },
+
+    async closeOrder(order) {
+      const action = await this.$confirm('确定取消订单？')
+      if (action === 'confirm') {
+        this.$refs.cancelOrder.init(order)
+        this.showCancelOrderBox()
+        // order.status = this.ORDER_STATUS_MAP.CLOSED
+      }
+    },
+
+    async cancelOrderConfirm(data) {
+      data.order.status = this.ORDER_STATUS_MAP.CLOSED
+      console.log(data.reason.reason)
+      this.closeCancelOrderBox()
     },
 
     showAmountTip() {
@@ -88,6 +106,8 @@ export default {
     backButtonAction() {
       if (this.searchBoxVisible) {
         this.searchBoxVisible = false
+      } else if (this.cancelOrderVisible) {
+        this.cancelOrderVisible = false
       } else if (this.procedureBoxVisible) {
         this.procedureBoxVisible = false
       } else if (this.applySheetVisible) {
@@ -112,6 +132,15 @@ export default {
     closeSearchBox() {
       this.routerBack()
       // this.searchBoxVisible = false
+    },
+
+    // 显示关闭原因
+    showCancelOrderBox() {
+      this.cancelOrderVisible = true
+    },
+
+    closeCancelOrderBox() {
+      this.cancelOrderVisible = false
     },
 
     // 显示申请手续
@@ -195,6 +224,7 @@ export default {
       statusFilterVisible: false,
       statusFilterStyle: {},
       searchBoxVisible: false, // 搜索层显示控制
+      cancelOrderVisible: false, // 搜索层显示控制
       procedureBoxVisible: false, // 搜索层显示控制
       loading: false,
       noMoreData: false,

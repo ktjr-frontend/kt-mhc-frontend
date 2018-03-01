@@ -60,7 +60,7 @@ module.exports = router => {
       status: 'passed',
       company: {
         name: '开通金融信息服务有限公司',
-        status: 'rejected',
+        status: 'passed',
         userName: '张三',
         idCard: '12311231131231',
         businessLicense: demoImg,

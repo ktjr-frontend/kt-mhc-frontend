@@ -23,7 +23,7 @@
           kt-field(type="text", label='empty', placeholder='请输入姓名', v-model='model.pickerName', :state="getFieldState('model.pickerName')", @click.native="showFieldError($event, 'model.pickerName')")
             div(slot="label")
               | 提车人姓名 <em>*</em>
-            mt-button(@click.prevent.stop="pickerListVisible = true") 选择提车人
+            //- mt-button(@click.prevent.stop="pickerListVisible = true") 选择提车人
           kt-field(type="text", label='empty', placeholder='请输入身份证号', v-model='model.pickerIdCard', :state="getFieldState('model.pickerIdCard')", @click.native="showFieldError($event, 'model.pickerIdCard')")
             div(slot="label")
               | 身份证号码 <em>*</em>
