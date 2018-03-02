@@ -59,6 +59,7 @@ import KtInput from '@/components/KtInput.vue'
 import KtPopupInput from '@/components/KtPopupInput.vue'
 import KtAddressSelect from '@/components/KtAddressSelect.vue'
 import KtImageView from '@/components/KtImageView.vue'
+import KtTimeLine from '@/components/KtTimeLine.vue'
 
 // vuex化路由
 sync(store, router)
@@ -102,6 +103,7 @@ Vue.component(KtInput.name, KtInput)
 Vue.component(KtPopupInput.name, KtPopupInput)
 Vue.component(KtAddressSelect.name, KtAddressSelect)
 Vue.component(KtImageView.name, KtImageView)
+Vue.component(KtTimeLine.name, KtTimeLine)
 
 Vue.use(KtFilters)
 Vue.use(KtMixins)

@@ -217,7 +217,7 @@ export default {
       this.$refs.vehicleList.reset()
       this.vehicleListVisible = true
       this.$nextTick(() => {
-        this.$refs.vehicleList.updatePopBoxHeight(44)
+        this.$refs.vehicleList.updatePopBoxHeight(44) // 44 is bottom button height
       })
     },
 
@@ -241,7 +241,7 @@ export default {
       this.$refs.logistics.init(this.model.logistics)
       this.logisticsVisible = true
       this.$nextTick(() => {
-        this.$refs.logistics.updatePopBoxHeight()
+        this.$refs.logistics.updatePopBoxHeight(44) // 44 is bottom button height
       })
     },
 

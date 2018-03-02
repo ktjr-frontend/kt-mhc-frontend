@@ -80,7 +80,7 @@
             section
               .fields
                 mt-cell.title-cell
-                  span(slot="title") 物流信息
+                  span(slot="title") 基本信息
                 mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
@@ -91,6 +91,19 @@
                       | 预计运达时间：2019-12-12
                     p.title-hint
                       | 实际运达时间：2019-12-12
+                    p.title-hint.ui-border-t.pt10
+                      | 所运输车辆：1 辆
+                    p.title-hint
+                      | 车架号：{{order.wayBillVehicle.frameNo}}
+                    p.title-hint
+                      | 外观内饰：{{order.wayBillVehicle.appearTrim}}
+            .fields.mt10
+              mt-cell.title-cell
+                span(slot="title") 在途信息
+              mt-cell
+                div(slot="title")
+                  kt-time-line(:list="transitInfos")
+
         mt-tab-container-item#4
           .body.mt10
             section
@@ -216,6 +229,13 @@ export default {
       activePhotos: { normal: {} },
       paymentCertVisible: false,
       depositCertVisible: false,
+      transitInfos: [{
+        date: new Date(),
+        address: '到达指定地点1'
+      }, {
+        date: new Date(),
+        address: '到达指定地点2'
+      }],
       order: {
         no: 'G20171123118765',
         amount: 160000,

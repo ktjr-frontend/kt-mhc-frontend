@@ -26,7 +26,7 @@ const orderStatusList = [{
   label: '放款审核未通过',
   value: ORDER_STATUS_MAP.LOAN_CHECK_FAILED
 }, {
-  label: '已放款',
+  label: '已提车',
   value: ORDER_STATUS_MAP.LOANED
 }, {
   label: '在途中',
