@@ -45,7 +45,7 @@
   mt-tabbar(:fixed="true", v-show="tabBarVisible", ref="tabbar")
     mt-tab-item#menu(:class="{'is-selected': homeTabItemIsSelected}")
       div(slot="icon")
-        i.iconfont.icon-home
+        i.iconfont.icon-home1
       | 首页
     //- mt-tab-item#orders(:class="{'is-selected': orderTabItemIsSelected}")
       div(slot="icon")
@@ -53,15 +53,15 @@
       | 订单融资
     mt-tab-item#messages(:class="{'is-selected': msgTabItemIsSelected}")
       div(slot="icon")
-        i.iconfont.icon-xiaoxi
+        i.iconfont.icon-message
       | 消息
     mt-tab-item#service
       div(slot="icon")
-        i.iconfont.icon-order
+        i.iconfont.icon-contact
       | 客服
     mt-tab-item#mine(:class="{'is-selected': mineTabItemIsSelected}")
       div(slot="icon")
-        i.iconfont.icon-wode
+        i.iconfont.icon-man
       | 我的
     //- mt-tab-item#mine(:class="{'is-selected': tabIsSelected(['mine', 'changeBankCardStep1', 'changeBankCardStep2', 'changeBankCardStep3', 'messageList', 'messageDetail'])}")
       div(slot="icon")
@@ -88,7 +88,7 @@ import {
 if (~process.env.NODE_ENV.indexOf('app')) {
   require('assets/fonts/iconfont/iconfont.css')
 } else {
-  require('http://at.alicdn.com/t/font_527342_frtkjcyinx8khuxr.css')
+  require('http://at.alicdn.com/t/font_527342_843oaa5igohzd7vi.css')
 }
 
 export default {
@@ -332,6 +332,9 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   transition: background .5s;
+  &.menu {
+    background-image: linear-gradient(0deg, #545b60, #212a32 34%);
+  }
   &.login,
   &.registerStep1,
   &.registerStep2,
@@ -346,7 +349,14 @@ body {
 }
 
 small {
-  color: $gray-color;
+  color: $placeholder-color;
+}
+
+.smaller {
+  color: $placeholder-color;
+  opacity: 0.8;
+  font-size: $font-size-xxs;
+  display: inline;
 }
 
 .container {

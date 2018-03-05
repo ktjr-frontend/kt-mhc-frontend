@@ -11,6 +11,11 @@
     border: 1px solid $border-color;
     pointer-events: none;
   }
+  &.opacity0_5 {
+    &:after {
+      opacity: 0.5;
+    }
+  }
   &.box-border-t {
     &:after {
       border-width: 1px 0 0 0;

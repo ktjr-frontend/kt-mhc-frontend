@@ -9,7 +9,7 @@
       section.mt10
         mt-cell.title-simple-cell.ui-border-b
           span(slot="title") 上传授权书
-          a(@click="showGrantPriviledgeTemp", v-if="model.status !== 'passed'") 查看授权书模板
+          a(@click="showGrantPriviledgeTemp", v-if="model.status !== 'passed'") 下载授权书模板
       .photo-body
         .photo-item
           .photo-item-inner

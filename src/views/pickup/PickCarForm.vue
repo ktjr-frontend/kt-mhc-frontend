@@ -7,7 +7,7 @@
           mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? ('已选择' + model.vehicle.count + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicle.count")
-          kt-date-picker.has-border.input-right(:custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
+          kt-date-picker.has-border.input-right(date-type="datetime", :custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
             div(slot="label")
               | 预计提车时间 <em>*</em>
           //- kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
@@ -30,7 +30,7 @@
           kt-field(type="number", label='empty', placeholder='请输入手机号', v-model='model.pickerPhone', :state="getFieldState('model.pickerPhone')", @click.native="showFieldError($event, 'model.pickerPhone')")
             div(slot="label")
               | 手机号号码 <em>*</em>
-          .form-buttons.text-center.pt20
+          //- .form-buttons.text-center.pt20
             a.underline(@click.prevent="showPickTemplate") 获取提车函模板
       //- .footer-tips
         h4 温馨提示：

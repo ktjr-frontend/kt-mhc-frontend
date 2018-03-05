@@ -1,6 +1,6 @@
 <template lang="pug">
   .card-item(@click="$emit('click')")
-    .card-header.ui-border-b(v-if="headerLeft || headerRight")
+    .card-header.ui-border-b(v-if="headerLeft || headerRight || $slots.headerRight || $slots.headerLeft")
       .left
         slot(name="headerLeft") {{headerLeft}}
       .right
@@ -31,8 +31,7 @@ export default {
 .card-item {
   &.stress {
     .left {
-      font-size: 1.2em;
-      // font-weight: bold;
+      font-size: 1.2em; // font-weight: bold;
       color: $primary-font-color;
     }
     .right {
@@ -55,9 +54,17 @@ export default {
   .buttons {
     padding: 10px 0;
     button {
-      background: none;
-      margin-left: 10px;
       line-height: 20px;
+      background: none;
+    }
+    &>button {
+      margin-left: 10px;
+    }
+    .text-left {
+      &>button {
+        margin-left: 0;
+        margin-right: 10px;
+      }
     }
   }
 }

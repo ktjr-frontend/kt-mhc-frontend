@@ -143,7 +143,7 @@
                 mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
-                      | 无内容
+                      | 采购金额：100万元
     mt-popup.popup-box(v-model='paymentCertVisible', position='right')
       payment-cert(ref="paymentCert", :close="closePaymentCert", @popup-confirmed="paymentCertConfirm")
     mt-popup.popup-box(v-model='depositCertVisible', position='right')
@@ -230,9 +230,11 @@ export default {
       paymentCertVisible: false,
       depositCertVisible: false,
       transitInfos: [{
+        id: 1,
         date: new Date(),
         address: '到达指定地点1'
       }, {
+        id: 2,
         date: new Date(),
         address: '到达指定地点2'
       }],

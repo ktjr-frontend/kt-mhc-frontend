@@ -2,12 +2,15 @@
   section.orders
     header
       h2 我的额度（元）
+        .show-amount-tip(@click="showAmountTip")
+          i.iconfont.icon-info2.ft12.mr5
+          | 额度利率说明
       p.amount-line
         | 总额度：
-        span.amount.mr10 0
+        span.amount.mr30 0
         | 已用额度：
         span.amount 0
-      button.show-amount-tip(@click="showAmountTip") 额度利率说明
+      //- button.show-amount-tip(@click="showAmountTip") 额度利率说明
     .search-column.flex.scroll-fixed(ref="searchColumn")
       .flex-item
         button(@click="showSearchBox") 搜索车架号、供应商/经销商、车型等关键词
@@ -22,8 +25,13 @@
       .no-data(v-if="!orderList.length")
         i.iconfont.icon-car
         p 没有订单数据
-      kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow-visible="true", :arrow='order.status | orderStatusFormat')
-        span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
+      kt-card-item(v-for='order in orderList', :key='order.number', :arrow-visible="false")
+        span(slot="headerRight")
+          i.iconfont.icon-edit.ft14.smaller(@click="$router.push({name: 'orderEdit', params: {id: order.id}})")
+        span(slot="headerLeft")
+          | 订单号：{{order.number}}
+          .smaller.ml5 {{order.createDate | moment("YYYY-MM-DD")}}
+        //- span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
         .content(@click="goToDetail(order)")
           .content-row 垫资金额：{{order.amount | ktCurrency}}
           .content-row 供应商：{{order.provider}}
@@ -31,9 +39,13 @@
             .content-left.flex-item 订单描述：{{order.desc}}
             .content-right 共 {{order.count}} 辆
           //- .content-row 订单简称：{{order.name}}
-        .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
-          button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
-          button.ui-border-radius.warning(v-if="canEditStatus(order.status)", @click="editOrder(order)") 编辑资料
+        .buttons.flex.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canPickStatus(order.status)")
+          .text-left.flex-item
+            button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
+            button.ui-border-radius(v-if="canPickStatus(order.status)", @click="showApplyActions") 申请提车
+          .text-right
+            span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
+            i.iconfont.icon-you.color-gray.ft12.ml5
       .no-more-data(v-if="noMoreData")
         small 已经到底了
     mt-popup.popup-box(v-model='searchBoxVisible', position='right')
@@ -46,7 +58,7 @@
     kt-actionsheet(:actions='applyActions', v-model='applySheetVisible')
     .fixed-footer-placeholder
     footer.fixed-footer
-      .tab-item.flex1(@click="showApplyActions")
+      //- .tab-item.flex1(@click="showApplyActions")
         i.iconfont.icon-car
         p 申请提车
       //- .tab-item.flex1.ui-border-l(@click="showProcedureBox()")
@@ -257,34 +269,48 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  height: 74px;
+  height: 130px;
   background-color: $primary-color;
-  background-image: linear-gradient(135deg, #509ff6 0%, #007af0 100%);
+  background-image: linear-gradient(0, #212a32 0%, #39414a 100%);
   color: white;
-  padding: 18px;
+  padding: 10px;
   position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   h2 {
-    font-size: 14px;
+    position: relative;
+    font-size: 16px;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 12.5em;
+      left: 0;
+      bottom: -15px;
+      border: 1px solid $border-color;
+      transform: scale(0.5);
+      transform-origin: 0;
+    }
   }
 }
 
 .amount-line {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .amount {
+  color: $primary-color;
   font-size: 30px;
   font-family: franklin; // margin-top: 15px;
 }
 
 .show-amount-tip {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
-  border: 0;
-  border-radius: 100px;
-  padding: 3px 8px;
-  background: rgba(0, 0, 0, .3);
+  right: -90px;
+  top: -10px;
+  font-size: $font-size-xxs;
 }
 
 .search-column {
@@ -337,7 +363,7 @@ header {
   width: 80px;
   flex: none;
   text-align: right;
-  color: $font-color-em;
+  color: $primary-color;
 }
 
 .content {

@@ -17,6 +17,9 @@ section.company-auth
           | 公司全称
       kt-address-select.has-border(:readonly="readonly", :state="getFieldState('model.city')", v-model="model.city")
         span(slot="label") 所在城市 <em>*</em>
+      kt-field.input-right(type="text", :disableClear="true", :readonly="readonly", label='empty', v-model='model.detailAddress', :state="getFieldState('model.detailAddress')")
+        div(slot="label")
+          | 公司所在位置 <em>*</em>
       kt-select.has-border(:readonly="readonly", :options="companyTypeList", v-model="model.companyType", :state="getFieldState('model.companyType')", @click.native="showFieldError($event, 'model.companyType')")
         span(slot="label") 公司类型 <em>*</em>
       vehicle-model-select.has-border(v-if="model.companyType === '1'", :readonly="readonly", v-model="model.mainModels", :state="getFieldState('model.mainModels')", @click.native="showFieldError($event, 'model.mainModels')")
@@ -230,6 +233,9 @@ export default {
     'model.city' (value) {
       return this.validate(value).required('请选择公司所在地')
     },
+    'model.detailAddress' (value) {
+      return this.validate(value).required('请填写公司位置信息')
+    },
     'model.companyType' (value) {
       return this.validate(value).required('请选择公司类型')
     },
@@ -334,6 +340,7 @@ export default {
       },
       model: merge({
         name: '',
+        detailAddress: '',
         status: 'initial',
         userName: '',
         idCard: '',

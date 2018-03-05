@@ -14,7 +14,7 @@ const orderStatusList = [{
   label: '审核未通过',
   value: ORDER_STATUS_MAP.FISRT_CHECK_REJECTED
 }, {
-  label: '待验车',
+  label: '待物流验车',
   value: ORDER_STATUS_MAP.WAIT_FOR_CHECK_CAR
 }, {
   label: '验车未通过',
@@ -26,7 +26,7 @@ const orderStatusList = [{
   label: '放款审核未通过',
   value: ORDER_STATUS_MAP.LOAN_CHECK_FAILED
 }, {
-  label: '已提车',
+  label: '已发运',
   value: ORDER_STATUS_MAP.LOANED
 }, {
   label: '在途中',
@@ -113,6 +113,13 @@ export default {
         ORDER_STATUS_MAP.LOAN_CHECK_FAILED
       ], status)
     },
+
+    canPickStatus(status) {
+      return includes([
+        ORDER_STATUS_MAP.PUT_IN_STORE
+      ], status)
+    },
+
     canCloseStatus(status) {
       return includes([
         ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,

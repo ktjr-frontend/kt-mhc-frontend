@@ -9,6 +9,7 @@ body {
   .overflow-scroll {
     overflow: auto;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     max-height: 100vh;
   }
@@ -262,9 +263,10 @@ body {
   }
 
   .mint-tabbar {
-    background-color: white;
+    background-color: #3f454c;
+    background-image: none;
     &>.mint-tab-item {
-      color: inherit;
+      color: #c2c4c7;
       position: relative;
       .iconfont {
         font-size: 20px;

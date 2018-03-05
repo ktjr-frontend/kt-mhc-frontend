@@ -1,7 +1,7 @@
 <template lang="pug">
   section.time-line
     ul
-      li(v-for="(item, index) in currentList", :key="item.date", :class="{'active': index === 0}")
+      li(v-for="(item, index) in currentList", :key="item.id", :class="{'active': index === 0}")
         h3 {{item.address}}
         p {{item.date | moment('YYYY-MM-DD HH:mm:ss')}}
 

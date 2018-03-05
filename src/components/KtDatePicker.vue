@@ -8,7 +8,7 @@ div
       //- span.mint-field-state.is-error(v-if="state === 'error'")
       //-   i.mintui.mintui-field-error
   .custom-model(v-if="pickerVisible && customModelVisible", @click="closePicker")
-  mt-datetime-picker(ref="datePicker", :value='currentValue', @cancel="pickerVisible = false", @confirm="confirm", type='date', year-format='{value} 年', month-format='{value} 月', date-format='{value} 日')
+  mt-datetime-picker(ref="datePicker", :value='currentValue', @cancel="pickerVisible = false", @confirm="confirm", :type="dateType", year-format='{value}', month-format='{value}', date-format='{value}', hour-format='{value}', minute-format="{value}")
 </template>
 
 <script>
@@ -17,6 +17,7 @@ import moment from 'moment'
 export default {
   name: 'kt-date-picker',
   props: {
+    dateType: { type: String, default: 'date' },
     label: String,
     placeholder: String,
     readonly: Boolean,
@@ -27,7 +28,7 @@ export default {
       type: String,
       default: 'default'
     },
-    value: {}
+    value: ''
   },
 
   methods: {
@@ -42,7 +43,7 @@ export default {
     },
 
     confirm(date) {
-      this.currentValue = moment(date).format('YYYY-MM-DD')
+      this.currentValue = moment(date).format('YYYY-MM-DD HH:mm')
       this.$emit('input', this.currentValue)
       this.pickerVisible = false
       this.$refs.datePicker.close()

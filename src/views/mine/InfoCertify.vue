@@ -12,7 +12,7 @@
         .content
           .content-row.minor-content
             ul.list-disc.lh0_6_3
-              li 可以发布寻车，给寻车报价
+              li 基本信息认证
       kt-card-item(header-left="empty", @click="goCompanyCertify")
         span(slot="headerLeft")
           .stress
@@ -25,9 +25,9 @@
           .content-row.minor-content
             ul.list-disc.lh0_6_3
               li 包含 <em>实名认证</em> 所有权限
-              li 可以发布车源
-              li 搜索排序加权，车源更靠前
-              li 企业认证专属标识，提示信任度
+              li 企业基本信息认证
+              //- li 搜索排序加权，车源更靠前
+              //- li 企业认证专属标识，提示信任度
       kt-card-item(header-left="empty", @click="goAdvancedCertify")
         span(slot="headerLeft")
           .stress

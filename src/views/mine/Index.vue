@@ -99,7 +99,7 @@ export default {
   .iconfont {
     font-size: 1.8em;
     margin-right: 5px;
-    color: $el-blue;
+    color: $primary-color;
   }
   .flex-item {
     &:active {
