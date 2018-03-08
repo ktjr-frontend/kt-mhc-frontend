@@ -155,10 +155,10 @@ export default {
       const success = await this.$validate()
 
       if (success) {
-        this.$router.back()
-        // this.$router.push({
-        //   name: 'orders'
-        // })
+        // this.$router.back()
+        this.$router.push({
+          name: 'settlementDoc'
+        })
       } else {
         this.$toast(this.validation.firstError(), 'error')
       }

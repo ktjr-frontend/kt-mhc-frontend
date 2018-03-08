@@ -1,23 +1,27 @@
 <template lang="pug">
 section.login
+  .logo
+    img(src="~assets/images/logo.svg")
   form.form(@submit.prevent='submit()')
-    .fields-header
+    //- .fields-header
       h3 登录
     .fields
-      kt-field.icon-title(type="number", label='手机号', placeholder='请输入您的手机号', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
+      kt-field.icon-title(type="number", label='手机号', placeholder='请输入用户名（手机号）', v-model='user.phone', :state="getFieldState('user.phone')", @click.native="showFieldError($event, 'user.phone')")
         span(slot="label")
           i.iconfont.icon-yonghu
       kt-field.icon-title.ui-border-b(type="number", label='mima', placeholder='请输入密码', v-model='user.password', :state="getFieldState('user.password')", @click.native="showFieldError($event, 'user.password')")
         span(slot="label")
           i.iconfont.icon-yanzhengma
+    .fields.mt10.of-h
+      router-link.fr.color-gray(:to="{name: 'forgetPasswordStep1'}") 忘记密码？
         //- mt-button(type='default', @click.stop.prevent='toGetMsgCode()', :disabled='countdownVisible')
           span(v-show='!countdownVisible') 获取验证码
           kt-countdown(ref='fnCountdown', v-show='countdownVisible', @countdown-over='onCountdownOver()')
     .form-buttons
       mt-button.mint-button-block(type='primary', size='large') 登录
-      .note-line
-        router-link(:to="{name: 'registerStep1'}") 注册
-        router-link.fr(:to="{name: 'forgetPasswordStep1'}") 忘记密码
+      .note-line.text-center
+        | 没有账号？
+        router-link(:to="{name: 'registerStep1'}") 立即注册
 </template>
 
 <script>

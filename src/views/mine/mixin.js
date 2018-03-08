@@ -64,6 +64,17 @@ const deliverTypeList = [{
   value: '2'
 }]
 
+const jobTypeList = [{
+  label: '销售主管',
+  value: '1'
+}, {
+  label: '销售顾问',
+  value: '2'
+}, {
+  label: '管理员',
+  value: '3'
+}]
+
 const pickCarStatusList = [{
   label: '签章成功',
   label2: '可提车',
@@ -101,6 +112,7 @@ const wayBillStatusMap = keyBy(wayBillStatusList, 'value')
 const wayBillVehicleStatusMap = keyBy(wayBillVehicleStatusList, 'value')
 const transportTypeMap = keyBy(transportTypeList, 'value')
 const deliverTypeMap = keyBy(deliverTypeList, 'value')
+const jobTypeMap = keyBy(jobTypeList, 'value')
 const pickCarStatusMap = keyBy(pickCarStatusList, 'value')
 const certifyStatusMap = keyBy(certifyStatusList, 'value')
 const messageStatusMap = keyBy(messageStatusList, 'value')
@@ -121,6 +133,9 @@ export default {
     },
     deliverTypeFormat(value) {
       return deliverTypeMap[value] ? deliverTypeMap[value].label : ''
+    },
+    jobTypeFormat(value) {
+      return jobTypeMap[value] ? jobTypeMap[value].label : ''
     },
     pickCarLetterStatusFormat(value) {
       return pickCarStatusMap[value] ? pickCarStatusMap[value].label : ''
@@ -157,6 +172,8 @@ export default {
       transportTypeMap,
       deliverTypeList,
       deliverTypeMap,
+      jobTypeList,
+      jobTypeMap,
       pickCarStatusList,
       pickCarStatusMap,
       certifyStatusList,

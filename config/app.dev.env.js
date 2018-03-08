@@ -5,7 +5,7 @@ var ip = getIPV4()[0]
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"app-development"',
-  API_HOST: '"http://core-test.fnsudai.com/api"',
+  API_HOST: '"http://core-test.ktjr.com/api"',
   // APP_MANIFEST_HOST: '"http://' + (ip || 'localhost') + ':8000/"'
-  APP_MANIFEST_HOST: '"http://app-static-test.fnsudai.com/"'
+  APP_MANIFEST_HOST: '"http://app-static-test.ktjr.com/"'
 })

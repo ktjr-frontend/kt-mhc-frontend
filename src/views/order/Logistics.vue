@@ -7,6 +7,10 @@ section.logistics-form
   form.overflow-scroll(ref="popBoxContainer", @submit.prevent="submit")
     section
       .fields
+        kt-select(:options="deliverTypeList", v-model="model.deliverType", :state="getFieldState('model.deliverType')", @click.native="showFieldError($event, 'model.deliverType')")
+          span(slot="label") 产品类型 <em>*</em>
+    section.mt10
+      .fields
         kt-address-select(:state="getFieldState('model.startAddress')", v-model="model.startAddress")
           span(slot="label") 起始地 <em>*</em>
         kt-field(type="textarea", label="详细地址", v-model="model.detailStartAddress", :state="getFieldState('model.detailStartAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailStartAddress')")
@@ -14,16 +18,16 @@ section.logistics-form
             | 详细地址 <em>*</em>
     section.mt10
       .fields
-        kt-select(:options="deliverTypeList", v-model="model.deliverType", :state="getFieldState('model.deliverType')", @click.native="showFieldError($event, 'model.deliverType')")
-          span(slot="label") 发货类型 <em>*</em>
-        kt-address-select.has-border(:state="getFieldState('model.endAddress')", v-model="model.endAddress")
+        //- kt-select(:options="deliverTypeList", v-model="model.deliverType", :state="getFieldState('model.deliverType')", @click.native="showFieldError($event, 'model.deliverType')")
+          span(slot="label") 物流类型 <em>*</em>
+        kt-address-select(:state="getFieldState('model.endAddress')", v-model="model.endAddress")
           span(slot="label") 目的地 <em>*</em>
         //- mt-cell(title="empty")
-      .fields(v-if="model.deliverType === '1'")
+      template(v-if="model.deliverType === '1'")
         mt-radio.cell-radiolist(slot="title", :state="getFieldState('model.endWareHouse')", v-model='model.endWareHouse', :options="endWareHouseList")
         .text-center.color-warning.bg-white.pt10.pb10(v-if="!endWareHouseList.length && model.endAddress") 该地区没有仓库地址，建议选择海淀区
         input(type="hidden", v-model="model.endWareHouse")
-      .fields(v-else-if="model.deliverType === '2'")
+      template(v-else-if="model.deliverType === '2'")
         kt-field(type="textarea", label="详细地址", v-model="model.detailEndAddress", :state="getFieldState('model.detailEndAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailEndAddress')")
           div(slot="label")
             | 收货地址 <em>*</em>

@@ -5,5 +5,5 @@ module.exports = {
   WX_APPID: '"wx05a218ccf353acb5"',
   API_HOST: '"/api"',
   APP_VERSION: "'" + getAppVersion() + "'",
-  APP_MANIFEST_HOST: '"https://app-static.fnsudai.com"'
+  APP_MANIFEST_HOST: '"https://app-static.ktjr.com"'
 }

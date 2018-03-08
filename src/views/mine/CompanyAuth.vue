@@ -17,7 +17,7 @@ section.company-auth
           | 公司全称
       kt-address-select.has-border(:readonly="readonly", :state="getFieldState('model.city')", v-model="model.city")
         span(slot="label") 所在城市 <em>*</em>
-      kt-field.input-right(type="text", :disableClear="true", :readonly="readonly", label='empty', v-model='model.detailAddress', :state="getFieldState('model.detailAddress')")
+      kt-field.input-right(type="text", :disableClear="readonly", :readonly="readonly", label='empty', v-model='model.detailAddress', :state="getFieldState('model.detailAddress')")
         div(slot="label")
           | 公司所在位置 <em>*</em>
       kt-select.has-border(:readonly="readonly", :options="companyTypeList", v-model="model.companyType", :state="getFieldState('model.companyType')", @click.native="showFieldError($event, 'model.companyType')")

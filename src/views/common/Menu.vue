@@ -8,7 +8,7 @@
           i.iconfont.icon-order
           p 订单融资
           i.iconfont.icon-you.ft25
-    .footer
+    .footer(:class="{visible: footerVisible}")
       button(@click="$router.push({name: 'depositAccount'})")
         i.iconfont.icon-shield.mr10
         | 保证金账户
@@ -32,6 +32,23 @@ export default {
     more() {
       this.$toast('敬请期待')
     }
+  },
+
+  mounted() {
+    setTimeout(() => {
+      this.footerVisible = true
+    }, 500)
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.footerVisible = false
+    next()
+  },
+
+  data() {
+    return {
+      footerVisible: false
+    }
   }
 }
 </script>
@@ -43,6 +60,10 @@ export default {
   left: 10px;
   right: 10px;
   text-align: center;
+  opacity: 0;
+  &.visible {
+    opacity: 1;
+  }
   button {
     background-color: #606c73;
     line-height: 35px;

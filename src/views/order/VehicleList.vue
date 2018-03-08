@@ -37,17 +37,17 @@ section.vehicle-list
                 //- span.mint-field-state.is-error(v-if="getFieldState('model.appearTrim') === 'error'")
                   i.mintui.mintui-field-error
             input(type="hidden", v-model="model.appearTrim")
-            kt-field.has-hint.input-right(type="number", label='数量', placeholder='请输入', v-model='model.count', :state="getFieldState('model.count')", @click.native="showFieldError($event, 'model.count')")
+            kt-field.has-hint.input-right(type="number", label='数量', placeholder='请输入', v-model='model.vehicleNumber', :state="getFieldState('model.vehicleNumber')", @click.native="showFieldError($event, 'model.vehicleNumber')")
               div(slot="label") 数量 <em>*</em>
               span(slot="input1-append") 辆
             kt-field.has-hint.input-right(type="number", label='单辆车合同单价', placeholder='请输入金额', v-model='model.price', :state="getFieldState('model.price')", @click.native="showFieldError($event, 'model.price')")
               div(slot="label") 单辆车合同单价 <em>*</em>
                 p.title-hint 给车型批次总价格
-              span(slot="input1-append") 元
+              span(slot="input1-append") 万元
           .fields.mt10
-            kt-field.has-hint.input-right(type="text", v-for="n in +model.count", label='车架号', placeholder='请输入车架号', :value="getFrameNo(n)", @input="updateFrameNo($event, n)", :state="getFieldState('model.frameNos')", @click.native="showFieldError($event, 'model.frameNos')")
+            kt-field.has-hint.input-right(type="text", v-for="n in +model.vehicleNumber", label='车架号', placeholder='请输入车架号', :value="getFrameNo(n)", @input="updateFrameNo($event, n)", :state="getFieldState('model.vins')", @click.native="showFieldError($event, 'model.vins')")
               div(slot="label") 车架号{{n}} <em>*</em>
-            input(type="hidden", v-model="model.frameNos")
+            input(type="hidden", v-model="model.vins")
     //- .step-block(v-show="activeStep === '2-4' || activeStep === '1-5'")
   .custom-model(v-if="appearTrimOptionsVisible", @click="appearTrimOptionsVisible = false")
   mt-popup(v-model="appearTrimOptionsVisible", position="bottom", :showToolbar="true")
@@ -87,12 +87,12 @@ export default {
     },
 
     getFrameNo(index) {
-      return this.model.frameNos[index - 1] || ''
+      return this.model.vins[index - 1] || ''
     },
 
     updateFrameNo(value, index) {
       console.log(index, value)
-      this.model.frameNos[index - 1] = value
+      this.model.vins[index - 1] = value
     },
 
     // 重置步骤
@@ -167,22 +167,32 @@ export default {
   },
 
   validators: {
-    'model.appearTrim' (value) {
+    'model.appearTrim ' (value) {
       return this.validate(value).required('请选择外观内饰')
     },
     'model.price' (value) {
       return this.validate(value).required('请输入单车金额')
     },
-    'model.count' (value) {
+    'model.vehicleNumber' (value) {
       return this.validate(value).required('请输入购买数量')
     },
-    'model.frameNos' (value) {
+    'model.vins' (value) {
       console.log(value)
       return this.validate(value).custom(() => {
-        if (value.length < this.model.count || some(value, v => !v)) {
+        if (value.length < this.model.vehicleNumber || some(value, v => !v)) {
           return '请填写所有车架号'
         }
       })
+    }
+  },
+
+  watch: {
+    'model.appearTrim' () {
+      const arr = this.model.appearTrim.split('-')
+      if (arr.length > 1) {
+        this.model.bodyColor = arr[0]
+        this.model.interiorColor = arr[0]
+      }
     }
   },
 
@@ -208,9 +218,11 @@ export default {
         textAlign: 'left'
       }],
       model: {
-        frameNos: [],
+        vins: [],
         appearTrim: null,
-        count: null,
+        bodyColor: null,
+        interiorColor: null,
+        vehicleNumber: null,
         price: null
       },
       standardList: [{

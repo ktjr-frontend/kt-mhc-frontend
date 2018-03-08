@@ -1,6 +1,6 @@
 <template lang="pug">
   section.payment-certs
-    mt-header(ref="header", title="选择供应商")
+    mt-header(ref="header", title="定金凭证")
       //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
       div(slot="left")
         i.p10.iconfont.icon-guanbi(@click.prevent="close")

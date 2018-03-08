@@ -58,9 +58,10 @@ module.exports = router => {
       desc: '我是中国人',
       email: '281231@qq.com',
       status: 'passed',
+      job: '1',
       company: {
         name: '开通金融信息服务有限公司',
-        status: 'passed',
+        status: 'initial',
         userName: '张三',
         idCard: '12311231131231',
         businessLicense: demoImg,

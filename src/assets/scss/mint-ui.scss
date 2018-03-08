@@ -66,6 +66,8 @@ body {
       min-width: 4em;
       &.is-selected {
         margin-bottom: -1px;
+        color: $primary-color;
+        border-bottom-color: $primary-color;
       }
     }
   }
@@ -113,13 +115,18 @@ body {
         background-image: none!important;
       }
     }
-    &:not(.ui-border-t):first-child {
+    &:not(.ui-border-t):first-child{
       .mint-cell-wrapper {
         background-image: none;
       }
     }
     &:not(.ui-border-b):last-child {
       background-image: none;
+    }
+    &.has-border {
+      .mint-cell-wrapper {
+        background-image: linear-gradient(180deg, $border-color, $border-color 50%, transparent 50%)!important;
+      }
     }
     &.click-active {
       &:active {
@@ -225,7 +232,7 @@ body {
 
   .has-border>.mint-cell:first-child {
     .mint-cell-wrapper {
-      background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
+      background-image: linear-gradient(180deg, $border-color, $border-color 50%, transparent 50%);
       background-origin: content-box;
     }
   } // &:last-child {

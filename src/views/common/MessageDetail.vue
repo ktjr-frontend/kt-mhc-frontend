@@ -2,7 +2,7 @@
   section.message-detail
     kt-card-item(:key='message.id', :header-left="message.createDate | moment('YYYY-MM-DD HH:mm:ss')")
         //- span.color-primary(slot='arrow') {{message.status | messageStatusFormat}}
-        .content(@click.prevent="$router.push({name: 'messageDetail', params: {id: message.id}})")
+        .content
           .content-row.mb5
             .stress {{message.title}}
           .content-row.flex.minor-content

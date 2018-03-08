@@ -9,12 +9,14 @@
         mt-cell.title-simple-cell.ui-border-b
           span(slot="title") 身份证信息
       section
-        kt-field(type="text", :readonly="readonly", :disableClear="readonly", label='empty', placeholder='请输入真实姓名', v-model='model.name', :state="getFieldState('model.name')", @click.native="showFieldError($event, 'model.name')")
+        kt-field.input-right(type="text", :readonly="readonly", :disableClear="readonly", label='empty', placeholder='请输入真实姓名', v-model='model.name', :state="getFieldState('model.name')", @click.native="showFieldError($event, 'model.name')")
           div(slot="label")
             | 真实姓名 <em>*</em>
-        kt-field(type="text", :readonly="readonly", :disableClear="readonly", label='empty', placeholder='请输入身份证号码', v-model='model.idCard', :state="getFieldState('model.idCard')", @click.native="showFieldError($event, 'model.idCard')")
+        kt-field.input-right(type="text", :readonly="readonly", :disableClear="readonly", label='empty', placeholder='请输入身份证号码', v-model='model.idCard', :state="getFieldState('model.idCard')", @click.native="showFieldError($event, 'model.idCard')")
           div(slot="label")
             | 身份证号码 <em>*</em>
+        kt-select.has-border(:options="jobTypeList", :readonly="readonly", v-model="model.job", :state="getFieldState('model.job')", @click.native="showFieldError($event, 'model.job')")
+          span(slot="label") 岗位 <em>*</em>
       section.mt10
         mt-cell.title-simple-cell.ui-border-b
           span(slot="title") 上传在职证明
@@ -154,6 +156,9 @@ export default {
     'model.idCard' (value) {
       return this.validate(value).required('请输入身份证号码')
     },
+    'model.job' (value) {
+      return this.validate(value).required('请输入工作岗位')
+    },
     'model.workCertify' (value) {
       return this.validate(value).required('请上传名片')
     }
@@ -186,6 +191,7 @@ export default {
       model: {
         name: user.name,
         idCard: user.idCard,
+        job: user.job,
         workCertify: user.workCertify
       }
     }

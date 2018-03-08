@@ -12,22 +12,22 @@
       button.cancel-btn(@click.prevent="cancel") 取消
     section.body
       mt-navbar(v-model='filter.tabActive', ref="navBar")
-        mt-tab-item#frameNo 车架号后6位
-        mt-tab-item#model 车型
-        mt-tab-item#provider 供应商/经销商
+        mt-tab-item#vin 车架号后6位
+        mt-tab-item#modelName 车型
+        mt-tab-item#supplier 供应商/经销商
       mt-tab-container.overflow-scroll(v-model='filter.tabActive', :swipeable="true", disable-swipe, ref="tabContainer")
-        mt-tab-container-item(v-for="id in ['frameNo', 'model', 'provider']", :id="id", v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
+        mt-tab-container-item(v-for="id in ['vin', 'modelName', 'supplier']", :id="id", v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
           .no-data(v-if="!orderList.length")
             i.iconfont.icon-car
             p 此搜索条件下没有结果
-          kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.number', :header-right='order.createDate | moment("YYYY-MM-DD")', :arrow-visible="true", :arrow='order.status | orderStatusFormat')
+          kt-card-item(v-for='order in orderList', :key='order.number', :header-left='"订单号：" + order.no', :header-right='order.applicationDate | moment("YYYY-MM-DD")', :arrow-visible="true", :arrow='order.status | orderStatusFormat')
             span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
             .content(@click="goToDetail(order)")
-              .content-row 垫资金额：{{order.amount | ktCurrency}}
-              .content-row 供应商：{{order.provider}}
+              .content-row 垫资金额：{{order.loanAmount | ktCurrency}}
+              .content-row 供应商：{{order.supplier}}
               .content-row.flex
-                .content-left.flex-item 订单描述：{{order.desc}}
-                .content-right 共 {{order.count}} 辆
+                .content-left.flex-item 订单描述：{{order.brandName}} {{order.seriesName}} {{order.modelName}}
+                .content-right 共 {{order.vehicleNumber}} 辆
               //- .content-row 订单简称：{{order.name}}
             .buttons.text-right.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canEditStatus(order.status)")
               button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 关闭订单
@@ -136,10 +136,10 @@ export default {
           throw res
         })
 
-      if (isMore) this.orderList = this.orderList.concat(res.data.result)
-      else this.orderList = res.data.result
+      if (isMore) this.orderList = this.orderList.concat(res.data.pageData)
+      else this.orderList = res.data.pageData
 
-      if (res.data.result.length) {
+      if (res.data.pageData.length) {
         this.loading = false
       } else {
         this.loading = true
@@ -164,7 +164,7 @@ export default {
       noMoreData: false,
       orderList: [],
       filter: {
-        tabActive: 'frameNo',
+        tabActive: 'vin',
         page: 1,
         size: 10,
         value: ''

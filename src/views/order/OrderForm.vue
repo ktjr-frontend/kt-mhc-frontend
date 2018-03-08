@@ -3,15 +3,15 @@
     form(@submit.prevent="submit")
       section
         .fields
-          mt-cell(title='供应商信息', :state="getFieldState('model.provider')", :class="{'empty': !model.provider}", :is-link="!readonly", @click.native="showProviderSearch")
-            span {{model.provider || '请选择'}}
-          input(type="hidden", v-model="model.provider")
+          mt-cell(title='供应商信息', :state="getFieldState('model.supplier')", :class="{'empty': !model.supplier}", :is-link="!readonly", @click.native="showSupplierSearch")
+            span {{model.supplier || '请选择'}}
+          input(type="hidden", v-model="model.supplier")
       section.mt10
         //- .fields-header 带 <em>*</em> 为必填
         .fields
-          mt-cell(:is-link="!readonly", :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList", :value="model.vehicle.count ? (model.vehicle.count + '辆') : '请选择'")
+          mt-cell(:is-link="!readonly", :class="{'empty': !model.vehicles.length}", :state="getFieldState('model.vehicles.length')", @click.native="showVehicleList", :value="model.vehicles.length ? (model.vehicles.length + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
-          input(type="hidden", v-model="model.vehicle.count")
+          input(type="hidden", v-model="model.vehicles.length")
           mt-cell(:is-link="!readonly", @click.native="showLogistics", :class="{'empty': !modelShow.logistics}",  :value="modelShow.logistics || '请选择'", :state="getFieldState('model.logistics')")
             span(slot="title") 选择物流 <em>*</em>
           input(type="hidden", v-model="model.logistics")
@@ -22,16 +22,20 @@
         .fields
           //- mt-cell.title-cell
             span(slot="title") 填写金额
-          //- mt-cell.has-hint(:class="{'empty': !model.totalAmount}", :value="!model.vehicle.count ? '请选择车辆' : model.totalAmount + '万元'")
+          mt-cell.has-hint(:class="{'empty': !model.contractAmount}", :value="!model.vehicles.length ? '自动计算' : model.contractAmount + '万元'")
             div(slot="title")
               | 车辆采购金额 <em>*</em>
               p.title-hint 采购和通总金额，与纸质合同总金额相等
-          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.totalAmount', :state="getFieldState('model.totalAmount')", @click.native="showFieldError($event, 'model.totalAmount')")
+          //- kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicles.length", label='empty', placeholder='请输入', v-model='model.contractAmount', :state="getFieldState('model.contractAmount')", @click.native="showFieldError($event, 'model.contractAmount')")
             div(slot="label")
               | 车辆采购金额 <em>*</em>
               p.title-hint 采购和通总金额，与纸质合同总金额相等
             span(slot="input1-append") 万元
-          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.bailAmount', :state="getFieldState('model.bailAmount')", @click.native="showFieldError($event, 'model.bailAmount')")
+          mt-cell.has-hint(:class="{'empty': !model.cashDeposit}", :value="!model.vehicles.length ? '自动计算' : model.cashDeposit + '万元'")
+            div(slot="title")
+              | 保证金金额 <em>*</em>
+              p.title-hint 最低为代购金额的20%，请输入您的实际<br>打款保证金金额，多打款不计入订单
+          //- kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicles.length", label='empty', placeholder='请输入', v-model='model.cashDeposit', :state="getFieldState('model.cashDeposit')", @click.native="showFieldError($event, 'model.cashDeposit')")
             div(slot="label")
               | 保证金金额 <em>*</em>
               p.title-hint 最低为代购金额的20%，请输入您的实际<br>打款保证金金额，多打款不计入订单
@@ -39,18 +43,18 @@
             //- template(slot="input2")
               input.mint-field-core(:value="!bailRate ? '' :bailRate | ktCurrency('','')", placeholder="自动计算", readonly)
             //- span(slot="input2-append") %
-          mt-cell.has-hint(:class="{'empty': !advanceMoney}")
-            span {{!advanceMoney ? '自动计算' : advanceMoney}}
-            span 万元
+          mt-cell.has-hint(:class="{'empty': !loanAmount}")
+            span {{!loanAmount ? '自动计算' : loanAmount + '万元'}}
+            //- span
             div(slot="title")
               | 垫资金额 <em>*</em>
               p.title-hint 合同金额减去已支付金额
-          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.payAmount', :state="getFieldState('model.payAmount')", @click.native="showFieldError($event, 'model.payAmount')")
+          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicles.length", label='empty', placeholder='请输入', v-model='model.deposit', :state="getFieldState('model.deposit')", @click.native="showFieldError($event, 'model.deposit')")
             div(slot="label")
               | 定金金额
               p.title-hint 已经支付给供应商的打款金额
             span(slot="input1-append") 万元
-          kt-field(type='input', label='订单备注', :readonly="readonly", :disableClear="readonly", placeholder='请输入备注（非必填）', v-model="model.desc")
+          kt-field(type='input', label='订单备注', :readonly="readonly", :disableClear="readonly", placeholder='请输入备注（非必填）', v-model="model.note")
       section.mt10
         .fields
           //- mt-cell.title-cell
@@ -58,16 +62,16 @@
           //- mt-cell(is-link, @click.native="showPurchaseContract", :class="{'empty': !modelShow.purchaseContract}",  :value="modelShow.purchaseContract ? '已上传' : '请上传'", :state="getFieldState('model.purchaseContract')")
             span(slot="title") 采购合同 <em>*</em>
           //- input(type="hidden", v-model="model.purchaseContract")
-          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicle.count", label='empty', placeholder='请输入', v-model='model.contractNo', :state="getFieldState('model.contractNo')", @click.native="showFieldError($event, 'model.contractNo')")
+          kt-field.has-hint.input-right(type="number", :readonly="readonly", :disableClear="readonly", :disabled="!model.vehicles.length", label='empty', placeholder='请输入', v-model='model.contractNo', :state="getFieldState('model.contractNo')", @click.native="showFieldError($event, 'model.contractNo')")
             div(slot="label")
               | 填写合同号 <em>*</em>
               p.title-hint 经销商与平台签订
-          mt-cell(:is-link="!model.depositCert", @click.native="showDepositAction", :class="{'empty': !modelShow.depositCert}",  :value="modelShow.depositCert ? '已添加' : '请添加'", :state="getFieldState('model.depositCert')")
+          mt-cell(:is-link="true", @click.native="showDepositAction", :class="{'empty': !modelShow.cashDepositAddress}",  :value="modelShow.cashDepositAddress ? '已添加' : '请添加'", :state="getFieldState('model.cashDepositAddress')")
             span(slot="title") 保证金凭证
-          input(type="hidden", v-model="model.depositCert")
-          mt-cell(:is-link="!model.paymentCert", @click.native="showPaymentCert", :class="{'empty': !modelShow.paymentCert}", :value="modelShow.paymentCert ? '已上传' : '请上传'", :state="getFieldState('model.paymentCert')")
+          input(type="hidden", v-model="model.cashDepositAddress")
+          mt-cell(:is-link="true", @click.native="showDepositAddress", :class="{'empty': !modelShow.depositAddress}", :value="modelShow.depositAddress ? '已上传' : '请上传'", :state="getFieldState('model.depositAddress')")
             span(slot="title") 定金凭证
-          input(type="hidden", v-model="model.paymentCert")
+          input(type="hidden", v-model="model.depositAddress")
           //- mt-cell(is-link, @click.native="showHandingLetter", :class="{'empty': !modelShow.handingLetter}",  :value="modelShow.handingLetter ? '已上传' : '请上传'", :state="getFieldState('model.handingLetter')")
           //-   span(slot="title") 手续函照片
           //- input(type="hidden", v-model="model.handingLetter")
@@ -88,8 +92,8 @@
       .form-buttons.fixed
         mt-button.mint-button-block(type='primary', size='large') 提交
     //- kt-actionsheet(:actions='depositActions', v-model='depositSheetVisible')
-    mt-popup.popup-box(v-model='providerSearchVisible', position='right')
-      provider-search(:close="closeProviderSearch", @popup-confirmed="providerConfirm")
+    mt-popup.popup-box(v-model='supplierSearchVisible', position='right')
+      supplier-search(:close="closeSupplierSearch", @popup-confirmed="supplierConfirm")
     mt-popup.popup-box(v-model='vehicleListVisible', position='right')
       vehicle-list(ref="vehicleList", :close="closeVehicleList", @popup-confirmed="vehicleConfirm")
     mt-popup.popup-box(v-model='logisticsVisible', position='right')
@@ -100,45 +104,45 @@
       purchase-contract(ref="purchaseContract", :close="closePurchaseContract", @popup-confirmed="purchaseContractConfirm")
     //- mt-popup.popup-box(v-model='handingLetterVisible', position='right')
       handing-letter(ref="handingLetter", :close="closeHandingLetter", @popup-confirmed="handingLetterConfirm")
-    mt-popup.popup-box(v-model='paymentCertVisible', position='right')
-      payment-cert(ref="paymentCert", :close="closePaymentCert", @popup-confirmed="paymentCertConfirm")
-    mt-popup.popup-box(v-model='depositCertVisible', position='right')
-      deposit-cert(ref="depositCert", :close="closeDepositCert", @popup-confirmed="depositCertConfirm")
+    mt-popup.popup-box(v-model='depositAddressVisible', position='right')
+      deposit-address(ref="depositAddress", :close="closeDepositAddress", @popup-confirmed="depositAddressConfirm")
+    mt-popup.popup-box(v-model='cashDepositAddressVisible', position='right')
+      cash-deposit-address(ref="cashDepositAddress", :close="closeCashDepositAddress", @popup-confirmed="cashDepositAddressConfirm")
 </template>
 
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
-import ProviderSearch from '@/views/order/ProviderSearch.vue'
+import SupplierSearch from '@/views/order/SupplierSearch.vue'
 import VehicleList from '@/views/order/VehicleList.vue'
 import Logistics from '@/views/order/Logistics.vue'
 import PurchaseContract from '@/views/order/PurchaseContract.vue'
 import VehiclePhoto from '@/views/order/VehiclePhoto.vue'
 import HandingLetter from '@/views/order/HandingLetter.vue'
-import PaymentCert from '@/views/order/PaymentCert.vue'
-import DepositCert from '@/views/order/DepositCert.vue'
+import DepositAddress from '@/views/order/DepositAddress.vue'
+import CashDepositAddress from '@/views/order/CashDepositAddress.vue'
 import { titleUpdater } from '@/common/crossers.js'
 // import { some, includes } from 'lodash'
 
 export default {
-  components: { ProviderSearch, VehicleList, Logistics, PurchaseContract, VehiclePhoto, HandingLetter, PaymentCert, DepositCert },
+  components: { SupplierSearch, VehicleList, Logistics, PurchaseContract, VehiclePhoto, HandingLetter, DepositAddress, CashDepositAddress },
   mixins: [ValidatorMixin],
   validators: {
-    'model.provider' (value) {
+    'model.supplier' (value) {
       return this.validate(value).required('请选择供应商')
     },
-    'model.vehicle.count' (value) {
+    'model.vehicles.length' (value) {
       return this.validate(value).required('请选择车辆')
     },
     'model.logistics' (value) {
       return this.validate(value).required('请填写物流信息')
     },
-    'model.totalAmount' (value) {
+    'model.contractAmount' (value) {
       return this.validate(value).required('请输入采购金额')
     },
-    // 'model.payAmount' (value) {
+    // 'model.deposit' (value) {
     //   return this.validate(value).required('请输入已支付金额')
     // },
-    'model.bailAmount' (value) {
+    'model.cashDeposit' (value) {
       return this.validate(value).required('请输入保证金金额')
     },
     'model.contractNo' (value) {
@@ -150,12 +154,12 @@ export default {
     // 'model.purchaseContract' (value) {
     //   return this.validate(value).required('请上传采购合同')
     // },
-    // 'model.depositCert' (value) {
+    // 'model.cashDepositAddress' (value) {
     //   return this.validate(value).required('请添加保证金凭证')
     // },
-    'model.paymentCert' (value) {
+    'model.depositAddress' (value) {
       return this.validate(value).custom(() => {
-        if (this.model.payAmount) {
+        if (this.model.deposit && !value) {
           return '请上传定金凭证'
         }
       })
@@ -168,8 +172,8 @@ export default {
   methods: {
     // 自定义顶部标题栏的返回按钮行为
     backButtonAction() {
-      if (this.providerSearchVisible) {
-        this.providerSearchVisible = false
+      if (this.supplierSearchVisible) {
+        this.supplierSearchVisible = false
       } else if (this.logisticsVisible) {
         this.logisticsVisible = false
         // } else if (this.vehiclePhotoVisible) {
@@ -178,10 +182,10 @@ export default {
         //   this.purchaseContractVisible = false
         // } else if (this.handingLetterVisible) {
         //   this.handingLetterVisible = false
-      } else if (this.paymentCertVisible) {
-        this.paymentCertVisible = false
-      } else if (this.depositCertVisible) {
-        this.depositCertVisible = false
+      } else if (this.depositAddressVisible) {
+        this.depositAddressVisible = false
+      } else if (this.cashDepositAddressVisible) {
+        this.cashDepositAddressVisible = false
       } else if (this.vehicleListVisible) {
         if (this.$refs.vehicleList.backButtonAction) {
           this.$refs.vehicleList.backButtonAction()
@@ -194,24 +198,24 @@ export default {
     },
 
     // 供应商信息
-    showProviderSearch() {
+    showSupplierSearch() {
       if (this.readonly) return
-      this.providerSearchVisible = true
+      this.supplierSearchVisible = true
     },
 
-    closeProviderSearch() {
-      this.providerSearchVisible = false
+    closeSupplierSearch() {
+      this.supplierSearchVisible = false
     },
 
-    providerConfirm(providerName) {
-      this.model.provider = providerName || ''
-      this.providerSearchVisible = false
+    supplierConfirm(supplierName) {
+      this.model.supplier = supplierName || ''
+      this.supplierSearchVisible = false
     },
 
     // 车辆信息
     showVehicleList() {
       if (this.readonly) return
-      if (!this.model.provider) {
+      if (!this.model.supplier) {
         this.$toast('请选择供应商')
         return
       }
@@ -228,15 +232,15 @@ export default {
     },
 
     vehicleConfirm(vehicle) {
-      this.model.vehicle = vehicle
-      this.model.totalAmount = vehicle.count * vehicle.price
+      this.model.vehicles.push(vehicle)
+      this.model.contractAmount = vehicle.vehicleNumber * vehicle.price
       this.vehicleListVisible = false
     },
 
     // 物料信息
     showLogistics() {
       if (this.readonly) return
-      if (!this.model.vehicle.count) {
+      if (!this.model.vehicles.length) {
         this.$toast('请选择车辆')
         return
       }
@@ -260,7 +264,7 @@ export default {
 
     // 车辆照片
     // showVehiclePhoto() {
-    //   if (!this.model.vehicle.count) {
+    //   if (!this.model.vehicles.length) {
     //     this.$toast('请选择车辆')
     //     return
     //   }
@@ -281,7 +285,7 @@ export default {
 
     // 合同信息
     // showPurchaseContract() {
-    //   if (!this.model.vehicle.count) {
+    //   if (!this.model.vehicles.length) {
     //     this.$toast('请选择车辆')
     //     return
     //   }
@@ -302,7 +306,7 @@ export default {
 
     // // 手续函照片
     // showHandingLetter() {
-    //   if (!this.model.vehicle.count) {
+    //   if (!this.model.vehicles.length) {
     //     this.$toast('请选择车辆')
     //     return
     //   }
@@ -322,57 +326,63 @@ export default {
     // },
 
     // 支付凭证
-    showPaymentCert() {
-      if (this.readonly && this.model.paymentCert) return
-      if (!this.model.vehicle.count) {
+    showDepositAddress() {
+      // if (this.readonly && this.model.depositAddress) return
+      if (!this.model.vehicles.length) {
         this.$toast('请选择车辆')
         return
       }
 
-      this.$refs.paymentCert.init(this.model.paymentCert)
-      this.paymentCertVisible = true
+      this.$refs.depositAddress.init(this.model.depositAddress)
+      this.depositAddressVisible = true
     },
 
-    closePaymentCert() {
-      this.paymentCertVisible = false
+    closeDepositAddress() {
+      this.depositAddressVisible = false
     },
 
-    paymentCertConfirm(paymentCert = {}) {
-      this.model.paymentCert = paymentCert
-      this.modelShow.paymentCert = '已上传'
-      this.paymentCertVisible = false
+    depositAddressConfirm(depositAddress = {}) {
+      this.model.depositAddress = depositAddress
+      this.modelShow.depositAddress = '已上传'
+      this.depositAddressVisible = false
+      this.$nextTick(() => {
+        this.$refs.depositAddress.updatePopBoxHeight(44) // 44 is bottom button height
+      })
     },
 
     // 保证金凭证
-    showDepositCert(type) {
-      if (!this.model.vehicle.count) {
+    showCashDepositAddress(type) {
+      if (!this.model.vehicles.length) {
         this.$toast('请选择车辆')
         return
       }
 
-      this.$refs.depositCert.init(this.model.depositCert, type)
-      this.depositCertVisible = true
+      this.$refs.cashDepositAddress.init(this.model.cashDepositAddress, type)
+      this.cashDepositAddressVisible = true
+      this.$nextTick(() => {
+        this.$refs.cashDepositAddress.updatePopBoxHeight(44) // 44 is bottom button height
+      })
     },
 
     // 选项
     showDepositAction() {
-      if (this.readonly && this.model.depositCert) return
-      if (!this.model.vehicle.count) {
+      // if (this.readonly && this.model.cashDepositAddress) return
+      if (!this.model.vehicles.length) {
         this.$toast('请选择车辆')
         return
       }
-      this.showDepositCert('offline_bank')
+      this.showCashDepositAddress('offline_bank')
       // this.depositSheetVisible = true
     },
 
-    closeDepositCert() {
-      this.depositCertVisible = false
+    closeCashDepositAddress() {
+      this.cashDepositAddressVisible = false
     },
 
-    depositCertConfirm(depositCert = {}) {
-      this.model.depositCert = depositCert
-      this.modelShow.depositCert = '已上传'
-      this.depositCertVisible = false
+    cashDepositAddressConfirm(cashDepositAddress = {}) {
+      this.model.cashDepositAddress = cashDepositAddress
+      this.modelShow.cashDepositAddress = '已上传'
+      this.cashDepositAddressVisible = false
     },
 
     async submit() {
@@ -380,7 +390,7 @@ export default {
 
       // // 保证主要内容填写
       // const inValid = some(this.validation.errors, err => {
-      //   return includes(['model.provider', 'model.vehicle.count', 'model.payAmount', 'bailAmount'], err.field)
+      //   return includes(['model.supplier', 'model.vehicles.length', 'model.deposit', 'cashDeposit'], err.field)
       // })
 
       // if (inValid) {
@@ -396,7 +406,7 @@ export default {
         // if (action === 'confirm') {
         //   this.$router.back()
         // }
-        // this.$toast(this.validation.firstError(), 'error')
+        this.$toast(this.validation.firstError(), 'error')
       }
     }
   },
@@ -406,18 +416,18 @@ export default {
     if (orderId !== 'add') {
       this.model = {
         ...this.model,
-        provider: '宁波奥宝莱汽车有限公司',
-        vehicle: { count: 4 },
+        supplier: '宁波奥宝莱汽车有限公司',
+        vehicles: [{ vehicleNumber: 4 }],
         contractNo: '1123111',
         // logistics: {},
         // purchaseContract: {},
         // handingLetter: {},
-        // paymentCert: {},
-        // depositCert: {},
-        // desc: '奥迪A3 2018款 30周周年年型 Sportback 40T',
-        totalAmount: 160000,
-        payAmount: 10000,
-        bailAmount: 150000
+        // depositAddress: {},
+        // cashDepositAddress: {},
+        // note: '奥迪A3 2018款 30周周年年型 Sportback 40T',
+        contractAmount: 160000,
+        deposit: 10000,
+        cashDeposit: 150000
       }
       titleUpdater.$emit('updatetitle', '编辑订单')
     } else {
@@ -426,42 +436,48 @@ export default {
   },
 
   computed: {
-    advanceMoney() {
-      return Number(this.model.totalAmount) - Number(this.model.payAmount)
+    loanAmount() {
+      const loanAmount = Number(this.model.contractAmount) - Number(this.model.deposit)
+      this.model.loanAmount = loanAmount
+      return loanAmount
     },
     readonly() {
       return this.$route.params.id !== 'add'
     }
     // bailRate() {
-    //   if (!this.model.totalAmount) return null
-    //   return Number(this.model.bailAmount) / Number(this.model.totalAmount)
+    //   if (!this.model.contractAmount) return null
+    //   return Number(this.model.cashDeposit) / Number(this.model.contractAmount)
     // }
+  },
+
+  watch: {
+
   },
 
   data() {
     const _self = this
     return {
       depositSheetVisible: false,
-      providerSearchVisible: false,
+      supplierSearchVisible: false,
       vehicleListVisible: false,
       logisticsVisible: false,
       // vehiclePhotoVisible: false,
       // purchaseContractVisible: false,
       // handingLetterVisible: false,
-      paymentCertVisible: false,
-      depositCertVisible: false,
+      depositAddressVisible: false,
+      cashDepositAddressVisible: false,
       depositActions: [{
         name: '线下银行卡',
         method() {
           _self.depositSheetVisible = true
-          _self.showDepositCert('offline_bank')
+          _self.showCashDepositAddress('offline_bank')
           // _self.$router.push({ name: 'pickCar' })
         }
       }, {
         name: '线下非银行卡',
         method() {
           _self.depositSheetVisible = true
-          _self.showDepositCert('offline_not_bank')
+          _self.showCashDepositAddress('offline_not_bank')
           // _self.$router.push({ name: 'interestTransfer' })
         }
       }],
@@ -470,23 +486,24 @@ export default {
         // vehiclePhoto: '',
         // purchaseContract: '',
         // handingLetter: '',
-        paymentCert: '',
-        depositCert: ''
+        depositAddress: '',
+        cashDepositAddress: ''
       },
       model: {
-        provider: '',
-        vehicle: { count: null },
+        supplier: '',
+        vehicles: [],
         logistics: null,
         contractNo: null,
         // vehiclePhoto: null,
         // purchaseContract: null,
-        paymentCert: null,
-        depositCert: null,
+        depositAddress: null,
+        cashDepositAddress: null,
         // handingLetter: null,
-        // desc: '',
-        totalAmount: null,
-        payAmount: null,
-        bailAmount: null
+        note: '',
+        loanAmount: null,
+        contractAmount: null,
+        deposit: null,
+        cashDeposit: null
       }
     }
   }

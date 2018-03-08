@@ -30,15 +30,15 @@
         span(slot="title") 全部服务
     section
       mt-cell(is-link, title="我的订单融资", :to="{name: 'orders', query: {from: 'mine'}}")
-        i.iconfont.icon-dingdan2.el-blue(slot="icon")
+        i.iconfont.icon-dingdan2.el-orange(slot="icon")
       mt-cell(is-link, title="我的运单", :to="{name: 'wayBills'}")
-        i.iconfont.icon-yunshu.el-blue(slot="icon")
+        i.iconfont.icon-yunshu.el-orange(slot="icon")
       mt-cell(is-link, title="我的车辆", :to="{name: 'myCars'}")
-        i.iconfont.icon-cheliang.el-blue(slot="icon")
-      mt-cell(is-link, title="我的提车函", :to="{name: 'pickCarLetters'}")
-        i.iconfont.icon-dingdan3.el-blue(slot="icon")
+        i.iconfont.icon-cheliang.el-orange(slot="icon")
+      //- mt-cell(is-link, title="我的提车函", :to="{name: 'pickCarLetters'}")
+        i.iconfont.icon-dingdan3.el-orange(slot="icon")
       mt-cell(is-link, title="信息认证", :to="{name: 'infoCertify'}")
-        i.iconfont.icon-verification.el-blue(slot="icon")
+        i.iconfont.icon-verification.el-orange(slot="icon")
     //- company-auth-rounded(v-model="companyAuthVisible", ref="companyAuthRounded", @popup-confirmed="companyAuthConfirm")
     .form-buttons
       mt-button.mint-button-block(type='primary', size='large', @click="$store.dispatch('logout')") 退出登录

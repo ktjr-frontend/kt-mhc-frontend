@@ -13,10 +13,10 @@
               .text-left.flex-item
                 small 订单号：{{order.no}}
               .text-right.flex-item
-                small {{order.createDate | moment('YYYY-MM-DD')}}
+                small {{order.applicationDate | moment('YYYY-MM-DD')}}
             .header-row.flex
               .text-left.flex-item
-                div 代购金额 <em>{{order.amount | ktCurrency}}</em>
+                div 代购金额 <em>{{order.loanAmount | ktCurrency}}</em>
               .text-right.flex-item
                 em {{order.status | orderStatusFormat}}
           .body.mt10
@@ -27,7 +27,7 @@
                 mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
-                      | 供应商：{{order.provider}}
+                      | 供应商：{{order.supllier}}
             section.mt10
               .fields
                 mt-cell.title-cell
@@ -35,16 +35,16 @@
                 mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
-                      | {{order.desc}}
+                      | {{order.note}}
             section.mt10
               .fields
                 mt-cell.title-cell
                   span(slot="title") 订单资料
                 //- mt-cell(:class="{'empty': !order.purchaseContract}", :value="order.purchaseContract ? '已上传' : '未上传'")
                   div(slot="title") 采购合同照片
-                mt-cell(:is-link="!order.paymentCert", @click.native="showPaymentCert", :class="{'empty': !order.paymentCert}", :value="order.paymentCert ? '已添加' : '未添加'")
+                mt-cell(:is-link="!order.depositAddress", @click.native="showDepositAddress", :class="{'empty': !order.depositAddress}", :value="order.depositAddress ? '已添加' : '未添加'")
                   div(slot="title") 定金凭证
-                mt-cell(:is-link="!order.depositCert", @click.native="showDepositAction", :class="{'empty': !order.depositCert}", :value="order.depositCert ? '已上传' : '未上传'")
+                mt-cell(:is-link="!order.cashDepositAddress", @click.native="showDepositAction", :class="{'empty': !order.cashDepositAddress}", :value="order.cashDepositAddress ? '已上传' : '未上传'")
                   div(slot="title") 保证金凭证
                 //- mt-cell(:class="{'empty': !order.handingLetter}", :value="order.handingLetter ? '已上传' : '未上传'")
                   div(slot="title") 手续承诺函照片
@@ -113,18 +113,18 @@
                 mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
-                      | 合同金额：{{order.contactAmount | ktCurrency}}
+                      | 合同金额：{{order.contractAmount | ktCurrency}}
                     p.title-hint
-                      | 定金：{{order.payAmount | ktCurrency}}
+                      | 定金：{{order.deposit | ktCurrency}}
                     p.title-hint
-                      | 保证金：{{order.bailAmount | ktCurrency}}
+                      | 保证金：{{order.cashDeposit | ktCurrency}}
             section.mt10
               .fields
                 mt-cell.title-cell
                   span(slot="title") 供应商打款信息
                 mt-cell.has-hint
                   div(slot="title")
-                    .provider-logo.flex
+                    .supllier-logo.flex
                       img(src="~assets/images/color.png")
                     p.title-hint
                       | 打款金额：{{order.fullPayment.amount | ktCurrency}}
@@ -144,10 +144,10 @@
                   div(slot="title")
                     p.title-hint
                       | 采购金额：100万元
-    mt-popup.popup-box(v-model='paymentCertVisible', position='right')
-      payment-cert(ref="paymentCert", :close="closePaymentCert", @popup-confirmed="paymentCertConfirm")
-    mt-popup.popup-box(v-model='depositCertVisible', position='right')
-      deposit-cert(ref="depositCert", :close="closeDepositCert", @popup-confirmed="depositCertConfirm")
+    mt-popup.popup-box(v-model='depositAddressVisible', position='right')
+      deposit-address(ref="depositAddress", :close="closeDepositAddress", @popup-confirmed="depositAddressConfirm")
+    mt-popup.popup-box(v-model='cashDepositAddressVisible', position='right')
+      cash-deposit-address(ref="cashDepositAddress", :close="closeCashDepositAddress", @popup-confirmed="cashDepositAddressConfirm")
     mt-popup.popup-box(v-model="photosVisible", position="right")
       mt-header(ref="header", title="验车照片")
         //- mt-button(icon="back", slot="left", @click.prevent="photosVisible = false") 返回
@@ -158,63 +158,63 @@
 
 <script>
 import OrderMixin from '@/views/order/mixin.js'
-import PaymentCert from '@/views/order/PaymentCert.vue'
-import DepositCert from '@/views/order/DepositCert.vue'
+import DepositAddress from '@/views/order/DepositAddress.vue'
+import CashDepositAddress from '@/views/order/CashDepositAddress.vue'
 import VehiclePhoto from '@/views/mine/VehiclePhoto.vue'
 import MineMixin from '@/views/mine/mixin.js'
 
 export default {
   mixins: [OrderMixin, MineMixin],
-  components: { PaymentCert, DepositCert, VehiclePhoto },
+  components: { DepositAddress, CashDepositAddress, VehiclePhoto },
   methods: {
     // 自定义顶部标题栏的返回按钮行为
     backButtonAction() {
       if (this.photosVisible) {
         this.$refs.vehiclePhoto.backButtonAction()
-      } else if (this.paymentCertVisible) {
-        this.paymentCertVisible = false
-      } else if (this.depositCertVisible) {
-        this.depositCertVisible = false
+      } else if (this.depositAddressVisible) {
+        this.depositAddressVisible = false
+      } else if (this.cashDepositAddressVisible) {
+        this.cashDepositAddressVisible = false
       } else {
         this.routerBack()
       }
     },
     // 支付凭证
-    showPaymentCert() {
-      this.$refs.paymentCert.init(this.order.paymentCert)
-      this.paymentCertVisible = true
+    showDepositAddress() {
+      this.$refs.depositAddress.init(this.order.depositAddress)
+      this.depositAddressVisible = true
     },
 
-    closePaymentCert() {
-      this.paymentCertVisible = false
+    closeDepositAddress() {
+      this.depositAddressVisible = false
     },
 
-    paymentCertConfirm(paymentCert = {}) {
-      this.order.paymentCert = paymentCert
-      // this.modelShow.paymentCert = '已上传'
-      this.paymentCertVisible = false
+    depositAddressConfirm(depositAddress = {}) {
+      this.order.depositAddress = depositAddress
+      // this.modelShow.depositAddress = '已上传'
+      this.depositAddressVisible = false
     },
 
     // 保证金凭证
-    showDepositCert(type) {
-      this.$refs.depositCert.init(this.order.depositCert, type)
-      this.depositCertVisible = true
+    showCashDepositAddress(type) {
+      this.$refs.cashDepositAddress.init(this.order.cashDepositAddress, type)
+      this.cashDepositAddressVisible = true
     },
 
     // 选项
     showDepositAction() {
-      this.showDepositCert('offline_bank')
+      this.showCashDepositAddress('offline_bank')
       // this.depositSheetVisible = true
     },
 
-    closeDepositCert() {
-      this.depositCertVisible = false
+    closeCashDepositAddress() {
+      this.cashDepositAddressVisible = false
     },
 
-    depositCertConfirm(depositCert = {}) {
-      this.order.depositCert = depositCert
-      // this.modelShow.depositCert = '已上传'
-      this.depositCertVisible = false
+    cashDepositAddressConfirm(cashDepositAddress = {}) {
+      this.order.cashDepositAddress = cashDepositAddress
+      // this.modelShow.cashDepositAddress = '已上传'
+      this.cashDepositAddressVisible = false
     },
 
     showVehiclePhoto(model) {
@@ -227,8 +227,8 @@ export default {
     return {
       photosVisible: false,
       activePhotos: { normal: {} },
-      paymentCertVisible: false,
-      depositCertVisible: false,
+      depositAddressVisible: false,
+      cashDepositAddressVisible: false,
       transitInfos: [{
         id: 1,
         date: new Date(),
@@ -240,16 +240,16 @@ export default {
       }],
       order: {
         no: 'G20171123118765',
-        amount: 160000,
-        contactAmount: 10000,
-        payAmount: 10000,
-        bailAmount: 10000,
+        loanAmount: 160000,
+        contractAmount: 10000,
+        deposit: 10000,
+        cashDeposit: 10000,
         status: '1',
-        provider: '宁波奥宝莱汽车有限公司',
-        desc: '测试订单',
+        supllier: '宁波奥宝莱汽车有限公司',
+        note: '测试订单',
         purchaseContract: {},
-        paymentCert: null,
-        depositCert: null,
+        depositAddress: null,
+        cashDepositAddress: null,
         wayBillVehicle: {
           id: '1',
           model: '中规/国产 安凯客车 宝斯通',
@@ -278,7 +278,7 @@ export default {
           bankName: '招商银行',
           bankUserName: '测试账户'
         },
-        createDate: new Date()
+        applicationDate: new Date()
       },
       tabActive: '1'
     }
@@ -292,7 +292,7 @@ export default {
   background-color: white;
 }
 
-.provider-logo {
+.supllier-logo {
   float: left;
   height: 100px;
   width: 100px;

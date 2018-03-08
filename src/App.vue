@@ -4,7 +4,7 @@
   n-progress(parent=".app")
   transition(:name="transitionName", appear, mode="out-in")
     mt-header(ref="header", fixed="", :title="headerTitle", v-show="headerShow")
-      div(slot="left")
+      div(slot="left", v-if="headerBackShow")
         i.p10.iconfont.icon-houtui(@click="back()", v-if="!tabBarVisible")
         i.p10.iconfont.icon-guanbi(@click="close()", v-if="headerCloseVisible")
       //- mt-button(v-if="headerBackShow", icon="back", slot="left", @click="back()")
@@ -335,12 +335,17 @@ body {
   &.menu {
     background-image: linear-gradient(0deg, #545b60, #212a32 34%);
   }
-  &.login,
   &.registerStep1,
   &.registerStep2,
   &.forgetPasswordStep1,
   &.forgetPasswordStep2 {
     background-color: white;
+  }
+  &.login {
+    background-image: url(~assets/images/login-bg.jpg);
+    background-position: 100% $header-height;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 }
 

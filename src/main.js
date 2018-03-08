@@ -148,7 +148,7 @@ Vue.use(SimpleVueValidation, {
 })
 
 // vue-router 全局配置
-Vue.http.options.root = process.env.API_HOST || '/api'
+Vue.http.options.root = process.env.API_HOST || '/api/v1'
 
 // vue-router拦截器统一注入
 interceptors.forEach((v) => {

@@ -1,5 +1,5 @@
 <template lang="pug">
-small {{second}} s
+small 已发送({{second}} s)
 </template>
 
 <script>

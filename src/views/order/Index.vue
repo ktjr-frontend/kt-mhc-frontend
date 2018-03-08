@@ -25,21 +25,21 @@
       .no-data(v-if="!orderList.length")
         i.iconfont.icon-car
         p 没有订单数据
-      kt-card-item(v-for='order in orderList', :key='order.number', :arrow-visible="false")
+      kt-card-item(v-for='order in orderList', :key='order.no', :arrow-visible="false")
         span(slot="headerRight")
           i.iconfont.icon-edit.ft14.smaller(@click="$router.push({name: 'orderEdit', params: {id: order.id}})")
         span(slot="headerLeft")
-          | 订单号：{{order.number}}
-          .smaller.ml5 {{order.createDate | moment("YYYY-MM-DD")}}
+          | 订单号：{{order.no}}
+          .smaller.ml5 {{order.applicationDate | moment("YYYY-MM-DD")}}
         //- span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
         .content(@click="goToDetail(order)")
-          .content-row 垫资金额：{{order.amount | ktCurrency}}
-          .content-row 供应商：{{order.provider}}
+          .content-row 垫资金额：{{order.loanAmount | ktCurrency}}
+          .content-row 供应商：{{order.supplier}}
           .content-row.flex
-            .content-left.flex-item 订单描述：{{order.desc}}
-            .content-right 共 {{order.count}} 辆
+            .content-left.flex-item 订单描述：{{order.brandName}} {{order.seriesName}} {{order.modelName}}
+            .content-right 共 {{order.vehicleNumber}} 辆
           //- .content-row 订单简称：{{order.name}}
-        .buttons.flex.ui-border-t(slot='footer', v-if="canCloseStatus(order.status) || canPickStatus(order.status)")
+        .buttons.flex.ui-border-t(slot='footer')
           .text-left.flex-item
             button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
             button.ui-border-radius(v-if="canPickStatus(order.status)", @click="showApplyActions") 申请提车
@@ -202,14 +202,14 @@ export default {
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
         .catch(res => {
-          this.loading = false
+          this.loading = true
           throw res
         })
 
-      if (isMore) this.orderList = this.orderList.concat(res.data.result)
-      else this.orderList = res.data.result
+      if (isMore) this.orderList = this.orderList.concat(res.data.pageData)
+      else this.orderList = res.data.pageData
 
-      if (res.data.result.length) {
+      if (res.data.pageData.length) {
         this.loading = false
       } else {
         this.loading = true

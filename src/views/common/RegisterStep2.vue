@@ -2,9 +2,9 @@
 section.register
   form.form(@submit.prevent='submit()')
     .fields-header
-      h3 设置用户名密码
+      h3 设置密码
     .fields
-      kt-field(type="number", label='姓名', placeholder='请填写您的真实姓名', v-model='user.name', :state="getFieldState('user.name')", @click.native="showFieldError($event, 'user.name')")
+      //- kt-field(type="number", label='姓名', placeholder='请填写您的真实姓名', v-model='user.name', :state="getFieldState('user.name')", @click.native="showFieldError($event, 'user.name')")
         span(slot="label") 姓名
       kt-field.ui-border-b(:type="passwordVisible ? 'text' : 'password'", label='密码', placeholder='请输入密码', v-model='user.password', :state="getFieldState('user.password')", @click.native="showFieldError($event, 'user.password')")
         span(slot="label") 密码
@@ -26,9 +26,9 @@ import {
 export default {
   mixins: [CommonMixin, ValidatorMixin],
   validators: {
-    'user.name' (value) {
-      return this.validate(value).required('请输入您的真实姓名')
-    },
+    // 'user.name' (value) {
+    //   return this.validate(value).required('请输入您的真实姓名')
+    // },
     'user.password' (value) {
       return this.validate(value).required('请输入密码').length(6, '最少6位密码')
     }
@@ -53,7 +53,7 @@ export default {
     return {
       passwordVisible: false,
       user: {
-        name: '',
+        // name: '',
         password: ''
       }
     }

@@ -19,7 +19,7 @@ app.use(session({
   cookie: { maxAge: 6000000 }
 }))
 
-app.use('/api', router)
+app.use('/api/v1', router)
 
 app.listen(process.env.PORT || 3000)
 console.log('[Info] mock api server start at ' + (process.env.PORT || 3000))
