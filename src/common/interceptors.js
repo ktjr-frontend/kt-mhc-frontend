@@ -112,22 +112,23 @@ export default [
     next((res) => {
       const date = isFunction(res.headers.get) ? res.headers.get('Date') : new Date()
       store.commit('updateNow', moment(date).toDate())
-      if (res.status === 419 || res.status === 401) {
+      const code = res.body.code || res.status
+      if (code === 419 || code === 401) {
         if (request.params.skipAuth) {
           store.dispatch('logout', true)
         } else {
           MessageBox('提示', res.body.message || '无访问权限！')
           store.dispatch('logout')
         }
-      } else if (res.status === 400) {
+      } else if (code === 400) {
         MessageBox('提示', res.body.message || '请求失败！')
-      } else if (res.status === 403) {
+      } else if (code === 403) {
         MessageBox('提示', res.body.message || '您无此权限！')
-      } else if (res.status === 404) {
+      } else if (code === 404) {
         MessageBox('提示', res.body.message || '访问错误！')
-      } else if (res.status === 500 || res.status === 502) {
+      } else if (code === 500 || code === 502) {
         MessageBox('提示', res.body.message || '抱歉！服务器忙。')
-      } else if (res.status === 200) {
+      } else if (code === 200) {
         if (!request.notApi && !request.params.skipAuth && (!res.body || res.body.code !== RET_CODE_MAP.OK)) {
           MessageBox('提示', res.body ? res.body.message : '登录失败或者访问无权限')
         } else {

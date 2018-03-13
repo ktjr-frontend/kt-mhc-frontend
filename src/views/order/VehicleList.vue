@@ -12,12 +12,12 @@ section.vehicle-list
   section.body.overflow-scroll(ref="popBoxContainer")
     //- .step-block(v-show="activeStep === '1-1' || activeStep === '2-1'")
       ul.standard-list
-        mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showVehicleList(s)", is-link, :title="s.name")
+        mt-cell.click-active(v-for="s in standardList", :key="s.id", @click.native="showBrandList(s)", is-link, :title="s.name")
     .step-block(v-show="activeStep === '1-2'")
       mt-index-list
-        mt-index-section(v-for="(item, key) in vehicleList", :key="key", :index="key")
-          mt-cell(v-for="v in item", :title='v.name', @click.native="showVehicleSearch('1-2')")
-            img(slot='icon', :src='v.icon', width='24', height='24')
+        mt-index-section(v-for="(item, key) in brandList", :key="key", :index="key")
+          mt-cell(v-for="v in item", :title='v.brandName', @click.native="showVehicleSearch('1-2')")
+            img(slot='icon', :src='v.brandLogo', width='24', height='24')
     .step-block(v-show="activeStep === '2-2' || activeStep === '1-3'")
       vehicle-search(ref="vehicleSearch", :close="closeVehicleSearch", @select-vehicle="onSelectVehicle")
     .step-block.pt10(v-show="activeStep === '2-3' || activeStep === '1-4'")
@@ -64,6 +64,7 @@ section.vehicle-list
 import VehicleSearch from '@/views/order/VehicleSearch.vue'
 import ValidatorMixin from '@/views/validator_mixin.js'
 import { some } from 'lodash'
+import { vehicleBrands } from '@/common/resources.js'
 
 export default {
   mixins: [ValidatorMixin],
@@ -73,6 +74,14 @@ export default {
 
   props: {
     close: Function
+  },
+
+  created() {
+    vehicleBrands.get()
+      .then(res => res.json())
+      .then(res => {
+        this.brandList = res.data
+      })
   },
 
   methods: {
@@ -119,7 +128,7 @@ export default {
     },
 
     // 显示车辆类型一级目录
-    showVehicleList() {
+    showBrandList() {
       this.activeStep = '1-2'
     },
 
@@ -244,86 +253,20 @@ export default {
         id: 6,
         name: '墨版'
       }],
-      vehicleList: {
+      brandList: {
         A: [{
-          name: '奥迪',
-          icon: require('@/assets/images/car_brand_icons/33.jpg')
+          brandName: '奥迪',
+          brandLogo: require('@/assets/images/car_brand_icons/33.jpg')
         }, {
-          name: '阿斯顿·马丁',
-          icon: require('@/assets/images/car_brand_icons/35.jpg')
+          brandName: '阿斯顿·马丁',
+          brandLogo: require('@/assets/images/car_brand_icons/35.jpg')
         }],
         B: [{
-          name: '本田',
-          icon: require('@/assets/images/car_brand_icons/14.jpg')
+          brandName: '本田',
+          brandLogo: require('@/assets/images/car_brand_icons/14.jpg')
         }, {
-          name: '奔驰',
-          icon: require('@/assets/images/car_brand_icons/36.jpg')
-        }, {
-          name: '宝马',
-          icon: require('@/assets/images/car_brand_icons/15.jpg')
-        }, {
-          name: '别克',
-          icon: require('@/assets/images/car_brand_icons/38.jpg')
-        }, {
-          name: '比亚迪',
-          icon: require('@/assets/images/car_brand_icons/75.jpg')
-        }, {
-          name: '宝骏',
-          icon: require('@/assets/images/car_brand_icons/120.jpg')
-        }, {
-          name: '标志',
-          icon: require('@/assets/images/car_brand_icons/13.jpg')
-        }, {
-          name: '保时捷',
-          icon: require('@/assets/images/car_brand_icons/40.jpg')
-        }, {
-          name: '宾利',
-          icon: require('@/assets/images/car_brand_icons/39.jpg')
-        }, {
-          name: '北京',
-          icon: require('@/assets/images/car_brand_icons/27.jpg')
-        }, {
-          name: '奔腾',
-          icon: require('@/assets/images/car_brand_icons/95.jpg')
-        }],
-        C: [{
-          name: '长安',
-          icon: require('@/assets/images/car_brand_icons/76.jpg')
-        }, {
-          name: '长城',
-          icon: require('@/assets/images/car_brand_icons/77.jpg')
-        }, {
-          name: '昌河',
-          icon: require('@/assets/images/car_brand_icons/79.jpg')
-        }, {
-          name: '成功汽车',
-          icon: require('@/assets/images/car_brand_icons/196.jpg')
-        }],
-        D: [{
-          name: '大众',
-          icon: require('@/assets/images/car_brand_icons/1.jpg')
-        }, {
-          name: '东风',
-          icon: require('@/assets/images/car_brand_icons/32.jpg')
-        }, {
-          name: '东南',
-          icon: require('@/assets/images/car_brand_icons/81.jpg')
-        }, {
-          name: '道奇',
-          icon: require('@/assets/images/car_brand_icons/41.jpg')
-        }],
-        F: [{
-          name: '福特',
-          icon: require('@/assets/images/car_brand_icons/8.jpg')
-        }, {
-          name: '丰田',
-          icon: require('@/assets/images/car_brand_icons/3.jpg')
-        }, {
-          name: '法拉利',
-          icon: require('@/assets/images/car_brand_icons/42.jpg')
-        }, {
-          name: '菲亚特',
-          icon: require('@/assets/images/car_brand_icons/96.jpg')
+          brandName: '奔驰',
+          brandLogo: require('@/assets/images/car_brand_icons/36.jpg')
         }]
       }
     }

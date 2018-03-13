@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { vehicles } from '@/common/resources.js'
+import { vehicleSeries } from '@/common/resources.js'
 import { debounce, each, find, every, chain } from 'lodash'
 
 const iconsMap = {
@@ -123,7 +123,7 @@ export default {
     },
 
     search: debounce(async function() {
-      const res = await vehicles
+      const res = await vehicleSeries
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
         .catch(res => {

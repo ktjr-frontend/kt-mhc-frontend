@@ -11,7 +11,7 @@ export default [{
     headerShow: true
   }
 }, {
-  path: '/h5/settlement_doc',
+  path: '/h5/settlement_doc/:id',
   name: 'settlementDoc',
   component: resolve => require(['@/views/pickup/SettlementDoc.vue'], resolve),
   meta: {

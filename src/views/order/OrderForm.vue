@@ -12,7 +12,7 @@
           mt-cell(:is-link="!readonly", :class="{'empty': !model.vehicles.length}", :state="getFieldState('model.vehicles.length')", @click.native="showVehicleList", :value="model.vehicles.length ? (model.vehicles.length + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
           input(type="hidden", v-model="model.vehicles.length")
-          mt-cell(:is-link="!readonly", @click.native="showLogistics", :class="{'empty': !modelShow.logistics}",  :value="modelShow.logistics || '请选择'", :state="getFieldState('model.logistics')")
+          mt-cell(:is-link="!readonly", @click.native="showLogistics", :class="{'empty': !model.logistics}",  :value="model.logistics ? '已添加' : '请选择'", :state="getFieldState('model.logistics')")
             span(slot="title") 选择物流 <em>*</em>
           input(type="hidden", v-model="model.logistics")
           //- mt-cell(is-link, @click.native="showVehiclePhoto", :class="{'empty': !modelShow.vehiclePhoto}",  :value="modelShow.vehiclePhoto ? '已上传' : '请上传'", :state="getFieldState('model.vehiclePhoto')")
@@ -66,10 +66,10 @@
             div(slot="label")
               | 填写合同号 <em>*</em>
               p.title-hint 经销商与平台签订
-          mt-cell(:is-link="true", @click.native="showDepositAction", :class="{'empty': !modelShow.cashDepositAddress}",  :value="modelShow.cashDepositAddress ? '已添加' : '请添加'", :state="getFieldState('model.cashDepositAddress')")
+          mt-cell(:is-link="true", @click.native="showDepositAction", :class="{'empty': !model.cashDepositAddress.length}",  :value="model.cashDepositAddress.length ? '已添加' : '请添加'", :state="getFieldState('model.cashDepositAddress')")
             span(slot="title") 保证金凭证
           input(type="hidden", v-model="model.cashDepositAddress")
-          mt-cell(:is-link="true", @click.native="showDepositAddress", :class="{'empty': !modelShow.depositAddress}", :value="modelShow.depositAddress ? '已上传' : '请上传'", :state="getFieldState('model.depositAddress')")
+          mt-cell(:is-link="true", @click.native="showDepositAddress", :class="{'empty': !model.depositAddress.length}", :value="model.depositAddress.length ? '已上传' : '请上传'", :state="getFieldState('model.depositAddress')")
             span(slot="title") 定金凭证
           input(type="hidden", v-model="model.depositAddress")
           //- mt-cell(is-link, @click.native="showHandingLetter", :class="{'empty': !modelShow.handingLetter}",  :value="modelShow.handingLetter ? '已上传' : '请上传'", :state="getFieldState('model.handingLetter')")
@@ -107,7 +107,7 @@
     mt-popup.popup-box(v-model='depositAddressVisible', position='right')
       deposit-address(ref="depositAddress", :close="closeDepositAddress", @popup-confirmed="depositAddressConfirm")
     mt-popup.popup-box(v-model='cashDepositAddressVisible', position='right')
-      cash-deposit-address(ref="cashDepositAddress", :close="closeCashDepositAddress", @popup-confirmed="cashDepositAddressConfirm")
+      cash-deposit-address(ref="cashDepositAddress", :close="closeCashDepositAddress", @popup-confirmed="cashDepositAddressConfirm", :cash-deposit-list="model.cashDepositAddress")
 </template>
 
 <script>
@@ -119,12 +119,22 @@ import PurchaseContract from '@/views/order/PurchaseContract.vue'
 import VehiclePhoto from '@/views/order/VehiclePhoto.vue'
 import HandingLetter from '@/views/order/HandingLetter.vue'
 import DepositAddress from '@/views/order/DepositAddress.vue'
-import CashDepositAddress from '@/views/order/CashDepositAddress.vue'
+import CashDepositAddress from '@/views/order/CashDepositList.vue'
 import { titleUpdater } from '@/common/crossers.js'
-// import { some, includes } from 'lodash'
+import { orders } from '@/common/resources.js'
+import { cloneDeep, filter } from 'lodash'
 
 export default {
-  components: { SupplierSearch, VehicleList, Logistics, PurchaseContract, VehiclePhoto, HandingLetter, DepositAddress, CashDepositAddress },
+  components: {
+    SupplierSearch,
+    VehicleList,
+    Logistics,
+    PurchaseContract,
+    VehiclePhoto,
+    HandingLetter,
+    DepositAddress,
+    CashDepositAddress
+  },
   mixins: [ValidatorMixin],
   validators: {
     'model.supplier' (value) {
@@ -258,7 +268,7 @@ export default {
 
     logisticsConfirm(logistics = {}) {
       this.model.logistics = logistics
-      this.modelShow.logistics = '已设置'
+      // this.modelShow.logistics = '已设置'
       this.logisticsVisible = false
     },
 
@@ -342,8 +352,8 @@ export default {
     },
 
     depositAddressConfirm(depositAddress = {}) {
-      this.model.depositAddress = depositAddress
-      this.modelShow.depositAddress = '已上传'
+      this.model.depositAddress.push(depositAddress)
+      // this.modelShow.depositAddress = '已上传'
       this.depositAddressVisible = false
       this.$nextTick(() => {
         this.$refs.depositAddress.updatePopBoxHeight(44) // 44 is bottom button height
@@ -380,8 +390,8 @@ export default {
     },
 
     cashDepositAddressConfirm(cashDepositAddress = {}) {
-      this.model.cashDepositAddress = cashDepositAddress
-      this.modelShow.cashDepositAddress = '已上传'
+      this.model.cashDepositAddress.push(cashDepositAddress)
+      // this.modelShow.cashDepositAddress = '已上传'
       this.cashDepositAddressVisible = false
     },
 
@@ -399,13 +409,18 @@ export default {
       // }
 
       if (success) {
-        this.$router.back()
+        const model = cloneDeep(this.model)
+        model.payments = [].concat(model.depositAddress).concat(model.cashDepositAddress)
+        delete model.depositAddress
+        delete model.cashDepositAddress
+        const res = await orders.save(model).then(res => res.json())
+        if (res.code === this.RET_CODE_MAP.OK) {
+          this.$router.back()
+        } else {
+          this.$toast('保存失败', 'error')
+        }
         // to be done
       } else {
-        // const action = await this.$confirm('信息不全，确定提交订单吗？')
-        // if (action === 'confirm') {
-        //   this.$router.back()
-        // }
         this.$toast(this.validation.firstError(), 'error')
       }
     }
@@ -414,12 +429,21 @@ export default {
   created() {
     const orderId = this.$route.params.id
     if (orderId !== 'add') {
+      orders
+        .get({ id: this.$route.params.id })
+        .then(res => res.json())
+        .then(res => {
+          this.model.cashDepositAddress = filter(res.data.payments, v => v.type === 1)
+          this.model.depositAddress = filter(res.data.payments, v => v.type === 2)
+        })
+
+      // this.model =
       this.model = {
         ...this.model,
         supplier: '宁波奥宝莱汽车有限公司',
         vehicles: [{ vehicleNumber: 4 }],
         contractNo: '1123111',
-        // logistics: {},
+        logistics: {},
         // purchaseContract: {},
         // handingLetter: {},
         // depositAddress: {},
@@ -429,6 +453,7 @@ export default {
         deposit: 10000,
         cashDeposit: 150000
       }
+      console.log(this.model)
       titleUpdater.$emit('updatetitle', '编辑订单')
     } else {
       titleUpdater.$emit('updatetitle', '添加订单')
@@ -481,14 +506,14 @@ export default {
           // _self.$router.push({ name: 'interestTransfer' })
         }
       }],
-      modelShow: {
-        logistics: '',
-        // vehiclePhoto: '',
-        // purchaseContract: '',
-        // handingLetter: '',
-        depositAddress: '',
-        cashDepositAddress: ''
-      },
+      // modelShow: {
+      //   logistics: '',
+      //   // vehiclePhoto: '',
+      //   // purchaseContract: '',
+      //   // handingLetter: '',
+      //   depositAddress: '',
+      //   cashDepositAddress: ''
+      // },
       model: {
         supplier: '',
         vehicles: [],
@@ -496,8 +521,8 @@ export default {
         contractNo: null,
         // vehiclePhoto: null,
         // purchaseContract: null,
-        depositAddress: null,
-        cashDepositAddress: null,
+        depositAddress: [], // 定金
+        cashDepositAddress: [], // 保证金
         // handingLetter: null,
         note: '',
         loanAmount: null,

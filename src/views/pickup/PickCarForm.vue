@@ -4,10 +4,10 @@
       section
         //- .fields-header 带 <em>*</em> 为必填
         .fields
-          mt-cell(is-link, :class="{'empty': !model.vehicle.count}", :state="getFieldState('model.vehicle.count')", @click.native="showVehicleList",  :value="model.vehicle.count ? ('已选择' + model.vehicle.count + '辆') : '请选择'")
+          mt-cell(is-link, :class="{'empty': !model.vins.length}", :state="getFieldState('model.vins')", @click.native="showVehicleList",  :value="model.vins.length ? ('已选择' + model.vins.length + '辆') : '请选择'")
             span(slot="title") 车辆信息 <em>*</em>
-          input(type="hidden", v-model="model.vehicle.count")
-          kt-date-picker.has-border.input-right(date-type="datetime", :custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickDate', :state="getFieldState('model.pickDate')", @click.native="showFieldError($event, 'model.pickDate')")
+          input(type="hidden", v-model="model.vins.length")
+          kt-date-picker.has-border.input-right(date-type="datetime", :custom-model-visible="false", label='empty', :readonly="true" placeholder='请选择', v-model='model.pickUpDate', :state="getFieldState('model.pickUpDate')", @click.native="showFieldError($event, 'model.pickUpDate')")
             div(slot="label")
               | 预计提车时间 <em>*</em>
           //- kt-select.has-border(:options="pickCompanies", v-model="model.pickCompany", :state="getFieldState('model.pickCompany')", @click.native="showFieldError($event, 'model.pickCompany')")
@@ -20,14 +20,14 @@
         .fields
           mt-cell.title-cell
             span(slot="title") 提车人信息
-          kt-field(type="text", label='empty', placeholder='请输入姓名', v-model='model.pickerName', :state="getFieldState('model.pickerName')", @click.native="showFieldError($event, 'model.pickerName')")
+          kt-field(type="text", label='empty', placeholder='请输入姓名', v-model='model.name', :state="getFieldState('model.name')", @click.native="showFieldError($event, 'model.name')")
             div(slot="label")
               | 提车人姓名 <em>*</em>
             //- mt-button(@click.prevent.stop="pickerListVisible = true") 选择提车人
-          kt-field(type="text", label='empty', placeholder='请输入身份证号', v-model='model.pickerIdCard', :state="getFieldState('model.pickerIdCard')", @click.native="showFieldError($event, 'model.pickerIdCard')")
+          kt-field(type="text", label='empty', placeholder='请输入身份证号', v-model='model.certNo', :state="getFieldState('model.certNo')", @click.native="showFieldError($event, 'model.certNo')")
             div(slot="label")
               | 身份证号码 <em>*</em>
-          kt-field(type="number", label='empty', placeholder='请输入手机号', v-model='model.pickerPhone', :state="getFieldState('model.pickerPhone')", @click.native="showFieldError($event, 'model.pickerPhone')")
+          kt-field(type="number", label='empty', placeholder='请输入手机号', v-model='model.phoneNumber', :state="getFieldState('model.phoneNumber')", @click.native="showFieldError($event, 'model.phoneNumber')")
             div(slot="label")
               | 手机号号码 <em>*</em>
           //- .form-buttons.text-center.pt20
@@ -68,28 +68,33 @@
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
 import VehicleList from '@/views/pickup/VehicleList.vue'
+// import { pickups } from '@/common/resources.js'
 // import { chain } from 'lodash'
 
 export default {
   components: { VehicleList },
   mixins: [ValidatorMixin],
   validators: {
-    'model.vehicle.count' (value) {
-      return this.validate(value).required('请选择车辆')
+    'model.vins' (value) {
+      return this.validate(value).custom(() => {
+        if (!value || !value.length) {
+          return '请选择车辆'
+        }
+      })
     },
-    'model.pickDate' (value) {
+    'model.pickUpDate' (value) {
       return this.validate(value).required('请选择提车时间')
     },
     // 'model.pickCompany' (value) {
     //   return this.validate(value).required('请选择提车公司')
     // },
-    'model.pickerName' (value) {
+    'model.name' (value) {
       return this.validate(value).required('请填写提车人姓名')
     },
-    'model.pickerPhone' (value) {
+    'model.phoneNumber' (value) {
       return this.validate(value).required('请填写手机号')
     },
-    'model.pickerIdCard' (value) {
+    'model.certNo' (value) {
       return this.validate(value).required('请填写身份证号')
     }
   },
@@ -127,9 +132,9 @@ export default {
 
     // 选择提车人
     onSelectPicker(picker) {
-      this.model.pickerName = picker.name
-      this.model.pickerPhone = picker.phone
-      this.model.pickerIdCard = picker.idCard
+      this.model.name = picker.name
+      this.model.phoneNumber = picker.phone
+      this.model.certNo = picker.idCard
       this.pickerListVisible = false
     },
 
@@ -144,10 +149,8 @@ export default {
     },
 
     vehicleConfirm({ vehicles, checkedCar }) {
-      this.model.vehicle = {
-        count: checkedCar.length,
-        vehicles: vehicles
-      }
+      // console.log(vehicles, checkedCar)
+      this.model.vins = [].concat(checkedCar)
       this.vehicleListVisible = false
     },
 
@@ -155,9 +158,12 @@ export default {
       const success = await this.$validate()
 
       if (success) {
-        // this.$router.back()
+        // const res = await pickups.save(this.model).then(res => res.json())
         this.$router.push({
-          name: 'settlementDoc'
+          name: 'settlementDoc',
+          params: {
+            // id: res.data.id || ''
+          }
         })
       } else {
         this.$toast(this.validation.firstError(), 'error')
@@ -214,12 +220,12 @@ export default {
       }],
       model: {
         provider: '',
-        vehicle: { count: null },
-        pickDate: '',
+        vins: [],
+        pickUpDate: '',
         // pickCompany: '',
-        pickerName: '',
-        pickerPhone: '',
-        pickerIdCard: ''
+        name: '',
+        phoneNumber: '',
+        certNo: ''
       }
     }
   }

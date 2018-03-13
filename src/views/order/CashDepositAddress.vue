@@ -8,16 +8,16 @@ section.deposit-form
     form(@submit.prevent="submit")
       section
         .fields
-          kt-field.input-right(type="number", :readonly="true", label='empty', placeholder='自动', v-model='model.payCount', :state="getFieldState('model.payCount')", @click.native="showFieldError($event, 'model.payCount')")
+          kt-field.input-right(type="number", label='empty', placeholder='填写打款笔数', v-model='model.financingApplicationNo', :state="getFieldState('model.financingApplicationNo')", @click.native="showFieldError($event, 'model.financingApplicationNo')")
             div(slot="label")
-              | 打款序号 <em>*</em>
+              | 打款笔数 <em>*</em>
             span 笔
       section.mt10
         .fields
-          kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.payDate', :state="getFieldState('model.payDate')", @click.native="showFieldError($event, 'model.payDate')")
+          kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.paymentTime', :state="getFieldState('model.paymentTime')", @click.native="showFieldError($event, 'model.paymentTime')")
             div(slot="label")
               | 支付日期 <em>*</em>
-          kt-field.input-right(type="number", label='empty', placeholder='请输入', v-model='model.payAmount', :state="getFieldState('model.payAmount')", @click.native="showFieldError($event, 'model.payAmount')")
+          kt-field.input-right(type="number", label='empty', placeholder='请输入', v-model='model.amount', :state="getFieldState('model.amount')", @click.native="showFieldError($event, 'model.amount')")
             div(slot="label")
               | 支付金额 <em>*</em>
             span 元
@@ -25,7 +25,7 @@ section.deposit-form
           mt-cell.title-cell
             span(slot="title") 支付凭证
           .photo-body.ui-border-t.flex.flex-wrap.flex-start
-            .preview(v-for="photo in model.photos")
+            .preview(v-for="photo in model.paymentVoucher")
               i.iconfont.icon-qingchu(@click="deletePhoto(photo)")
               img(v-if="photo.previewUrl", :src="photo.previewUrl")
             .upload-input
@@ -35,20 +35,20 @@ section.deposit-form
           mt-cell.title-cell
             span(slot="title") 付款人信息
               small （打款时使用的信息）
-          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.account', :state="getFieldState('model.account')", @click.native="showFieldError($event, 'model.account')")
+          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.outAccountName', :state="getFieldState('model.outAccountName')", @click.native="showFieldError($event, 'model.outAccountName')")
             div(slot="label")
               | 付款账户 <em>*</em>
-          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.bankCard', :state="getFieldState('model.bankCard')", @click.native="showFieldError($event, 'model.bankCard')")
+          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.outAccountBankCardNo', :state="getFieldState('model.outAccountBankCardNo')", @click.native="showFieldError($event, 'model.outAccountBankCardNo')")
             div(slot="label")
               | 银行账号 <em>*</em>
-          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.bankName', :state="getFieldState('model.bankName')", @click.native="showFieldError($event, 'model.bankName')")
+          kt-field.input-right(type="text", label='empty', placeholder='请输入', v-model='model.outAccountBankName', :state="getFieldState('model.outAccountBankName')", @click.native="showFieldError($event, 'model.outAccountBankName')")
             div(slot="label")
               | 开户银行 <em>*</em>
         .fields.mt10(v-if="depositType === 'offline_bank'")
           mt-cell.title-cell
             span(slot="title") 支付凭证
           .photo-body.ui-border-t.flex.flex-wrap.flex-start
-            .preview(v-for="photo in model.photos")
+            .preview(v-for="photo in model.paymentVoucher")
               i.iconfont.icon-qingchu(@click="deletePhoto(photo)")
               img(v-if="photo.previewUrl", :src="photo.previewUrl")
             .upload-input
@@ -88,7 +88,7 @@ export default {
     },
 
     deletePhoto(photo) {
-      this.model.photos = remove(this.model.photos, c => c !== photo)
+      this.model.paymentVoucher = remove(this.model.paymentVoucher, c => c !== photo)
       this.$refs.file.value = ''
     },
 
@@ -97,7 +97,7 @@ export default {
       img.src = url
       img.onload = () => {
         photo.previewUrl = url
-        this.model.photos.push(photo)
+        this.model.paymentVoucher.push(photo)
         // photo.img = img
         this.$indicator.close()
         // const maxW = this.$els[ns].getBoundingClientRect().width
@@ -140,38 +140,38 @@ export default {
   },
 
   validators: {
-    'model.photos' (value) {
+    'model.paymentVoucher' (value) {
       return this.validate(value).custom(() => {
-        if (this.depositType === 'offline_not_bank' && (!value || !value.length)) {
+        if (!value || !value.length) {
           return '请上传保证金凭证'
         }
       })
     },
 
-    'model.payCount' (value) {
+    'model.financingApplicationNo' (value) {
       return this.validate(value).required('前填写打款笔数')
     },
-    'model.payDate' (value) {
+    'model.paymentTime' (value) {
       return this.validate(value).required('前填写打款日期')
     },
-    'model.payAmount' (value) {
+    'model.amount' (value) {
       return this.validate(value).required('请填写支付金额')
     },
-    'model.account' (value) {
+    'model.outAccountName' (value) {
       return this.validate(value).custom(() => {
         if (this.depositType === 'offline_bank' && !value) {
           return '请填写付款账户'
         }
       })
     },
-    'model.bankCard' (value) {
+    'model.outAccountBankCardNo' (value) {
       return this.validate(value).custom(() => {
         if (this.depositType === 'offline_bank' && !value) {
           return '请填写银行账号'
         }
       })
     },
-    'model.bankName' (value) {
+    'model.outAccountBankName' (value) {
       return this.validate(value).custom(() => {
         if (this.depositType === 'offline_bank' && !value) {
           return '请填写开户银行'
@@ -190,13 +190,13 @@ export default {
         previewImgStyle: {}
       }],
       model: {
-        photos: [],
-        payCount: null,
-        payDate: '',
-        payAmount: null,
-        account: '',
-        bankCard: '',
-        bankName: ''
+        paymentVoucher: [],
+        financingApplicationNo: null,
+        paymentTime: '',
+        amount: null,
+        outAccountName: '',
+        outAccountBankCardNo: '',
+        outAccountBankName: ''
       }
     }
   }

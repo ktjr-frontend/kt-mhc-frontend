@@ -283,7 +283,7 @@ module.exports = router => {
   })
 
   // 依据价格搜索车型
-  router.get('/vehicles', (req, res) => {
+  router.get('/vehicle/series/list', (req, res) => {
     const result = [{
       id: '0',
       model: '奥迪A3 2018款 30周年年型 Sportback 35 TFSI 进取型',

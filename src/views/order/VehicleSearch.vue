@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { vehicles } from '@/common/resources.js'
+import { vehicleSeries } from '@/common/resources.js'
 import { debounce, each } from 'lodash'
 
 const iconsMap = {
@@ -55,10 +55,10 @@ export default {
       this.search()
     },
 
-    init(price) {
-      if (price) {
+    init(brandId) {
+      if (brandId) {
         this.headerVisible = false
-        this.filter.price = price
+        this.filter.brandId = brandId
         this.search()
       } else {
         this.headerVisible = true
@@ -67,7 +67,7 @@ export default {
     },
 
     search: debounce(async function() {
-      const res = await vehicles
+      const res = await vehicleSeries
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
         .catch(res => {
@@ -92,6 +92,7 @@ export default {
       headerVisible: true,
       searchResult: [],
       filter: {
+        brandId: '',
         price: ''
       }
     }

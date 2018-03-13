@@ -11,33 +11,33 @@ section.logistics-form
           span(slot="label") 产品类型 <em>*</em>
     section.mt10
       .fields
-        kt-address-select(:state="getFieldState('model.startAddress')", v-model="model.startAddress")
+        kt-address-select(:state="getFieldState('model.startingCity')", v-model="model.startingCity")
           span(slot="label") 起始地 <em>*</em>
-        kt-field(type="textarea", label="详细地址", v-model="model.detailStartAddress", :state="getFieldState('model.detailStartAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailStartAddress')")
+        kt-field(type="textarea", label="详细地址", v-model="model.startingAddress", :state="getFieldState('model.startingAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.startingAddress')")
           div(slot="label")
             | 详细地址 <em>*</em>
     section.mt10
       .fields
         //- kt-select(:options="deliverTypeList", v-model="model.deliverType", :state="getFieldState('model.deliverType')", @click.native="showFieldError($event, 'model.deliverType')")
           span(slot="label") 物流类型 <em>*</em>
-        kt-address-select(:state="getFieldState('model.endAddress')", v-model="model.endAddress")
+        kt-address-select(:state="getFieldState('model.destinationCity')", v-model="model.destinationCity")
           span(slot="label") 目的地 <em>*</em>
         //- mt-cell(title="empty")
       template(v-if="model.deliverType === '1'")
-        mt-radio.cell-radiolist(slot="title", :state="getFieldState('model.endWareHouse')", v-model='model.endWareHouse', :options="endWareHouseList")
-        .text-center.color-warning.bg-white.pt10.pb10(v-if="!endWareHouseList.length && model.endAddress") 该地区没有仓库地址，建议选择海淀区
-        input(type="hidden", v-model="model.endWareHouse")
+        mt-radio.cell-radiolist(slot="title", :state="getFieldState('model.destinationAddress')", v-model='model.destinationAddress', :options="endWareHouseList")
+        .text-center.color-warning.bg-white.pt10.pb10(v-if="!endWareHouseList.length && model.destinationCity") 该地区没有仓库地址，建议选择海淀区
+        input(type="hidden", v-model="model.destinationAddress")
       template(v-else-if="model.deliverType === '2'")
-        kt-field(type="textarea", label="详细地址", v-model="model.detailEndAddress", :state="getFieldState('model.detailEndAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailEndAddress')")
+        kt-field(type="textarea", label="详细地址", v-model="model.destinationAddress", :state="getFieldState('model.destinationAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.destinationAddress')")
           div(slot="label")
             | 收货地址 <em>*</em>
-        kt-field(type="text", label='empty', placeholder='请输入收货联系人', v-model='model.receiptContact', :state="getFieldState('model.receiptContact')", @click.native="showFieldError($event, 'model.receiptContact')")
+        kt-field(type="text", label='empty', placeholder='请输入收货联系人', v-model='model.consignee', :state="getFieldState('model.consignee')", @click.native="showFieldError($event, 'model.consignee')")
           div(slot="label")
             | 收货联系人 <em>*</em>
-        kt-field(type="number", label='empty', placeholder='收货人联系方式', v-model='model.receiptPhone', :state="getFieldState('model.receiptPhone')", @click.native="showFieldError($event, 'model.receiptPhone')")
+        kt-field(type="number", label='empty', placeholder='收货人联系方式', v-model='model.consigneePhoneNumber', :state="getFieldState('model.consigneePhoneNumber')", @click.native="showFieldError($event, 'model.consigneePhoneNumber')")
           div(slot="label")
             | 联系方式 <em>*</em>
-        kt-field(type="text", label='empty', placeholder='收货人身份证号', v-model='model.receiptIdCard', :state="getFieldState('model.receiptIdCard')", @click.native="showFieldError($event, 'model.receiptIdCard')")
+        kt-field(type="text", label='empty', placeholder='收货人身份证号', v-model='model.consigneeIdNo', :state="getFieldState('model.consigneeIdNo')", @click.native="showFieldError($event, 'model.consigneeIdNo')")
           div(slot="label")
             | 身份证号 <em>*</em>
     //- section.mt10
@@ -46,25 +46,25 @@ section.logistics-form
           span(slot="label") 运输类型 <em>*</em>
     section.mt10
       .fields
-        kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.deliverDate', :state="getFieldState('model.deliverDate')", @click.native="showFieldError($event, 'model.deliverDate')")
+        kt-date-picker.input-right(label='empty', :custom-model-visible="true", :readonly="true" placeholder='请选择', v-model='model.transportationDate', :state="getFieldState('model.transportationDate')", @click.native="showFieldError($event, 'model.transportationDate')")
           div(slot="label")
             | 发运时间 <em>*</em>
-        kt-field(type="text", label='empty', placeholder='请输入发货联系人', v-model='model.deliverContact', :state="getFieldState('model.deliverContact')", @click.native="showFieldError($event, 'model.deliverContact')")
+        kt-field(type="text", label='empty', placeholder='请输入发货联系人', v-model='model.consigner', :state="getFieldState('model.consigner')", @click.native="showFieldError($event, 'model.consigner')")
           div(slot="label")
             | 发货联系人 <em>*</em>
-        kt-field(type="number", label='empty', placeholder='发货人联系方式', v-model='model.deliverPhone', :state="getFieldState('model.deliverPhone')", @click.native="showFieldError($event, 'model.deliverPhone')")
+        kt-field(type="number", label='empty', placeholder='发货人联系方式', v-model='model.consignerPhoneNumber', :state="getFieldState('model.consignerPhoneNumber')", @click.native="showFieldError($event, 'model.consignerPhoneNumber')")
           div(slot="label")
             | 联系方式 <em>*</em>
-        //- kt-field(type="text", label='empty', :readonly="true", placeholder='同起始地', v-model='model.startAddress')
+        //- kt-field(type="text", label='empty', :readonly="true", placeholder='同起始地', v-model='model.startingCity')
         //-   div(slot="label")
         //-     | 发货地址 <em>*</em>
-        //- kt-field(type="textarea", label=" ", v-model="model.detailStartAddress", :state="getFieldState('model.detailStartAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.detailStartAddress')")
-        kt-field(type="text", label="empty", :readonly="true", placeholder='自动计算', :value='transportFee')
+        //- kt-field(type="textarea", label=" ", v-model="model.startingAddress", :state="getFieldState('model.startingAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.startingAddress')")
+        kt-field(type="text", label="empty", :readonly="true", placeholder='自动计算', :value='totalCost')
           div(slot="label")
             | 预估运输费用
             p.title-hint 以实际发生为准
           span(slot="input1-append") 元
-        kt-field(type="text", label="empty", placeholder='请输入备注', v-model='model.comment')
+        kt-field(type="text", label="empty", placeholder='请输入备注', v-model='model.note')
           div(slot="label")
             | 备注
         .note-line
@@ -104,51 +104,51 @@ export default {
   },
 
   validators: {
-    'model.startAddress' (value) {
+    'model.startingCity' (value) {
       return this.validate(value).required('请选择起始地址')
     },
-    'model.detailStartAddress' (value) {
+    'model.startingAddress' (value) {
       return this.validate(value).required('请填写详细发货地址')
     },
-    'model.endAddress' (value) {
+    'model.destinationCity' (value) {
       return this.validate(value).required('请选择目的地址')
     },
-    'model.detailEndAddress' (value) {
+    'model.destinationAddress' (value) {
       return this.validate(value).custom(() => {
-        if (this.model.deliverType === '2' && !value) {
-          return '请填写详细收货地址'
+        if (!value) {
+          return this.model.deliverType === '1' ? '请选择目的地仓库' : '请填写详细收货地址'
         }
       })
     },
-    'model.endWareHouse' (value) {
-      return this.validate(value).custom(() => {
-        if (this.model.deliverType === '1' && !value) {
-          return '请选择目的地仓库'
-        }
-      })
-    },
-    'model.receiptContact' (value) {
+    // 'model.destinationAddress' (value) {
+    //   return this.validate(value).custom(() => {
+    //     if (this.model.deliverType === '1' && !value) {
+    //       return '请选择目的地仓库'
+    //     }
+    //   })
+    // },
+    'model.consignee' (value) {
       return this.validate(value).custom(() => {
         if (this.model.deliverType === '2' && !value) {
           return '请填写收货人'
         }
       })
     },
-    'model.receiptPhone' (value) {
+    'model.consigneePhoneNumber' (value) {
       return this.validate(value).custom(() => {
         if (this.model.deliverType === '2' && !value) {
           return '请填写收货人联系方式'
         }
       })
     },
-    'model.receiptIdCard' (value) {
+    'model.consigneeIdNo' (value) {
       return this.validate(value).custom(() => {
         if (this.model.deliverType === '2' && !value) {
           return '请填写收货人身份证号'
         }
       })
     },
-    'model.deliverDate' (value) {
+    'model.transportationDate' (value) {
       return this.validate(value).required('请选择发货时间')
     },
     'model.deliverType' (value) {
@@ -157,10 +157,10 @@ export default {
     // 'model.tranportType' (value) {
     //   return this.validate(value).required('请选择运输类型')
     // },
-    'model.deliverContact' (value) {
+    'model.consigner' (value) {
       return this.validate(value).required('请填写发货人')
     },
-    'model.deliverPhone' (value) {
+    'model.consignerPhoneNumber' (value) {
       return this.validate(value).required('请填写发货人联系方式')
     },
     'agreement' (value) {
@@ -173,21 +173,21 @@ export default {
   },
 
   computed: {
-    transportFee() {
-      if (this.model.startAddress && this.model.endAddress && this.model.endWareHouse) {
+    totalCost() {
+      if (this.model.startingCity && this.model.destinationCity && this.model.destinationAddress) {
         return 2123
       }
     },
 
     endWareHouseList() {
-      console.log(this.model.endAddress)
+      console.log(this.model.destinationCity)
       let area = ''
       let addrs = []
 
-      if (this.model.endAddress) addrs = this.model.endAddress.split('-')
+      if (this.model.destinationCity) addrs = this.model.destinationCity.split('-')
       if (addrs.length) area = addrs[2]
 
-      this.model.endWareHouse = ''
+      this.model.destinationAddress = ''
 
       return filter([{
         area: '海淀区',
@@ -206,21 +206,21 @@ export default {
       agreement: false,
       // tranportTypeList: ,
       model: {
-        startAddress: null,
-        endAddress: null,
-        endWareHouse: '',
+        startingCity: null,
+        destinationCity: null,
+        destinationAddress: '',
         deliverType: '',
         // tranportType: '',
-        deliverDate: '',
-        deliverContact: '',
-        deliverPhone: '',
-        receiptContact: '',
-        receiptPhone: '',
-        receiptIdCard: '',
-        transportFee: null,
-        detailStartAddress: '',
-        detailEndAddress: '',
-        comment: ''
+        transportationDate: '',
+        consigner: '',
+        consignerPhoneNumber: '',
+        consignee: '',
+        consigneePhoneNumber: '',
+        consigneeIdNo: '',
+        totalCost: null,
+        startingAddress: '',
+        // destinationAddress: '',
+        note: ''
       }
     }
   }
