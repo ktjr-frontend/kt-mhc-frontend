@@ -25,7 +25,7 @@ section.logistics-form
         //- mt-cell(title="empty")
       template(v-if="model.deliverType === '1'")
         mt-radio.cell-radiolist(slot="title", :state="getFieldState('model.destinationAddress')", v-model='model.destinationAddress', :options="endWareHouseList")
-        .text-center.color-warning.bg-white.pt10.pb10(v-if="!endWareHouseList.length && model.destinationCity") 该地区没有仓库地址，建议选择海淀区
+        .text-center.color-warning.bg-white.pt10.pb10(v-if="!endWareHouseList.length && model.destinationCity") 该地区没有仓库地址，建议选择其他地区
         input(type="hidden", v-model="model.destinationAddress")
       template(v-else-if="model.deliverType === '2'")
         kt-field(type="textarea", label="详细地址", v-model="model.destinationAddress", :state="getFieldState('model.destinationAddress')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.destinationAddress')")
@@ -81,7 +81,8 @@ section.logistics-form
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
 import MineMixin from '@/views/mine/mixin.js'
-import { filter } from 'lodash'
+import { map } from 'lodash'
+import { warehouses } from '@/common/resources.js'
 
 export default {
   mixins: [ValidatorMixin, MineMixin],
@@ -93,12 +94,29 @@ export default {
     init() {
 
     },
+
     async submit() {
       const success = await this.$validate()
       if (success) {
         this.$emit('popup-confirmed', this.model)
       } else {
         this.$toast(this.validation.firstError(), 'error')
+      }
+    },
+
+    getWarehouses() {
+      if (this.model.destinationCity && this.model.deliverType === '1') {
+        const addrs = this.model.destinationCity.split('-')
+        warehouses
+          .get({
+            province: addrs[0],
+            city: addrs[1],
+            county: addrs[2]
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.endWareHouseList = map(res.data.data, d => ({ label: d.warehouseName, value: d.warehouseName }))
+          })
       }
     }
   },
@@ -172,37 +190,47 @@ export default {
     }
   },
 
+  watch: {
+    'model.deliverType' (value) {
+      this.getWarehouses()
+    },
+    'model.destinationCity' () {
+      this.getWarehouses()
+    }
+  },
+
   computed: {
     totalCost() {
       if (this.model.startingCity && this.model.destinationCity && this.model.destinationAddress) {
         return 2123
       }
-    },
-
-    endWareHouseList() {
-      console.log(this.model.destinationCity)
-      let area = ''
-      let addrs = []
-
-      if (this.model.destinationCity) addrs = this.model.destinationCity.split('-')
-      if (addrs.length) area = addrs[2]
-
-      this.model.destinationAddress = ''
-
-      return filter([{
-        area: '海淀区',
-        label: '测试仓库1号',
-        value: '1'
-      }, {
-        area: '海淀区',
-        label: '测试仓库2号',
-        value: '2'
-      }], v => v.area === area)
     }
+
+    // endWareHouseList() {
+    //   console.log(this.model.destinationCity)
+    //   let area = ''
+    //   let addrs = []
+
+    //   if (this.model.destinationCity) addrs = this.model.destinationCity.split('-')
+    //   if (addrs.length) area = addrs[2]
+
+    //   this.model.destinationAddress = ''
+
+    //   return filter([{
+    //     area: '海淀区',
+    //     label: '测试仓库1号',
+    //     value: '1'
+    //   }, {
+    //     area: '海淀区',
+    //     label: '测试仓库2号',
+    //     value: '2'
+    //   }], v => v.area === area)
+    // }
   },
 
   data() {
     return {
+      endWareHouseList: [],
       agreement: false,
       // tranportTypeList: ,
       model: {

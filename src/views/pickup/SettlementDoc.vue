@@ -8,67 +8,101 @@
           mt-cell.has-hint
             div(slot="title")
               p.title-hint
-                | 结算日期：{{settlement.settlementDate}}
-              p.title-hint
                 | 结算单号：{{settlement.no}}
               p.title-hint
-                | 订单编号：{{settlement.financingApplicationNo}}
+                | 订单编号：{{settlement.no}}
               p.title-hint
-                | 经销商：{{settlement.supplier}}
+                | 垫资日期：{{settlement.no}}
+              p.title-hint
+                | 提车日期：{{settlement.settlementDate}}
+              p.title-hint
+                | 结算日期：{{settlement.settlementDate}}
       section.mt10
         .fields
           mt-cell.title-cell
-            span(slot="title") 费用结算
+            span(slot="title") 车架号列表
+          mt-cell
+            div(slot="title")
+              p.title-hint
+                | 车架号：{{settlement.no}}
+              p.title-hint
+                | 品牌：{{settlement.no}}
+              p.title-hint
+                | 车型：{{settlement.no}}
+      section.mt10
+        .fields
+          mt-cell.title-cell
+            span(slot="title") 服务费结算明细
           mt-cell.has-hint
             div(slot="title")
               p.title-hint
-                | 借款总额：{{settlement.financingAmount | ktCurrency}}
+                | 保证金金额：{{settlement.cashDeposit | ktCurrency}}
               p.title-hint
-                | 保证金：{{settlement.cashDeposit | ktCurrency}}
+                | 定金金额：{{settlement.cashDeposit | ktCurrency}}
               p.title-hint
-                | 费用起始日：{{settlement.gmtCreated | moment('YYYY-MM-DD')}}
-              p.title-hint
-                | 费用结算日：{{settlement.gmtModified | moment('YYYY-MM-DD')}}
+                | 垫资金额：{{settlement.cashDeposit | ktCurrency}}
               p.title-hint
                 | 计费天数：{{settlement.billingDays}}
               p.title-hint
-                | 正常费用总额：{{settlement.firstStepAmount | ktCurrency}}
+                | 结算台数：{{settlement.billingDays}}
               p.title-hint
-                | 第一阶梯天数：{{settlement.firstStepDays}}
+                | 第1阶梯费率/日：{{settlement.firstStepRate}}
               p.title-hint
-                | 阶梯费率/日：{{settlement.firstStepRate}}
+                | 第1阶梯费用：{{settlement.firstStepAmount | ktCurrency}}
               p.title-hint
-                | 阶梯费用：{{settlement.firstStepAmount | ktCurrency}}
+                | 第2阶梯费率/日：{{settlement.firstStepRate}}
+              p.title-hint
+                | 第2阶梯费用：{{settlement.firstStepAmount | ktCurrency}}
+              p.title-hint
+                | 逾期天数：{{settlement.financingAmount | ktCurrency}}
+              p.title-hint
+                | 逾期金额：{{settlement.gmtCreated | moment('YYYY-MM-DD')}}
+              p.title-hint
+                | 金融结算总额：{{settlement.gmtModified | moment('YYYY-MM-DD')}}
               p.title-hint
                 | 金融结算总额：1000元
       section.mt10
         .fields
           mt-cell.title-cell
-            span(slot="title") 物流结算
+            span(slot="title") 物流结算明细
           mt-cell.has-hint
             div(slot="title")
               p.title-hint
-                | 承运商名称：{{settlement.logisticsEnterprise}}
+                | 承运商：{{settlement.logisticsEnterprise}}
               p.title-hint
-                | 物流费用：{{settlement.logisticsCost | ktCurrency}}
+                | 结算台数：{{settlement.logisticsEnterprise}}
               p.title-hint
-                | 服务费：{{settlement.otherLogisticsCost | ktCurrency}}
+                | 运输工具：{{settlement.logisticsCost | ktCurrency}}
               p.title-hint
-                | 物流结算总额：{{settlement.logisticsSettlementAmount | ktCurrency}}
+                | 物流费用总额：{{settlement.logisticsSettlementAmount | ktCurrency}}
       section.mt10
         .fields
           mt-cell.title-cell
-            span(slot="title") 仓储结算
+            span(slot="title") 仓储结算明细
           mt-cell.has-hint
             div(slot="title")
               p.title-hint
-                | 本次结算台数：{{settlement.vehicleNumber}}
+                | 仓储天数：{{settlement.vehicleNumber}}
               p.title-hint
-                | 存储费：{{settlement.storageSettlementAmount | ktCurrency}}
+                | 本次结算台数：{{settlement.storageSettlementAmount | ktCurrency}}
               p.title-hint
-                | 服务费：{{settlement.otherStorageCost | ktCurrency}}
+                | 仓储费用总额：{{settlement.otherStorageCost | ktCurrency}}
               p.title-hint
                 | 仓储结算总额：{{}}
+      section.mt10
+        .fields
+          mt-cell.title-cell
+            span(slot="title") 其他费用
+          mt-cell.has-hint
+            div(slot="title")
+              p.title-hint
+                | 费用名称：100000元
+              p.title-hint
+                | 金额：10000元
+              p.title-hint
+                | 空驶费、搭电费：{{settlement.preferentialAmount}}
+              p.title-hint
+                | 其他费用总额：{{settlement.actualSettlementAmount}}
       section.mt10
         .fields
           mt-cell.title-cell
@@ -78,13 +112,9 @@
               p.title-hint
                 | 应收总额：100000元
               p.title-hint
-                | 待还款金额：10000元
+                | 优惠金额：10000元
               p.title-hint
-                | 优惠金额：{{settlement.preferentialAmount}}
-              p.title-hint
-                | 实际应收金额：{{settlement.actualSettlementAmount}}
-              p.title-hint
-                | 实际应收大写：壹万元整
+                | 实际应收金额：{{settlement.preferentialAmount}}
       section.mt10
         .fields
           mt-cell.title-cell

@@ -34,7 +34,7 @@ module.exports = router => {
     })
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
-      result: filterMessages.slice(startIndex, size + startIndex)
+      data: filterMessages.slice(startIndex, size + startIndex)
     })
   })
 }

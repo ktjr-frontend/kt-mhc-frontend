@@ -35,7 +35,7 @@ module.exports = router => {
     })
 
     res.jsonOk({
-      result: filterCompany
+      data: filterCompany
     })
   })
 }

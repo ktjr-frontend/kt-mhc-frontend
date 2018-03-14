@@ -57,7 +57,7 @@ export default {
     // 搜索公司
     inputOnInput: debounce(function(value) {
       company.get({ name: value }).then(res => res.json()).then(res => {
-        this.companyList = res.data.result
+        this.companyList = res.data.data
       })
     }, 300),
 

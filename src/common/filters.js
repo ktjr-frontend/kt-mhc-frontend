@@ -1,6 +1,7 @@
 import { isNumber, round, isNull, isNil } from 'lodash'
 import moment from 'moment'
 import numeral from 'numeral'
+import nzhcn from 'nzh/cn'
 
 export default {
   install(Vue, options) {
@@ -67,6 +68,10 @@ export default {
 
     Vue.filter('ktBankCardSpace', (value) => {
       return value ? value.replace(/\d{4}(?=(\d{1,4}))/g, '$& ') : '-'
+    })
+
+    Vue.filter('encodeB', (value) => {
+      return Number(value) ? nzhcn.encodeB(value) : value
     })
 
     Vue.filter('moment', (date, format) => {

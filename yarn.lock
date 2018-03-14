@@ -5704,6 +5704,10 @@ numeral@^2.0.4:
   version "2.0.6"
   resolved "http://registry.npm.taobao.org/numeral/download/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
 
+nzh@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/nzh/download/nzh-1.0.3.tgz#fb0d1b5a78c6f6a2912fc4c4af233119060392ec"
+
 oauth-sign@~0.8.1, oauth-sign@~0.8.2:
   version "0.8.2"
   resolved "http://registry.npm.taobao.org/oauth-sign/download/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"

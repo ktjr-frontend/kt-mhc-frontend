@@ -1,5 +1,5 @@
 import router from '@/router'
-import { login, captcha, users } from '@/common/resources.js'
+import { login, captcha, users, regions } from '@/common/resources.js'
 import * as Storage from '@/storage'
 import { STORE_KEY_USER, STORE_KEY_ACCESS_TOKEN, RET_CODE_MAP, STORE_KEY_LAST_LOGINED_PHONE } from '@/constants'
 
@@ -27,13 +27,24 @@ export default {
 
   // 获取用户信息
   async getUser({ commit, dispatch }, params = {}) {
-    const data = await users.get(params).then(res => res.json())
-    if (data.code === RET_CODE_MAP.OK) {
-      const user = data.data
+    const res = await users.get(params).then(res => res.json())
+    if (res.code === RET_CODE_MAP.OK) {
+      const user = res.data
       await dispatch('updateUser', user)
+      dispatch('getRegions')
       commit('updateStateCode', '1') // 只是用来标记用户信息获取成功
     }
-    return data
+    return res
+  },
+
+  // 获取地域信息
+  async getRegions({ commit, dispatch }, params = {}) {
+    const res = await regions.get(params).then(res => res.json())
+    if (res.code === RET_CODE_MAP.OK) {
+      const data = res.data
+      commit('updateRegions', data.data)
+    }
+    return res
   },
 
   // 获取手机验证码

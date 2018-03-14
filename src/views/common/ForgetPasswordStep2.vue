@@ -24,7 +24,7 @@ export default {
   mixins: [CommonMixin, ValidatorMixin],
   validators: {
     'user.password' (value) {
-      return this.validate(value).required('请输入密码').length(6, '最少6位密码')
+      return this.validate(value).required('请输入密码').maxLength(6, '最少6位密码')
     }
   },
 

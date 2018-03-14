@@ -68,6 +68,7 @@
 <script>
 import ValidatorMixin from '@/views/validator_mixin.js'
 import VehicleList from '@/views/pickup/VehicleList.vue'
+import { isIdcard } from '@/common/utils.js'
 // import { pickups } from '@/common/resources.js'
 // import { chain } from 'lodash'
 
@@ -92,10 +93,14 @@ export default {
       return this.validate(value).required('请填写提车人姓名')
     },
     'model.phoneNumber' (value) {
-      return this.validate(value).required('请填写手机号')
+      return this.validate(value).required('请填写手机号').regex('^1[3-9]\\d{9}$', '请输入正确手机号')
     },
     'model.certNo' (value) {
-      return this.validate(value).required('请填写身份证号')
+      return this.validate(value).required('请填写身份证号').custom(() => {
+        if (!isIdcard(value)) {
+          return '请填写正确身份证号'
+        }
+      })
     }
   },
 

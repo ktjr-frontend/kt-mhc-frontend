@@ -108,10 +108,10 @@ export default {
         throw res
       })
 
-      if (isMore) this.wayBillVehicleList = this.wayBillVehicleList.concat(res.data.result)
-      else this.wayBillVehicleList = res.data.result
+      if (isMore) this.wayBillVehicleList = this.wayBillVehicleList.concat(res.data.data)
+      else this.wayBillVehicleList = res.data.data
 
-      if (res.data.result.length) {
+      if (res.data.data.length) {
         this.loading = false
       } else {
         this.loading = true

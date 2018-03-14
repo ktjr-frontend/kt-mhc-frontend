@@ -67,6 +67,7 @@ export default {
 
     showPopupInput(opt) {
       this.$refs.popupInput.init(opt)
+      console.log(opt)
       this.popupInputVisible = true
     },
 

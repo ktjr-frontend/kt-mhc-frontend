@@ -1,5 +1,5 @@
 import { includes, keyBy } from 'lodash'
-import { ORDER_STATUS_MAP } from '@/constants.js'
+import { ORDER_STATUS_MAP, SETTLE_STATUS_MAP } from '@/constants.js'
 
 const orderStatusList = [{
   label: '全部',
@@ -17,17 +17,11 @@ const orderStatusList = [{
   label: '待物流验车',
   value: ORDER_STATUS_MAP.WAIT_FOR_CHECK_CAR
 }, {
-  label: '验车未通过',
-  value: ORDER_STATUS_MAP.CHECK_CAR_REJECTED
-}, {
-  label: '放款审核通过',
-  value: ORDER_STATUS_MAP.LOAN_CHECK_SUCCESS
-}, {
-  label: '放款审核未通过',
-  value: ORDER_STATUS_MAP.LOAN_CHECK_FAILED
+  label: '物流已验车',
+  value: ORDER_STATUS_MAP.CHECK_PASSED
 }, {
   label: '已发运',
-  value: ORDER_STATUS_MAP.LOANED
+  value: ORDER_STATUS_MAP.DISPATCHED
 }, {
   label: '在途中',
   value: ORDER_STATUS_MAP.ON_THE_WAY
@@ -38,26 +32,32 @@ const orderStatusList = [{
   label: '已入库',
   value: ORDER_STATUS_MAP.PUT_IN_STORE
 }, {
-  label: '还款不通过',
-  value: ORDER_STATUS_MAP.REPAYMENT_FAILED
-}, {
   label: '待提车',
   value: ORDER_STATUS_MAP.WAIT_FOR_PICK
-}, {
-  label: '提车审核不通过',
-  value: ORDER_STATUS_MAP.PICK_CHECK_FAILED
 }, {
   label: '已完成',
   value: ORDER_STATUS_MAP.PICK_SUCCESS
 }, {
   label: '已取消',
   value: ORDER_STATUS_MAP.CLOSED
+}]
+
+const settlementStatusList = [{
+  label: '结算待支付',
+  value: SETTLE_STATUS_MAP.WAIT_FOR_PAY
 }, {
   label: '待结算审核',
-  value: ORDER_STATUS_MAP.WAIT_FOT_SETTLEMENT
+  value: SETTLE_STATUS_MAP.CHECKING
+}, {
+  label: '还款审核通过',
+  value: SETTLE_STATUS_MAP.REJECT
+}, {
+  label: '审核通过',
+  value: SETTLE_STATUS_MAP.PASSED
 }]
 
 const orderStatusMap = keyBy(orderStatusList, 'value')
+const settlementStatusMap = keyBy(settlementStatusList, 'value')
 
 const orderStatusClassMap = {
 
@@ -70,6 +70,9 @@ export default {
     },
     orderStatusClass(value) {
       return orderStatusClassMap[value] || ''
+    },
+    settlementStatusFormat(value) {
+      return settlementStatusMap[value] ? settlementStatusMap[value].label : ''
     }
   },
 
@@ -107,10 +110,7 @@ export default {
     canEditStatus(status) {
       return includes([
         ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,
-        ORDER_STATUS_MAP.WAIT_FOR_FIRST_CHECK,
-        ORDER_STATUS_MAP.FISRT_CHECK_REJECTED,
-        ORDER_STATUS_MAP.CHECK_CAR_REJECTED,
-        ORDER_STATUS_MAP.LOAN_CHECK_FAILED
+        ORDER_STATUS_MAP.WAIT_FOR_FIRST_CHECK
       ], status)
     },
 
@@ -125,9 +125,7 @@ export default {
         ORDER_STATUS_MAP.WAIT_FILL_MATERIAL,
         ORDER_STATUS_MAP.FISRT_CHECK_REJECTED,
         ORDER_STATUS_MAP.WAIT_FOR_CHECK_CAR,
-        ORDER_STATUS_MAP.CHECK_CAR_REJECTED,
-        ORDER_STATUS_MAP.WAIT_FOR_LOAN,
-        ORDER_STATUS_MAP.LOAN_CHECK_FAILED
+        ORDER_STATUS_MAP.DISPATCHED
       ], status)
     }
   },
@@ -138,7 +136,10 @@ export default {
 
   data() {
     return {
-      orderStatusList
+      orderStatusList,
+      orderStatusMap,
+      settlementStatusList,
+      settlementStatusMap
     }
   }
 }

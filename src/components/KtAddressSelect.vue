@@ -19,44 +19,7 @@ div
 
 <script>
 import { find, map, includes } from 'lodash'
-
-const addressList = [{
-  name: '北京市',
-  children: [{
-    name: '北京市',
-    children: [{
-      name: '海淀区'
-    }, {
-      name: '昌平区'
-    }, {
-      name: '东城区'
-    }]
-  }]
-}, {
-  name: '上海市',
-  children: [{
-    name: '上海市',
-    children: [{
-      name: '黄浦区'
-    }, {
-      name: '卢湾区'
-    }, {
-      name: '金山区'
-    }]
-  }]
-}, {
-  name: '天津市',
-  children: [{
-    name: '天津市',
-    children: [{
-      name: '津南区'
-    }, {
-      name: '河西区'
-    }, {
-      name: '河东区'
-    }]
-  }]
-}]
+// import { mapGetters } from 'lodash'
 
 export default {
   name: 'kt-address-select',
@@ -76,7 +39,7 @@ export default {
     // 地址选择
     onAddressChange(picker, values) {
       let [province, city, region] = values
-      const address = find(addressList, addr => addr.name === province)
+      const address = find(this.regions, addr => addr.name === province)
       const cities = map(address.children, 'name')
       if (!includes(cities, city)) {
         picker.setSlotValues(1, cities)
@@ -115,23 +78,26 @@ export default {
   },
 
   data() {
+    const regions = this.$store.getters.regions
+    console.log(regions)
     return {
+      regions,
       currentValue: this.value,
       selectedAddress: '黑色-黑色',
       addressOptionsVisible: false,
       addressList: [{
         flex: 1,
-        values: map(addressList, 'name'),
+        values: map(regions, 'name'),
         className: 'province',
         textAlign: 'right'
       }, {
         flex: 1,
-        values: map(addressList[0].children, 'name'),
+        values: map(regions[0].children, 'name'),
         className: 'city',
         textAlign: 'center'
       }, {
         flex: 1,
-        values: map(addressList[0].children[0].children, 'name'),
+        values: map(regions[0].children[0].children, 'name'),
         className: 'region',
         textAlign: 'left'
       }]

@@ -40,10 +40,10 @@ export default {
     //   })
     // },
     'user.phone' (value) {
-      return this.validate(value).required('请输入手机号').digit('请正确输入手机号').regex('^1[3-9]\\d{9}$', '请正确输入手机号')
+      return this.validate(value).required('请输入手机号').digit('请输入正确手机号').regex('^1[3-9]\\d{9}$', '请输入正确手机号')
     },
     'user.captcha' (value) {
-      return this.validate(value).required('请输入验证码').digit('请正确输入验证码').length(6, '请正确输入验证码')
+      return this.validate(value).required('请输入验证码').digit('请输入正确验证码').length(6, '请输入正确验证码')
     }
   },
 

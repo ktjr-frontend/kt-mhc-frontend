@@ -4,7 +4,7 @@
       img(src="~assets/images/icon.png")
     .card-container
       .card.box-border.box-border-b.opacity0_5
-        router-link.card-inner(:to="{name: 'orders'}")
+        .card-inner(@click="goToOrders()")
           i.iconfont.icon-order
           p 订单融资
           i.iconfont.icon-you.ft25
@@ -29,8 +29,14 @@
 <script>
 export default {
   methods: {
-    more() {
-      this.$toast('敬请期待')
+    goToOrders() {
+      if (this.user.advancedCertify.status === 'passed') {
+        this.$router.push({
+          name: 'orders'
+        })
+      } else {
+        this.$toast('请完成高级权限认证！')
+      }
     }
   },
 
@@ -47,6 +53,7 @@ export default {
 
   data() {
     return {
+      user: this.$store.getters.user,
       footerVisible: false
     }
   }

@@ -176,7 +176,7 @@ export default {
       if (tab === 'service') {
         this.$msgBox({
           title: '客服电话',
-          message: '188123111123'
+          message: '<a href="tel://188123111123">188123111123'
         })
       } else {
         this.$router.push({

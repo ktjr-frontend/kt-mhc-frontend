@@ -13,7 +13,7 @@
           input(type="hidden", v-model="model.reason")
           //- section(v-if="model.reason === '其他'")
           //- .fields.ui-border-t
-          kt-field(v-if="model.reason === '其他'", type="textarea", label="自定义原因：", v-model="model.otherReason", :state="getFieldState('model.otherReason')", placeholder="详细地址（街道，门牌号等）", @click.native="showFieldError($event, 'model.otherReason')")
+          kt-field(v-if="model.reason === '其他'", type="textarea", label="自定义原因：", v-model="model.otherReason", :state="getFieldState('model.otherReason')", placeholder="填写具体原因", @click.native="showFieldError($event, 'model.otherReason')")
             //- div(slot="label")
               | 详细地址
     .form-buttons-placeholder

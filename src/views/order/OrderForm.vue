@@ -527,8 +527,8 @@ export default {
         note: '',
         loanAmount: null,
         contractAmount: null,
-        deposit: null,
-        cashDeposit: null
+        deposit: '',
+        cashDeposit: ''
       }
     }
   }

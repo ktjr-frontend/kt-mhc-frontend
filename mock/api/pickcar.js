@@ -32,7 +32,7 @@ module.exports = router => {
     })
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
-      result: filterLetters.slice(startIndex, size + startIndex)
+      data: filterLetters.slice(startIndex, size + startIndex)
     })
   })
 }

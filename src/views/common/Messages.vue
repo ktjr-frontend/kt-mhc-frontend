@@ -24,12 +24,13 @@ import { debounce } from 'lodash'
 export default {
   mixins: [MineMixin],
   mounted() {
-    this._fetchData()
+    // this._fetchData()
   },
 
   methods: {
     loadMore: debounce(function() {
-      this._fetchData(true)
+      return
+      // this._fetchData(true)
     }, 500),
 
     search() {
@@ -52,10 +53,10 @@ export default {
         throw res
       })
 
-      if (isMore) this.messageList = this.messageList.concat(res.data.result)
-      else this.messageList = res.data.result
+      if (isMore) this.messageList = this.messageList.concat(res.data.data)
+      else this.messageList = res.data.data
 
-      if (res.data.result.length) {
+      if (res.data.data.length) {
         this.loading = false
       } else {
         this.loading = true
@@ -66,7 +67,7 @@ export default {
 
   watch: {
     $route() {
-      this._fetchData()
+      // this._fetchData()
     }
   },
 

@@ -139,8 +139,25 @@
             section.mt10
               .fields
                 mt-cell.title-cell
-                  span(slot="title") 结算信息
-                mt-cell.has-hint
+                  span(slot="title") 结算单列表
+                kt-card-item(v-for='settlement in settlementList', :key='settlement.no', :arrow-visible="false")
+                  span(slot="headerRight")
+                    i.iconfont.icon-edit.ft14.smaller(@click="$router.push({name: 'settlementEdit', params: {id: settlement.id}})")
+                  span(slot="headerLeft")
+                    | 结算单号：{{settlement.no}}
+                    .smaller.ml5 {{settlement.applicationDate | moment("YYYY-MM-DD")}}
+                  //- span.color-primary(@click="goToDetail(settlement)", slot='arrow') {{settlement.status | settlementStatusFormat}}
+                  .content(@click="goToDetail(settlement)")
+                    .content-row 垫资金额：{{settlement.loanAmount | ktCurrency}}
+                    .content-row 供应商：{{settlement.supplier}}
+                    //- .content-row.flex
+                      //- .content-left.flex-item 订单描述：{{settlement.brandName}} {{settlement.seriesName}} {{settlement.modelName}}
+                      //- .content-right 共 {{settlement.vehicleNumber}} 辆
+                    //- .content-row 订单简称：{{order.name}}
+                  .buttons.flex.ui-border-t(slot='footer')
+                    .text-left.flex-item
+                      button.ui-border-radius(v-if="canCloseStatus(settlement.status)", @click="$router.push({name: 'settlementDoc', params: {id: settlement.no}})") 上传支付凭证
+                //- mt-cell.has-hint
                   div(slot="title")
                     p.title-hint
                       | 采购金额：100万元
@@ -229,6 +246,7 @@ export default {
       activePhotos: { normal: {} },
       depositAddressVisible: false,
       cashDepositAddressVisible: false,
+      settlementList: [],
       transitInfos: [{
         id: 1,
         date: new Date(),

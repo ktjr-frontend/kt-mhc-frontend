@@ -11,6 +11,10 @@ export default {
     state.token = token
   },
 
+  updateRegions(state, regions = []) {
+    state.regions = regions
+  },
+
   updateStateCode(state, stateCode) {
     state.stateCode = stateCode
   },

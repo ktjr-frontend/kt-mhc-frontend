@@ -222,6 +222,19 @@ const orders = [{
     applicationDate: new Date(),
     status: '17',
     name: '测试订单'
+  }, {
+    no: 'G2017123100018',
+    vin: 'LMGDG5G09E1060018',
+    vehicleNumber: 4,
+    id: '18',
+    loanAmount: 160000,
+    supplier: '宁波奥宝莱汽车有限公司',
+    brandName: '奥迪',
+    seriesName: 'A3',
+    modelName: '2018款 30周周年年型 Sportback 40T',
+    applicationDate: new Date(),
+    status: '18',
+    name: '测试订单'
   }
 ]
 
@@ -265,7 +278,7 @@ module.exports = router => {
   })
 
   // 供应商列表
-  router.get('/providers', (req, res) => {
+  router.get('/cooperators', (req, res) => {
     const result = [{
       id: '1',
       name: '宁波奥宝莱汽车有限公司'
@@ -278,7 +291,7 @@ module.exports = router => {
     }]
 
     res.jsonOk({
-      result: result.filter((r) => ~r.name.indexOf(req.query.providerName))
+      data: result.filter((r) => ~r.name.indexOf(req.query.providerName))
     })
   })
 
@@ -303,8 +316,7 @@ module.exports = router => {
     }]
 
     res.jsonOk({
-      // result: result.filter((r) => ~r.price.toString().replace('.', '').indexOf(req.query.price))
-      result: result
+      data: result
     })
   })
 }

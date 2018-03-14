@@ -9,18 +9,18 @@
         i.iconfont.icon-qingchu(v-if="filter.price", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
-      .no-data(v-if="!searchResult.length && filter.price")
+      .no-data(v-if="!searchResult.length && !filter.price")
         i.iconfont.icon-car
         p 此搜索条件下没有结果
-      .search-help(v-if="!searchResult.length && !filter.price")
-        img(src="~assets/images/search-vehicle-bg.jpg")
+      //- .search-help(v-if="!searchResult.length && !filter.price")
+      //-   img(src="~assets/images/search-vehicle-bg.jpg")
       ul.search-result(v-if="searchResult.length")
         mt-cell.click-active(v-for="r in searchResult", :key="r.id", @click.native="selectResult(r)", title="11")
           .custom-title.flex.flex-start(slot="title")
-            img.mr10(:src="r.icon", slot="icon", width="18")
+            img.mr10(:src="r.brandLogo", slot="icon", width="18")
             .custom-content
-              p {{r.model}}
-              small.note 指导价：{{ r.price }} 万
+              p {{r.brandName}} {{r.seriesName}} {{r.modelName}}
+              small.note 指导价：{{ r.manufacturerGuidancePrice }} 万
     //- .form-buttons-placeholder
     //- .form-buttons.fixed
       mt-button.mint-button-block(type='primary', size='large', @click="submit") 确定
@@ -55,10 +55,11 @@ export default {
       this.search()
     },
 
-    init(brandId) {
-      if (brandId) {
+    init(brand) {
+      if (brand) {
         this.headerVisible = false
-        this.filter.brandId = brandId
+        this.filter.brandId = brand.id
+        console.log(this.filter, 'filter')
         this.search()
       } else {
         this.headerVisible = true
@@ -75,11 +76,11 @@ export default {
           throw res
         })
 
-      each(res.data.result, r => {
+      each(res.data.data, r => {
         r.icon = iconsMap[r.iconId]
       })
 
-      this.searchResult = res.data.result || []
+      this.searchResult = res.data.data || []
     }, 500),
 
     selectResult(r) {

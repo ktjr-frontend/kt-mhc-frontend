@@ -72,7 +72,7 @@ module.exports = router => {
         city: '北京-北京-海淀区',
         companyType: '2'
       },
-      advancedCertify: { status: 'initial', grantLetter: demoImg },
+      advancedCertify: { status: 'passed', grantLetter: demoImg },
       avatarURL: ''
     }))
   })

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { providers } from '@/common/resources.js'
+import { cooperators } from '@/common/resources.js'
 import { debounce } from 'lodash'
 
 export default {
@@ -39,14 +39,14 @@ export default {
     },
 
     search: debounce(async function() {
-      const res = await providers
+      const res = await cooperators
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
         .catch(res => {
           this.loading = false
           throw res
         })
-      this.searchResult = res.data.result || []
+      this.searchResult = res.data.data || []
     }, 300),
 
     selectResult(r) {

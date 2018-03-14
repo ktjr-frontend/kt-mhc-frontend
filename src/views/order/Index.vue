@@ -43,6 +43,7 @@
           .text-left.flex-item
             button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
             button.ui-border-radius(v-if="canPickStatus(order.status)", @click="showApplyActions") 申请提车
+            //- button.ui-border-radius(v-if="canUploadSettlementStatus(order.status)", @click="showSettlement(order)") 上传结算凭证
           .text-right
             span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
             i.iconfont.icon-you.color-gray.ft12.ml5
@@ -127,6 +128,16 @@ export default {
       } else {
         this.routerBack()
       }
+    },
+
+    // 上传结算支付凭证
+    showSettlement(order) {
+      this.$router.push({
+        name: 'settlementDoc',
+        params: {
+          id: order.id
+        }
+      })
     },
 
     // 显示搜索框

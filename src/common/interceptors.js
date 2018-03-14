@@ -90,6 +90,7 @@ export default [
     request.cache = includes(CACHE_URLS, key.split('?')[0])
 
     if (!request.params.no_cache && read(key)) {
+      console.log(key, 'api cache')
       next({
         status: 200,
         ok: true,

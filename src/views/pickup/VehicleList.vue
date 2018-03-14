@@ -4,13 +4,13 @@
       //- mt-button(icon="back", slot="left", @click.prevent="close") 返回
       div(slot="left")
         i.p10.iconfont.icon-guanbi(@click.prevent="close")
-    header.flex.search-header
+    //- header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
         input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.frameNo", placeholder="输入车架号快速搜索")
         i.iconfont.icon-qingchu(v-if="filter.frameNo", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
-    .header-sub.ui-borderNo
+    //- .header-sub.ui-borderNo
       //- .custom-model(v-if="repositoryListVisible", @click="repositoryListVisible = false")
       .select-repository
         div.select-value(@click="repositoryListVisible = !repositoryListVisible")
@@ -18,7 +18,7 @@
         div.select-list(v-show="repositoryListVisible")
           ul.ui-border-t
             li.ui-border-t(v-for="r in repositoryList", :key="r.value", @click="() => {selectRepository = r.value;repositoryListVisible=false}") {{r.label}}
-    section.body
+    section.body.overflow-scroll
       .no-data(v-if="!searchResult.length && filter.price")
         i.iconfont.icon-car
         p 此条件下没有结果
@@ -131,11 +131,11 @@ export default {
           throw res
         })
 
-      each(res.data.result, r => {
+      each(res.data.data, r => {
         r.icon = iconsMap[r.iconId]
       })
 
-      this.searchResult = res.data.result || []
+      this.searchResult = res.data.data || []
     }, 500),
 
     submit() {

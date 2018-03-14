@@ -3,6 +3,10 @@ export default {
     return state.user
   },
 
+  regions(state) {
+    return state.regions
+  },
+
   token(state) {
     return state.token
   },

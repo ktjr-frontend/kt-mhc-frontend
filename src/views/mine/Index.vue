@@ -33,7 +33,7 @@
         i.iconfont.icon-dingdan2.el-orange(slot="icon")
       mt-cell(is-link, title="我的运单", :to="{name: 'wayBills'}")
         i.iconfont.icon-yunshu.el-orange(slot="icon")
-      mt-cell(is-link, title="我的车辆", :to="{name: 'myCars'}")
+      //- mt-cell(is-link, title="我的车辆", :to="{name: 'myCars'}")
         i.iconfont.icon-cheliang.el-orange(slot="icon")
       //- mt-cell(is-link, title="我的提车函", :to="{name: 'pickCarLetters'}")
         i.iconfont.icon-dingdan3.el-orange(slot="icon")

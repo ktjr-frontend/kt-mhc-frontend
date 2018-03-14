@@ -95,10 +95,10 @@ export default {
         throw res
       })
 
-      if (isMore) this.wayBillList = this.wayBillList.concat(res.data.result)
-      else this.wayBillList = res.data.result
+      if (isMore) this.wayBillList = this.wayBillList.concat(res.data.data)
+      else this.wayBillList = res.data.data
 
-      if (res.data.result.length) {
+      if (res.data.data.length) {
         this.loading = false
       } else {
         this.loading = true

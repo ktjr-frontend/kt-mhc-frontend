@@ -212,7 +212,7 @@ module.exports = router => {
 
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
-      result: filterWaybills.slice(startIndex, size + startIndex)
+      data: filterWaybills.slice(startIndex, size + startIndex)
     })
   })
 
@@ -233,7 +233,7 @@ module.exports = router => {
 
     console.log('startIndex', startIndex, 'size + startIndex', size + startIndex)
     res.jsonOk({
-      result: filterWaybillVehicles.slice(startIndex, size + startIndex)
+      data: filterWaybillVehicles.slice(startIndex, size + startIndex)
     })
   })
 }

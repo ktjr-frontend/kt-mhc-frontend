@@ -16,17 +16,17 @@ section.vehicle-list
     .step-block(v-show="activeStep === '1-2'")
       mt-index-list
         mt-index-section(v-for="(item, key) in brandList", :key="key", :index="key")
-          mt-cell(v-for="v in item", :title='v.brandName', @click.native="showVehicleSearch('1-2')")
+          mt-cell(v-for="v in item", :title='v.brandName', @click.native="showVehicleSearch('1-2', v)")
             img(slot='icon', :src='v.brandLogo', width='24', height='24')
     .step-block(v-show="activeStep === '2-2' || activeStep === '1-3'")
       vehicle-search(ref="vehicleSearch", :close="closeVehicleSearch", @select-vehicle="onSelectVehicle")
     .step-block.pt10(v-show="activeStep === '2-3' || activeStep === '1-4'")
       mt-cell.click-active.ui-border-b
         .custom-title.flex.flex-start(slot="title")
-          img.mr10(:src="selectedVehicle.icon", slot="icon", width="18")
+          img.mr10(:src="selectedVehicle.brandLogo", slot="icon", width="18")
           .custom-content
-            p {{selectedVehicle.model}}
-            small.note 指导价：{{ selectedVehicle.price }} 万
+            p {{selectedVehicle.brandName}} {{selectedVehicle.seriesName}} {{selectedVehicle.modelName}}
+            small.note 指导价：{{ selectedVehicle.manufacturerGuidancePrice }} 万
       form(@submit.prevent="submit")
         section
           .fields
@@ -54,7 +54,7 @@ section.vehicle-list
     .picker-header.ui-border-b
       mt-button.fl.cancel.no-border(@click="appearTrimOptionsVisible = false") 取消
       mt-button.fr.confirm.no-border(@click="confirmAppearTrim") 确定
-    mt-picker.apprear-trim-picker(:slots='appearTrimList' @change='onApprearTrimChange')
+    mt-picker.apprear-trim-picker(:slots='appearTrimList', @change='onApprearTrimChange')
   .form-buttons-placeholder
   .form-buttons.fixed
     mt-button.mint-button-block(type='primary', size='large', @click="submit") 提交
@@ -64,7 +64,7 @@ section.vehicle-list
 import VehicleSearch from '@/views/order/VehicleSearch.vue'
 import ValidatorMixin from '@/views/validator_mixin.js'
 import { some } from 'lodash'
-import { vehicleBrands } from '@/common/resources.js'
+import { vehicleBrands, vehicleColors } from '@/common/resources.js'
 
 export default {
   mixins: [ValidatorMixin],
@@ -80,7 +80,7 @@ export default {
     vehicleBrands.get()
       .then(res => res.json())
       .then(res => {
-        this.brandList = res.data
+        this.brandList = res.data.data
       })
   },
 
@@ -116,9 +116,9 @@ export default {
     },
 
     // 显示车辆搜索栏
-    showVehicleSearch(preStep) {
+    showVehicleSearch(preStep, brand) {
       if (preStep === '1-2') {
-        this.$refs.vehicleSearch.init(133)
+        this.$refs.vehicleSearch.init(brand)
         this.activeStep = '1-3'
       }
       // else if (preStep === '2-1') {
@@ -137,6 +137,32 @@ export default {
       this.nextStep()
       this.validation.reset()
       this.selectedVehicle = vehicle
+      this.getAppearTrim(vehicle)
+    },
+
+    async getAppearTrim(vehicle) {
+      const res = await vehicleColors.get({
+        brandName: vehicle.brandName,
+        seriesName: vehicle.seriesName,
+        modelName: vehicle.modelName
+      }).then(res => res.json())
+      const data = res.data.data
+
+      this.appearTrimList = [{
+        flex: 1,
+        values: data.bodyColorList,
+        className: 'apprear',
+        textAlign: 'right'
+      }, {
+        divider: true,
+        content: '-',
+        className: 'divider'
+      }, {
+        flex: 1,
+        values: data.interiorColorList,
+        className: 'trim',
+        textAlign: 'left'
+      }]
     },
 
     // 关闭车辆搜索栏
@@ -255,16 +281,20 @@ export default {
       }],
       brandList: {
         A: [{
+          id: 1,
           brandName: '奥迪',
           brandLogo: require('@/assets/images/car_brand_icons/33.jpg')
         }, {
+          id: 2,
           brandName: '阿斯顿·马丁',
           brandLogo: require('@/assets/images/car_brand_icons/35.jpg')
         }],
         B: [{
+          id: 3,
           brandName: '本田',
           brandLogo: require('@/assets/images/car_brand_icons/14.jpg')
         }, {
+          id: 4,
           brandName: '奔驰',
           brandLogo: require('@/assets/images/car_brand_icons/36.jpg')
         }]

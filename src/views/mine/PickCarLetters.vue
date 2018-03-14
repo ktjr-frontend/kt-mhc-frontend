@@ -58,10 +58,10 @@ export default {
         throw res
       })
 
-      if (isMore) this.pickCarLetterList = this.pickCarLetterList.concat(res.data.result)
-      else this.pickCarLetterList = res.data.result
+      if (isMore) this.pickCarLetterList = this.pickCarLetterList.concat(res.data.data)
+      else this.pickCarLetterList = res.data.data
 
-      if (res.data.result.length) {
+      if (res.data.data.length) {
         this.loading = false
       } else {
         this.loading = true
