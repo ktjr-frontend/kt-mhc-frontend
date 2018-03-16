@@ -31,7 +31,7 @@ export default {
     if (res.code === RET_CODE_MAP.OK) {
       const user = res.data
       await dispatch('updateUser', user)
-      dispatch('getRegions')
+      await dispatch('getRegions')
       commit('updateStateCode', '1') // 只是用来标记用户信息获取成功
     }
     return res
@@ -42,7 +42,7 @@ export default {
     const res = await regions.get(params).then(res => res.json())
     if (res.code === RET_CODE_MAP.OK) {
       const data = res.data
-      commit('updateRegions', data.data)
+      commit('updateRegions', data)
     }
     return res
   },

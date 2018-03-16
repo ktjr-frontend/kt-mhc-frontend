@@ -277,6 +277,51 @@ module.exports = router => {
     })
   })
 
+  // 单个订单详情
+  router.get('/financings/:id', (req, res) => {
+    res.jsonOk({
+      data: {
+        'id': '3ee3a719ad7044f4afcc4db3e2b071de',
+        'type': 1,
+        'no': '',
+        'cashDeposit': 0,
+        'deposit': 0,
+        'loanAmount': 0,
+        'contractAmount': 0,
+        'contractNo': '',
+        'supplier': '',
+        'vehicleNumber': 0,
+        'applicationDate': '',
+        'orderStatus': '',
+        'vehicles': [{
+          'vin': '',
+          'brandName': '',
+          'seriesName': '',
+          'modelName': '',
+          'bodyColor': '',
+          'interiorColor': '',
+          'displacement': '',
+          'marketPrice': 0,
+          'contractPrice': 0,
+          'productionDate': ''
+        }],
+        'payments': [{
+          'type': 1,
+          'financingApplicationNo': '',
+          'amount': 0,
+          'outAccountName': '',
+          'outAccountBankCardNo': '',
+          'outAccountBankName': '',
+          'inAccountName': '',
+          'inAccountBankCardNo': '',
+          'inAccountBankName': '',
+          'paymentTime': '',
+          'paymentVoucher': ''
+        }]
+      }
+    })
+  })
+
   // 供应商列表
   router.get('/cooperators', (req, res) => {
     const result = [{
@@ -291,32 +336,7 @@ module.exports = router => {
     }]
 
     res.jsonOk({
-      data: result.filter((r) => ~r.name.indexOf(req.query.providerName))
-    })
-  })
-
-  // 依据价格搜索车型
-  router.get('/vehicle/series/list', (req, res) => {
-    const result = [{
-      id: '0',
-      model: '奥迪A3 2018款 30周年年型 Sportback 35 TFSI 进取型',
-      appearTrim: '白色/黑色',
-      checked: false,
-      iconId: '33',
-      price: 13.39,
-      children: [{
-        checked: false,
-        vin: 'LMGDG5G09E106001',
-        appearTrim: '白色/黑色'
-      }, {
-        checked: false,
-        vin: 'LMGDG5G09E106002',
-        appearTrim: '白色/黑色'
-      }]
-    }]
-
-    res.jsonOk({
-      data: result
+      data: result.filter((r) => ~r.name.indexOf(req.query.name))
     })
   })
 }

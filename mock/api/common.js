@@ -13,7 +13,7 @@ module.exports = router => {
   })
 
   // 登录
-  router.post('/login', (req, res) => {
+  router.post('/users/login', (req, res) => {
     const data = req.body
     // console.log(data, req.session.captcha)
     if (Math.random() >= 1) {
@@ -75,5 +75,12 @@ module.exports = router => {
       advancedCertify: { status: 'passed', grantLetter: demoImg },
       avatarURL: ''
     }))
+  })
+
+  // 上传文件
+  router.get('/file/upload', (req, res) => {
+    res.jsonOk({
+      data: demoImg
+    })
   })
 }

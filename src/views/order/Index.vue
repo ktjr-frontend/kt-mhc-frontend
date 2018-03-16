@@ -42,12 +42,12 @@
         .buttons.flex.ui-border-t(slot='footer')
           .text-left.flex-item
             button.ui-border-radius(v-if="canCloseStatus(order.status)", @click="closeOrder(order)") 取消订单
-            button.ui-border-radius(v-if="canPickStatus(order.status)", @click="showApplyActions") 申请提车
+            button.ui-border-radius(v-if="canPickStatus(order.status)", @click="showApplyActions(order)") 申请提车
             //- button.ui-border-radius(v-if="canUploadSettlementStatus(order.status)", @click="showSettlement(order)") 上传结算凭证
           .text-right
             span.color-primary(@click="goToDetail(order)", slot='arrow') {{order.status | orderStatusFormat}}
             i.iconfont.icon-you.color-gray.ft12.ml5
-      .no-more-data(v-if="noMoreData")
+      .no-more-data(v-if="noMoreData && orderList.length")
         small 已经到底了
     mt-popup.popup-box(v-model='searchBoxVisible', position='right')
       search(:close="closeSearchBox", ref="searchBox")
@@ -176,9 +176,10 @@ export default {
     },
 
     // 显示申请action菜单
-    showApplyActions() {
+    showApplyActions(order) {
       this.$router.push({
-        name: 'pickCar'
+        name: 'pickCar',
+        params: { id: order.id }
       })
       // this.applySheetVisible = true
     },
@@ -186,10 +187,10 @@ export default {
     // 筛选
     search(item) {
       this.filter.status = item.value
-      this.filter.page = 1
+      this.filter.reqDatetime = null
       this.$router.push({
         name: this.$route.name,
-        query: this.filter
+        query: this.pruneParams(this.filter)
       })
       this.statusFilterVisible = false
     },
@@ -205,6 +206,7 @@ export default {
       this._fetchData(true)
     }, 500),
 
+    // 获取订单列表
     async _fetchData(isMore) {
       if (isMore) this.filter.page += 1
 
@@ -217,10 +219,10 @@ export default {
           throw res
         })
 
-      if (isMore) this.orderList = this.orderList.concat(res.data.pageData)
-      else this.orderList = res.data.pageData
+      if (isMore) this.orderList = this.orderList.concat(res.data)
+      else this.orderList = res.data
 
-      if (res.data.pageData.length) {
+      if (res.data.length) {
         this.loading = false
       } else {
         this.loading = true
@@ -268,9 +270,9 @@ export default {
         }
       }],
       filter: {
-        status: '0',
-        page: 1,
-        size: 10
+        status: null,
+        reqDatetime: null,
+        reqCount: 10
       },
       orderList: []
     }

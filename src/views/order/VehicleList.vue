@@ -17,16 +17,16 @@ section.vehicle-list
       mt-index-list
         mt-index-section(v-for="(item, key) in brandList", :key="key", :index="key")
           mt-cell(v-for="v in item", :title='v.brandName', @click.native="showVehicleSearch('1-2', v)")
-            img(slot='icon', :src='v.brandLogo', width='24', height='24')
+            img(slot='icon', :src='v.brandLogo', width='24', height='24', v-if="v.brandLogo")
     .step-block(v-show="activeStep === '2-2' || activeStep === '1-3'")
       vehicle-search(ref="vehicleSearch", :close="closeVehicleSearch", @select-vehicle="onSelectVehicle")
     .step-block.pt10(v-show="activeStep === '2-3' || activeStep === '1-4'")
       mt-cell.click-active.ui-border-b
         .custom-title.flex.flex-start(slot="title")
-          img.mr10(:src="selectedVehicle.brandLogo", slot="icon", width="18")
+          img.mr10(:src="selectedVehicle.brandLogo", slot="icon", width="18", v-if="selectedVehicle.brandLogo")
           .custom-content
             p {{selectedVehicle.brandName}} {{selectedVehicle.seriesName}} {{selectedVehicle.modelName}}
-            small.note 指导价：{{ selectedVehicle.manufacturerGuidancePrice }} 万
+            small.note 指导价：{{ selectedVehicle.manufacturerGuidancePrice }} 元
       form(@submit.prevent="submit")
         section
           .fields
@@ -40,10 +40,10 @@ section.vehicle-list
             kt-field.has-hint.input-right(type="number", label='数量', placeholder='请输入', v-model='model.vehicleNumber', :state="getFieldState('model.vehicleNumber')", @click.native="showFieldError($event, 'model.vehicleNumber')")
               div(slot="label") 数量 <em>*</em>
               span(slot="input1-append") 辆
-            kt-field.has-hint.input-right(type="number", label='单辆车合同单价', placeholder='请输入金额', v-model='model.price', :state="getFieldState('model.price')", @click.native="showFieldError($event, 'model.price')")
+            kt-field.has-hint.input-right(type="number", label='单辆车合同单价', placeholder='请输入金额', v-model='model.contractPrice', :state="getFieldState('model.contractPrice')", @click.native="showFieldError($event, 'model.contractPrice')")
               div(slot="label") 单辆车合同单价 <em>*</em>
                 p.title-hint 给车型批次总价格
-              span(slot="input1-append") 万元
+              span(slot="input1-append") 元
           .fields.mt10
             kt-field.has-hint.input-right(type="text", v-for="n in +model.vehicleNumber", label='车架号', placeholder='请输入车架号', :value="getFrameNo(n)", @input="updateFrameNo($event, n)", :state="getFieldState('model.vins')", @click.native="showFieldError($event, 'model.vins')")
               div(slot="label") 车架号{{n}} <em>*</em>
@@ -80,7 +80,7 @@ export default {
     vehicleBrands.get()
       .then(res => res.json())
       .then(res => {
-        this.brandList = res.data.data
+        this.brandList = res.data
       })
   },
 
@@ -121,10 +121,6 @@ export default {
         this.$refs.vehicleSearch.init(brand)
         this.activeStep = '1-3'
       }
-      // else if (preStep === '2-1') {
-      //   this.$refs.vehicleSearch.init()
-      //   this.activeStep = '2-2'
-      // }
     },
 
     // 显示车辆类型一级目录
@@ -146,7 +142,7 @@ export default {
         seriesName: vehicle.seriesName,
         modelName: vehicle.modelName
       }).then(res => res.json())
-      const data = res.data.data
+      const data = res.data
 
       this.appearTrimList = [{
         flex: 1,
@@ -193,7 +189,13 @@ export default {
     async submit() {
       const success = await this.$validate()
       if (success) {
-        this.$emit('popup-confirmed', this.model)
+        this.$emit('popup-confirmed', {
+          ...this.model,
+          brandName: this.selectedVehicle.brandName,
+          seriesName: this.selectedVehicle.seriesName,
+          modelName: this.selectedVehicle.modelName,
+          manufacturerGuidancePrice: this.selectedVehicle.manufacturerGuidancePrice
+        })
       } else {
         console.log(this.validation)
         this.$toast(this.validation.firstError(), 'error')
@@ -205,7 +207,7 @@ export default {
     'model.appearTrim ' (value) {
       return this.validate(value).required('请选择外观内饰')
     },
-    'model.price' (value) {
+    'model.contractPrice' (value) {
       return this.validate(value).required('请输入单车金额')
     },
     'model.vehicleNumber' (value) {
@@ -258,7 +260,7 @@ export default {
         bodyColor: null,
         interiorColor: null,
         vehicleNumber: null,
-        price: null
+        contractPrice: null
       },
       standardList: [{
         id: 1,

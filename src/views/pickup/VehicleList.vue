@@ -7,8 +7,8 @@
     //- header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.frameNo", placeholder="输入车架号快速搜索")
-        i.iconfont.icon-qingchu(v-if="filter.frameNo", @click="clearSearch")
+        input.flex-item(type="search", @input="searchInputChange($event)", @keyup.13.prevent="search", :value="filter.vin", placeholder="输入车架号快速搜索")
+        i.iconfont.icon-qingchu(v-if="filter.vin", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     //- .header-sub.ui-borderNo
       //- .custom-model(v-if="repositoryListVisible", @click="repositoryListVisible = false")
@@ -32,12 +32,12 @@
                 p {{r.model}}
                 small.note 共 {{r.children.length}} 辆
           section
-            mt-cell.no-border(v-for="sub in r.children", :key="sub.frameNo", title="empty")
+            mt-cell.no-border(v-for="sub in r.children", :key="sub.vin", title="empty")
               .custom-title.flex.flex-start(slot="title")
                 kt-checkbox.mr10(v-show="!readonly", v-model="sub.checked", @change="syncParentStatus(r, sub)")
                 //- img.mr10(:src="r.icon", slot="icon", width="18")
                 .custom-content
-                  p 车架号：{{sub.frameNo}}
+                  p 车架号：{{sub.vin}}
                   small.note 外观内饰：{{sub.appearTrim}}
     .fixed-footer-placeholder
     footer.fixed-footer.flex
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { vehicleSeries } from '@/common/resources.js'
+import { vehiclesPickup } from '@/common/resources.js'
 import { debounce, each, find, every, chain } from 'lodash'
 
 const iconsMap = {
@@ -86,7 +86,8 @@ export default {
       this.search()
     },
 
-    init() {
+    init(checkedCar) {
+      this.currentCheckedCar = checkedCar
       if (this.from === 'mine') {
         this.readonly = true
       }
@@ -123,7 +124,7 @@ export default {
     },
 
     search: debounce(async function() {
-      const res = await vehicleSeries
+      const res = await vehiclesPickup
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
         .catch(res => {
@@ -161,6 +162,7 @@ export default {
 
   data() {
     return {
+      currentCheckedCar: [],
       readonly: false, // 控制是否可以编辑
       checked: [],
       repositoryListVisible: false,
@@ -175,7 +177,7 @@ export default {
       // headerVisible: true,
       searchResult: [],
       filter: {
-        frameNo: ''
+        vin: ''
       }
     }
   }

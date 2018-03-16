@@ -51,7 +51,7 @@ export default {
       return this.validate(value).required('请输入手机号').digit('请输入正确手机号').regex('^1[3-9]\\d{9}$', '请输入正确手机号')
     },
     'user.password' (value) {
-      return this.validate(value).required('请输入密码').digit('请正确输入密码').maxLength(6, '请正确输入密码')
+      return this.validate(value).required('请输入密码').digit('请正确输入密码').minLength(6, '请正确输入密码')
     }
   },
 

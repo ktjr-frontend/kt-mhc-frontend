@@ -1,7 +1,24 @@
 <template lang="pug">
   section.way-bill-vehicle-list
-    section.body
-      mt-navbar(v-model='tabActive', ref="navBar")
+    section.body.overflow-scroll
+      .card-body
+        .no-data(v-if="!wayBillVehicleList.length")
+          i.iconfont.icon-car
+          p 没有订单数据
+        kt-card-item.stress(v-for='wayBillVehicle in wayBillVehicleList', :key='wayBillVehicle.number', :header-left='wayBillVehicle.model', :header-right="wayBillVehicle.status | wayBillVehicleStatusFormat")
+          //- span.color-primary(slot='arrow') {{wayBillVehicle.status | wayBillVehicleStatusFormat}}
+          .content
+            .content-row 车架号：{{wayBillVehicle.frameNo}}
+            .content-row 指导价：{{wayBillVehicle.price}}元
+            .content-row
+              small
+                span 运价：{{wayBillVehicle.transportFee | ktCurrency}}
+                span.pl10 保险费：{{wayBillVehicle.insuranceFee | ktCurrency}}
+          //- .buttons.text-right.ui-border-t(slot='footer')
+            button.ui-border-radius.warning(@click="showVehiclePhoto(wayBillVehicle)") 验车照片
+        .no-more-data(v-if="noMoreData")
+          small 已经到底了
+      //- mt-navbar(v-model='tabActive', ref="navBar")
         mt-tab-item#0.tab-0 全部
         mt-tab-item#1.tab-1 待验车
         mt-tab-item#2.tab-2 待发运
@@ -9,7 +26,7 @@
         mt-tab-item#4.tab-4 到达
         mt-tab-item#5.tab-5 完成
         mt-tab-item#6.tab-6 失效
-      mt-tab-container.overflow-scroll(v-model='tabActive', :swipeable="true", disable-swipe, ref="tabContainer")
+      //- mt-tab-container.overflow-scroll(v-model='tabActive', :swipeable="true", disable-swipe, ref="tabContainer")
         mt-tab-container-item(v-for="index in 7", :id="'' + (index - 1)", v-infinite-scroll="loadMore", infinite-scroll-disabled="loading", infinite-scroll-distance="10")
           .card-body
             .no-data(v-if="!wayBillVehicleList.length")
@@ -19,7 +36,7 @@
               //- span.color-primary(slot='arrow') {{wayBillVehicle.status | wayBillVehicleStatusFormat}}
               .content
                 .content-row 车架号：{{wayBillVehicle.frameNo}}
-                .content-row 指导价：{{wayBillVehicle.price}}万元
+                .content-row 指导价：{{wayBillVehicle.price}}元
                 .content-row
                   small
                     span 运价：{{wayBillVehicle.transportFee | ktCurrency}}
@@ -121,15 +138,15 @@ export default {
   },
 
   watch: {
-    tabActive() {
-      if (this.tabActive !== '0') {
-        this.filter.status = this.tabActive
-      } else {
-        this.filter.status = null
-      }
-      this.$el.querySelector('.tab-' + this.tabActive).scrollIntoView()
-      this.search()
-    },
+    // tabActive() {
+    //   if (this.tabActive !== '0') {
+    //     this.filter.status = this.tabActive
+    //   } else {
+    //     this.filter.status = null
+    //   }
+    //   this.$el.querySelector('.tab-' + this.tabActive).scrollIntoView()
+    //   this.search()
+    // },
 
     $route() {
       this._fetchData()
@@ -141,14 +158,14 @@ export default {
       filter: {
         page: 1,
         size: 10,
-        status: '0'
+        status: null
       },
       activePhotos: { normal: {} },
       photosVisible: false,
       loading: false,
       noMoreData: false,
-      wayBillVehicleList: [],
-      tabActive: '0'
+      wayBillVehicleList: []
+      // tabActive: '0'
     }
   }
 }

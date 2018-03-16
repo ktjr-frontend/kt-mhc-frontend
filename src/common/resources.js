@@ -16,7 +16,7 @@ const commonOpts = {
 }
 
 const resource = Vue.resource
-export const login = resource('login', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 登录
+export const login = resource('users/login', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 登录
 export const captcha = resource('captcha', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 验证码
 export const users = resource('users', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 用户信息
 export const orders = resource('financings{/id}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单
@@ -33,6 +33,8 @@ export const pickCarLetters = resource('pick_car_letters{/id}', {}, {}, { _showL
 export const messages = resource('messages{/:id}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 消息列表
 
 export const vehicleBrands = resource('vehicle/brand/list', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 汽车品牌列表
-export const vehicleSeries = resource('vehicle/series{/brandId}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 车系列表
-export const vehicleColors = resource('vehicle/color{/brandName}{/seriesName}{/modelName}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 内饰外观颜色
-export const logisticsCost = resource('logistics/price{/startingAddressCode}{/destinationAddressCode}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 物流费用
+export const vehicleSeries = resource('vehicle/series{/brandName}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 车系列表
+export const vehiclesPickup = resource('vehicles/pickup', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 车库列表
+export const vehicleColors = resource('vehicle/series/color{/brandName}{/seriesName}{/modelName}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 内饰外观颜色
+export const logisticsPrice = resource('logistics/price{/startingAddressCode}{/destinationAddressCode}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 物流费用
+export const logisticsQuery = resource('logistics/query{/orderId}', {}, {}, { _showLoadingStatus: true, ...commonOpts }) // 订单在途信息

@@ -18,7 +18,7 @@
               .text-left.flex-item
                 div 代购金额 <em>{{order.loanAmount | ktCurrency}}</em>
               .text-right.flex-item
-                em {{order.status | orderStatusFormat}}
+                em {{order.orderStatus | orderStatusFormat}}
           .body.mt10
             section
               .fields
@@ -42,9 +42,9 @@
                   span(slot="title") 订单资料
                 //- mt-cell(:class="{'empty': !order.purchaseContract}", :value="order.purchaseContract ? '已上传' : '未上传'")
                   div(slot="title") 采购合同照片
-                mt-cell(:is-link="!order.depositAddress", @click.native="showDepositAddress", :class="{'empty': !order.depositAddress}", :value="order.depositAddress ? '已添加' : '未添加'")
+                mt-cell(:is-link="!order.depositAddress.length", @click.native="showDepositAddress", :class="{'empty': !order.depositAddress.length}", :value="order.depositAddress.length ? '已添加' : '未添加'")
                   div(slot="title") 定金凭证
-                mt-cell(:is-link="!order.cashDepositAddress", @click.native="showDepositAction", :class="{'empty': !order.cashDepositAddress}", :value="order.cashDepositAddress ? '已上传' : '未上传'")
+                mt-cell(:is-link="!order.cashDepositAddress.length", @click.native="showDepositAction", :class="{'empty': !order.cashDepositAddress.length}", :value="order.cashDepositAddress.length ? '已上传' : '未上传'")
                   div(slot="title") 保证金凭证
                 //- mt-cell(:class="{'empty': !order.handingLetter}", :value="order.handingLetter ? '已上传' : '未上传'")
                   div(slot="title") 手续承诺函照片
@@ -53,24 +53,26 @@
           //- .no-data
             i.iconfont.icon-car
             p 暂无数据
-          kt-card-item.stress(:header-left='order.wayBillVehicle.model', :header-right="order.wayBillVehicle.status | wayBillVehicleStatusFormat")
+          kt-card-item.stress(v-for="item in order.vehicles")
+            span(slot="headerLeft") {{item.brandName}} {{item.seriesName}} {{item.modelName}}
+            span.color-primary(slot='headerRight') {{order.orderStatus | orderStatusFormat}}
             //- span.color-primary(slot='arrow') {{order.wayBillVehicle.status | wayBillVehicleStatusFormat}}
             .content
-              .content-row 车架号：{{order.wayBillVehicle.frameNo}}
-              .content-row 外观内饰：{{order.wayBillVehicle.appearTrim}}
-              .content-row 发动机排量（ML）：{{order.wayBillVehicle.displacement}}
-              .content-row 生产日期：2018年12月03日
-              .content-row 指导价：{{order.wayBillVehicle.price}}万元
-              .content-row.ui-border-t.mt10.pt10
-                small
-                  span 发车日期：2018年12月03日
-              .content-row
-                small
-                  span 出库日期：2018年11月03日
-              .content-row
-                small
-                  span 仓库：北京-昌平区-测试车库1
-            .buttons.text-right.ui-border-t(slot='footer')
+              .content-row 车架号：{{item.vin}}
+              .content-row 外观内饰：{{item.bodyColor}} / {{item.interiorColor}}
+              .content-row 发动机排量（ML）：{{item.displacement}}
+              .content-row 生产日期：{{item.productionDate | moment('YYYY-MM-DD')}}
+              .content-row 指导价：{{item.marketPrice}}元
+              //- .content-row.ui-border-t.mt10.pt10
+              //-   small
+              //-     span 发车日期：2018年12月03日
+              //- .content-row
+              //-   small
+              //-     span 出库日期：2018年11月03日
+              //- .content-row
+              //-   small
+              //-     span 仓库：北京-昌平区-测试车库1
+            //- .buttons.text-right.ui-border-t(slot='footer')
               button.ui-border-radius.warning(@click="showVehiclePhoto(order.wayBillVehicle)") 验车照片
         mt-tab-container-item#3
           //- .no-data
@@ -94,9 +96,9 @@
                     p.title-hint.ui-border-t.pt10
                       | 所运输车辆：1 辆
                     p.title-hint
-                      | 车架号：{{order.wayBillVehicle.frameNo}}
+                      | 车架号：
                     p.title-hint
-                      | 外观内饰：{{order.wayBillVehicle.appearTrim}}
+                      | 外观内饰：
             .fields.mt10
               mt-cell.title-cell
                 span(slot="title") 在途信息
@@ -127,15 +129,15 @@
                     .supllier-logo.flex
                       img(src="~assets/images/color.png")
                     p.title-hint
-                      | 打款金额：{{order.fullPayment.amount | ktCurrency}}
+                      | 打款金额：
                     p.title-hint
-                      | 打款日期：{{order.fullPayment.date | moment('YYYY-MM-DD')}}
+                      | 打款日期：
                     p.title-hint
-                      | 账号：{{order.fullPayment.account}}
+                      | 账号：
                     p.title-hint
-                      | 开户行：{{order.fullPayment.bankName}}
+                      | 开户行：
                     p.title-hint
-                      | 户名：{{order.fullPayment.bankUserName}}
+                      | 户名：
             section.mt10
               .fields
                 mt-cell.title-cell
@@ -176,13 +178,29 @@
 <script>
 import OrderMixin from '@/views/order/mixin.js'
 import DepositAddress from '@/views/order/DepositAddress.vue'
-import CashDepositAddress from '@/views/order/CashDepositAddress.vue'
+import CashDepositAddress from '@/views/order/CashDepositList.vue'
 import VehiclePhoto from '@/views/mine/VehiclePhoto.vue'
 import MineMixin from '@/views/mine/mixin.js'
+import { orders, logisticsQuery } from '@/common/resources.js'
+import { filter } from 'lodash'
 
 export default {
   mixins: [OrderMixin, MineMixin],
   components: { DepositAddress, CashDepositAddress, VehiclePhoto },
+  mounted() {
+    orders
+      .get({ id: this.$route.params.id })
+      .then(res => res.json())
+      .then(res => {
+        const data = res.data.data
+        if (data.payments.length) {
+          data.depositAddress = filter(data.payments, v => v.type === 1)
+          data.cashDepositAddress = filter(data.payments, v => v.type === 2)
+        }
+        this.order = res.data.data
+      })
+  },
+
   methods: {
     // 自定义顶部标题栏的返回按钮行为
     backButtonAction() {
@@ -196,6 +214,14 @@ export default {
         this.routerBack()
       }
     },
+
+    // 顶部关闭按钮
+    headerClose() {
+      this.$router.push({
+        name: 'orders'
+      })
+    },
+
     // 支付凭证
     showDepositAddress() {
       this.$refs.depositAddress.init(this.order.depositAddress)
@@ -206,10 +232,14 @@ export default {
       this.depositAddressVisible = false
     },
 
-    depositAddressConfirm(depositAddress = {}) {
+    async depositAddressConfirm(depositAddress = {}) {
       this.order.depositAddress = depositAddress
       // this.modelShow.depositAddress = '已上传'
       this.depositAddressVisible = false
+      await orders.update({
+        id: this.$route.params.id,
+        payments: [this.order.depositAddress]
+      })
     },
 
     // 保证金凭证
@@ -221,22 +251,44 @@ export default {
     // 选项
     showDepositAction() {
       this.showCashDepositAddress('offline_bank')
-      // this.depositSheetVisible = true
     },
 
     closeCashDepositAddress() {
       this.cashDepositAddressVisible = false
     },
 
-    cashDepositAddressConfirm(cashDepositAddress = {}) {
+    async cashDepositAddressConfirm(cashDepositAddress = {}) {
       this.order.cashDepositAddress = cashDepositAddress
-      // this.modelShow.cashDepositAddress = '已上传'
       this.cashDepositAddressVisible = false
+      await orders.update({
+        id: this.$route.params.id,
+        payments: [this.order.cashDepositAddress]
+      })
     },
 
     showVehiclePhoto(model) {
       this.activePhotos = model.photos
       this.photosVisible = true
+    },
+
+    async getLogisticsInfo() {
+      const res = await logisticsQuery.get({
+        orderId: this.$route.params.id
+      }).then(res => res.json())
+      const data = res.data.data
+      this.logisticsInfo = data
+    },
+
+    async getFinanceInfo() {
+
+    }
+  },
+
+  watch: {
+    tabActive(value) {
+      if (value === '3') {
+        this.getLogisticsInfo()
+      }
     }
   },
 
@@ -256,48 +308,9 @@ export default {
         date: new Date(),
         address: '到达指定地点2'
       }],
-      order: {
-        no: 'G20171123118765',
-        loanAmount: 160000,
-        contractAmount: 10000,
-        deposit: 10000,
-        cashDeposit: 10000,
-        status: '1',
-        supllier: '宁波奥宝莱汽车有限公司',
-        note: '测试订单',
-        purchaseContract: {},
-        depositAddress: null,
-        cashDepositAddress: null,
-        wayBillVehicle: {
-          id: '1',
-          model: '中规/国产 安凯客车 宝斯通',
-          status: '1',
-          frameNo: 'LSVHH1771123111101',
-          price: 32.00,
-          displacement: 2000,
-          transportFee: 4500,
-          insuranceFee: 1000,
-          appearTrim: '白色/棕色',
-          photos: {
-            normal: {
-              front: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
-              back: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
-              inside: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
-              odometer: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg',
-              nameBoard: 'https://www.ktjr.com/static/ico/logo-vertical-new.svg'
-            },
-            exception: ['https://www.ktjr.com/static/ico/logo-vertical-new.svg']
-          }
-        },
-        fullPayment: {
-          amount: 150000,
-          date: new Date(),
-          account: 1231121111111,
-          bankName: '招商银行',
-          bankUserName: '测试账户'
-        },
-        applicationDate: new Date()
-      },
+      order: {},
+      logisticsInfo: {},
+      financinginfo: {},
       tabActive: '1'
     }
   }

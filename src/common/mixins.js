@@ -1,6 +1,6 @@
 import { pruneParams } from '@/common/helpers.js'
 import { isWeixin } from '@/common/utils.js'
-import { ORDER_STATUS_MAP, RET_CODE_MAP, SETTLE_STATUS_MAP } from '@/constants.js'
+import { ORDER_STATUS_MAP, RET_CODE_MAP, SETTLE_STATUS_MAP, PAYMENT_TYPE, DELIVERY_TYPE } from '@/constants.js'
 const routerCrumbs = []
 
 export default {
@@ -57,7 +57,9 @@ export default {
         return {
           RET_CODE_MAP,
           ORDER_STATUS_MAP,
-          SETTLE_STATUS_MAP
+          SETTLE_STATUS_MAP,
+          PAYMENT_TYPE,
+          DELIVERY_TYPE
         }
       }
     })

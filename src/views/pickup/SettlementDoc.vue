@@ -10,9 +10,9 @@
               p.title-hint
                 | 结算单号：{{settlement.no}}
               p.title-hint
-                | 订单编号：{{settlement.no}}
+                | 订单编号：{{settlement.financingApplicationNo}}
               p.title-hint
-                | 垫资日期：{{settlement.no}}
+                | 垫资日期：{{settlement.financingDate}}
               p.title-hint
                 | 提车日期：{{settlement.settlementDate}}
               p.title-hint

@@ -43,7 +43,14 @@ export default {
     },
 
     confirm(date) {
-      this.currentValue = moment(date).format('YYYY-MM-DD HH:mm')
+      if (this.dateType === 'date') {
+        this.currentValue = moment(date).format('YYYY-MM-DD')
+      } else if (this.dateType === 'datetime') {
+        this.currentValue = moment(date).format('YYYY-MM-DD HH:mm')
+      } else {
+        this.currentValue = moment(date).format('HH:mm')
+      }
+
       this.$emit('input', this.currentValue)
       this.pickerVisible = false
       this.$refs.datePicker.close()

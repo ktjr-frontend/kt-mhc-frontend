@@ -24,6 +24,7 @@ router.beforeEach(async(to, from, next) => {
   const nextAsync = function(opt) { // 避免watch先于popstate事件执行的问题
     setTimeout(() => { opt ? next(opt) : next() })
   }
+
   const { user, token, stateCode } = store.getters
   if (!to.meta.skipAuth) { // 需要登录权限的页面
     if (!token || !user.phone) {

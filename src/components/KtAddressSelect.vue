@@ -11,14 +11,14 @@ div
   //- 起始地选择
   .custom-model(v-if="addressOptionsVisible", @click="addressOptionsVisible = false")
   mt-popup(v-model="addressOptionsVisible", position="bottom", :showToolbar="true")
-    mt-picker.popup-picker(:showToolbar="true", :slots='addressList', @change='onAddressChange')
+    mt-picker.popup-picker(:showToolbar="true", value-key="name", :slots='addressList', @change='onAddressChange')
       .picker-header.ui-border-b
         mt-button.fl.cancel.no-border(@click="addressOptionsVisible = false") 取消
         mt-button.fr.confirm.no-border(@click="confirmAddress") 确定
 </template>
 
 <script>
-import { find, map, includes } from 'lodash'
+import { find, includes } from 'lodash'
 // import { mapGetters } from 'lodash'
 
 export default {
@@ -38,32 +38,36 @@ export default {
 
     // 地址选择
     onAddressChange(picker, values) {
+      console.log(picker, values)
       let [province, city, region] = values
-      const address = find(this.regions, addr => addr.name === province)
-      const cities = map(address.children, 'name')
-      if (!includes(cities, city)) {
-        picker.setSlotValues(1, cities)
-        picker.setSlotValue(1, cities[0])
-        city = cities[0]
+      if (province) {
+        const address = find(this.regions, addr => addr.name === province.name)
+        const cities = address.children
+        if (!includes(cities, city)) {
+          picker.setSlotValues(1, cities)
+          picker.setSlotValue(1, cities[0])
+          city = cities[0]
+        }
+
+        const cityObj = find(address.children, c => c.name === city.name)
+        const regions = cityObj.children
+
+        if (!includes(regions, region)) {
+          picker.setSlotValues(2, regions)
+          picker.setSlotValue(2, regions[0])
+          region = regions[0]
+        }
+
+        this.selectedAddress = `${province.name}-${city.name}-${region.name}`
+        this.selectedValues = values
       }
-
-      const cityObj = find(address.children, c => c.name === city)
-      const regions = map(cityObj.children, 'name')
-
-      if (!includes(regions, region)) {
-        picker.setSlotValues(2, regions)
-        picker.setSlotValue(2, regions[0])
-        region = regions[0]
-      }
-
-      this.selectedAddress = `${province}-${city}-${region}`
     },
 
     // 确定选择地址
-    confirmAddress(value) {
+    confirmAddress() {
       this.currentValue = this.selectedAddress
       this.addressOptionsVisible = false
-      // this.$emit('input', this.currentValue)
+      this.$emit('input2', this.selectedValues)
     }
   },
 
@@ -83,21 +87,22 @@ export default {
     return {
       regions,
       currentValue: this.value,
+      selectedValues: [],
       selectedAddress: '黑色-黑色',
       addressOptionsVisible: false,
       addressList: [{
         flex: 1,
-        values: map(regions, 'name'),
+        values: regions,
         className: 'province',
         textAlign: 'right'
       }, {
         flex: 1,
-        values: map(regions[0].children, 'name'),
+        values: regions[0].children,
         className: 'city',
         textAlign: 'center'
       }, {
         flex: 1,
-        values: map(regions[0].children[0].children, 'name'),
+        values: regions[0].children[0].children,
         className: 'region',
         textAlign: 'left'
       }]

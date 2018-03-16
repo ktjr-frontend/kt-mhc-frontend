@@ -21,7 +21,7 @@
                 .content-row
                   .content-left.flex-item 车辆数量：{{wayBill.vehicleCount}}
                 .content-row
-                  span.mr10(v-for="item in wayBill.detail") {{item.model}} {{item.price | ktCurrency('', '万元')}} {{item.count}} 辆
+                  span.mr10(v-for="item in wayBill.detail") {{item.model}} {{item.price | ktCurrency('', '元')}} {{item.count}} 辆
               .buttons.text-right.ui-border-t(slot='footer')
                 button.ui-border-radius(@click="showVehicleInfo(wayBill)") 车辆信息
                 button.ui-border-radius.warning(@click="showWayBillDetail(wayBill)") 运单详情

@@ -55,6 +55,7 @@ module.exports = router => {
     })
   })
 
+  // 内饰外观颜色
   router.get('/vehicle/color/:brandName/:seriesName/:modelName', (req, res) => {
     res.jsonOk({
       'data': {
@@ -67,6 +68,31 @@ module.exports = router => {
           'ttt'
         ]
       }
+    })
+  })
+
+  // 依据价格搜索车型
+  router.get('/warehouse/vehicles', (req, res) => {
+    const result = [{
+      id: '0',
+      model: '奥迪A3 2018款 30周年年型 Sportback 35 TFSI 进取型',
+      appearTrim: '白色/黑色',
+      checked: false,
+      iconId: '33',
+      price: 13.39,
+      children: [{
+        checked: false,
+        vin: 'LMGDG5G09E106001',
+        appearTrim: '白色/黑色'
+      }, {
+        checked: false,
+        vin: 'LMGDG5G09E106002',
+        appearTrim: '白色/黑色'
+      }]
+    }]
+
+    res.jsonOk({
+      data: result
     })
   })
 }

@@ -145,7 +145,7 @@ export default {
 
     // 车辆信息
     showVehicleList() {
-      this.$refs.vehicleList.init()
+      this.$refs.vehicleList.init(this.model.vins)
       this.vehicleListVisible = true
     },
 

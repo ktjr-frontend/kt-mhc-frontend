@@ -1,10 +1,10 @@
 <template lang="pug">
   section.profile
     section
-      mt-cell.input-file-cell(is-link, title="个人头像")
+      mt-cell.input-file-cell(title="个人头像")
         .avata
           img(:src="avatar.previewUrl", width="65", height="65")
-          input(type="file", @change="avatarChange")
+          //- input(type="file", @change="avatarChange")
       mt-cell(is-link, title="个人简介", :value="user.desc", @click.native="showPopupInput({type: 'textarea', customType: 'desc', maxLength: 20, placeholder: '请输入个人简介', value: user.desc, title: '个人简介'})")
     section.mt10
       mt-cell(:class="userRealNameReadOnly ? 'readonly' : ''", is-link, @click.native="$router.push({name: 'realNameAuth'})", title="真实姓名", :value="user.name || '未认证'")
@@ -106,7 +106,7 @@ export default {
       avatar: {
         rst: {},
         file: null,
-        previewUrl: require('@/assets/images/car_brand_icons/1.jpg'),
+        previewUrl: require('@/assets/images/default-avatar.svg'),
         previewImgStyle: {}
       }
     }

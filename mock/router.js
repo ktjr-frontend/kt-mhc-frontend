@@ -22,13 +22,13 @@ router.use(jwt({
 }).unless({
   path: [
     '/api/v1/captcha',
-    '/api/v1/login'
+    '/api/v1/users/login'
   ]
 }), (req, res, next) => {
   req.session.captcha = 123456
   res.jsonOk = function(data) {
     res.json({
-      code: 0,
+      code: '200',
       message: 'success',
       data
     })
@@ -48,7 +48,7 @@ files.forEach(f => {
 router.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({
-      code: 200003,
+      code: '401',
       message: '鉴权失败'
     })
   } else {

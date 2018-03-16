@@ -30,7 +30,7 @@ export default {
     //   return this.validate(value).required('请输入您的真实姓名')
     // },
     'user.password' (value) {
-      return this.validate(value).required('请输入密码').maxLength(6, '最少6位密码')
+      return this.validate(value).required('请输入密码').minLength(6, '最少6位密码')
     }
   },
 

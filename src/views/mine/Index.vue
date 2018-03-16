@@ -3,7 +3,7 @@
     section
       mt-cell(is-link, :title="user.name", @click.native="$router.push({name: 'profile'})")
         .custom-title.flex.flex-start(slot="title")
-          img.mr10(src="~assets/images/car_brand_icons/1.jpg", slot="icon", width="55", height="55")
+          img.mr10(src="~assets/images/default-avatar.svg", slot="icon", width="55", height="55")
           .custom-content
             p {{user.name}}
             small.note {{user.company.name}}

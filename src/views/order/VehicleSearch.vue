@@ -5,22 +5,22 @@
     header.flex.search-header(v-if="headerVisible")
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.price", placeholder="输入指导价快速选择车型")
-        i.iconfont.icon-qingchu(v-if="filter.price", @click="clearSearch")
+        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.key", placeholder="输入品牌、车系、车型搜索")
+        i.iconfont.icon-qingchu(v-if="filter.key", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
-      .no-data(v-if="!searchResult.length && !filter.price")
+      .no-data(v-if="!searchResult.length && !filter.key")
         i.iconfont.icon-car
         p 此搜索条件下没有结果
-      //- .search-help(v-if="!searchResult.length && !filter.price")
+      //- .search-help(v-if="!searchResult.length && !filter.key")
       //-   img(src="~assets/images/search-vehicle-bg.jpg")
       ul.search-result(v-if="searchResult.length")
         mt-cell.click-active(v-for="r in searchResult", :key="r.id", @click.native="selectResult(r)", title="11")
           .custom-title.flex.flex-start(slot="title")
-            img.mr10(:src="r.brandLogo", slot="icon", width="18")
+            img.mr10(:src="r.brandLogo", slot="icon", width="18", v-if="r.brandLogo")
             .custom-content
               p {{r.brandName}} {{r.seriesName}} {{r.modelName}}
-              small.note 指导价：{{ r.manufacturerGuidancePrice }} 万
+              small.note 指导价：{{ r.manufacturerGuidancePrice }} 元
     //- .form-buttons-placeholder
     //- .form-buttons.fixed
       mt-button.mint-button-block(type='primary', size='large', @click="submit") 确定
@@ -41,24 +41,24 @@ export default {
 
   methods: {
     clearSearch() {
-      this.filter.price = ''
+      this.filter.key = ''
       this.search()
     },
 
     reset() {
       this.searchResult = []
-      this.filter.price = ''
+      this.filter.key = ''
     },
 
     inputChange(event) {
-      this.filter.price = event.target.value
+      this.filter.key = event.target.value
       this.search()
     },
 
     init(brand) {
       if (brand) {
-        this.headerVisible = false
-        this.filter.brandId = brand.id
+        this.headerVisible = true
+        this.filter.brandName = brand.brandName
         console.log(this.filter, 'filter')
         this.search()
       } else {
@@ -69,18 +69,18 @@ export default {
 
     search: debounce(async function() {
       const res = await vehicleSeries
-        .get(this.pruneParams(this.filter))
+        .get(this.filter)
         .then(res => res.json())
         .catch(res => {
           this.loading = false
           throw res
         })
 
-      each(res.data.data, r => {
+      each(res.data, r => {
         r.icon = iconsMap[r.iconId]
       })
 
-      this.searchResult = res.data.data || []
+      this.searchResult = res.data || []
     }, 500),
 
     selectResult(r) {
@@ -93,8 +93,8 @@ export default {
       headerVisible: true,
       searchResult: [],
       filter: {
-        brandId: '',
-        price: ''
+        brandName: '',
+        key: ''
       }
     }
   }

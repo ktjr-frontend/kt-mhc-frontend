@@ -7,7 +7,7 @@
     header.flex.search-header
       form.search-input.flex-item.flex(@submit.prevent="search")
         i.iconfont.icon-sousuo
-        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.providerName", placeholder="搜索")
+        input.flex-item(type="search", @input="inputChange($event)", @keyup.13.prevent="search", :value="filter.name", placeholder="搜索")
         i.iconfont.icon-qingchu(v-if="filter.value", @click="clearSearch")
       button.cancel-btn(@click="close") 取消
     section.body
@@ -34,11 +34,12 @@ export default {
     },
 
     inputChange(event) {
-      this.filter.providerName = event.target.value
+      this.filter.name = event.target.value
       this.search()
     },
 
     search: debounce(async function() {
+      if (!this.filter.name) return
       const res = await cooperators
         .get(this.pruneParams(this.filter))
         .then(res => res.json())
@@ -46,15 +47,15 @@ export default {
           this.loading = false
           throw res
         })
-      this.searchResult = res.data.data || []
+      this.searchResult = res.data || []
     }, 300),
 
     selectResult(r) {
-      this.filter.providerName = r.name
+      this.filter.name = r.name
     },
 
     submit() {
-      this.$emit('popup-confirmed', this.filter.providerName)
+      this.$emit('popup-confirmed', this.filter.name)
     }
   },
 
@@ -62,7 +63,7 @@ export default {
     return {
       searchResult: [],
       filter: {
-        providerName: ''
+        name: ''
       }
     }
   }
@@ -78,5 +79,4 @@ export default {
 .body {
   padding-top: 10px;
 }
-
 </style>
